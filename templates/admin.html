@@ -3,170 +3,364 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LuckyCart Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0a0f;--s:#12121a;--s2:#1a1a26;--bd:#2a2a3f;--gd:#f5c842;--ac:#7c6af7;--ac2:#5b4fcf;--gr:#2ecc71;--rd:#e74c3c;--tx:#f0f0fa;--mt:#7a7a9a;}
+:root{--ink:#05050a;--ink2:#0d0d18;--ink3:#141424;--ink4:#1c1c32;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);--tx:#f2f2fa;--tx2:#a0a0c0;--tx3:#606080;--amber:#f0b429;--amber2:#d4920a;--violet:#8b7cf8;--violet2:#6b5ce7;--green:#22c55e;--red:#ef4444;--phonepe:#5f259f;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
-nav{background:var(--s);border-bottom:1px solid var(--bd);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;background:linear-gradient(135deg,var(--gd),var(--ac));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.bsm{padding:7px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--s2);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;transition:all .2s;}
-.bsm:hover{border-color:var(--ac);}
-main{max-width:1100px;margin:0 auto;padding:32px;}
-h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:20px;}
-.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:36px;}
-.stat{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:20px;}
-.stat-v{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--gd);margin-bottom:4px;}
-.stat-l{font-size:13px;color:var(--mt);}
-.card{background:var(--s);border:1px solid var(--bd);border-radius:14px;padding:24px;margin-bottom:24px;}
-.card h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:18px;}
-.form-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:16px;}
-.fld label{display:block;font-size:12px;font-weight:600;color:var(--mt);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
-.fld input,.fld select,.fld textarea{width:100%;padding:10px 14px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;}
-.fld input:focus,.fld select:focus{outline:none;border-color:var(--ac);}
-.fld textarea{resize:vertical;min-height:70px;}
-.fld select option{background:var(--s);}
-.btn{padding:10px 20px;border-radius:9px;border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;}
-.btn.pr{background:linear-gradient(135deg,var(--ac2),var(--ac));color:#fff;}
-.btn.pr:hover{box-shadow:0 6px 20px rgba(124,106,247,.35);}
-.btn.dng{background:linear-gradient(135deg,#c0392b,var(--rd));color:#fff;}
-.btn.gd{background:linear-gradient(135deg,#e8a020,var(--gd));color:#000;}
+body{font-family:'Instrument Sans',sans-serif;background:var(--ink);color:var(--tx);min-height:100vh;}
+nav{background:var(--ink3);border-bottom:1px solid var(--line);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:700;background:linear-gradient(120deg,var(--tx) 40%,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.bsm{padding:7px 14px;border-radius:8px;border:1px solid var(--line2);background:var(--ink4);color:var(--tx2);font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;transition:all .2s;}
+.bsm:hover{border-color:var(--amber);color:var(--tx);}
+main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+h2{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;margin-bottom:20px;}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:36px;}
+.stat{background:var(--ink3);border:1px solid var(--line);border-radius:16px;padding:20px;}
+.statv{font-family:'Clash Display',sans-serif;font-size:28px;font-weight:700;color:var(--amber);margin-bottom:4px;}
+.statl{font-size:12px;color:var(--tx3);}
+.stat.alert{border-color:rgba(240,180,41,.3);background:rgba(240,180,41,.05);}
+.stat.alert .statv{animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* CARD */
+.card{background:var(--ink3);border:1px solid var(--line);border-radius:20px;padding:24px;margin-bottom:24px;}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.card-hdr h3{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:700;}
+
+/* PENDING PAYMENTS — the key section */
+.pq-item{background:var(--ink4);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.pq-emoji{font-size:32px;flex-shrink:0;}
+.pq-info{flex:1;min-width:200px;}
+.pq-name{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700;margin-bottom:4px;}
+.pq-meta{font-size:12px;color:var(--tx3);line-height:1.7;}
+.pq-utr{display:inline-block;background:var(--ink3);border:1px solid rgba(240,180,41,.3);border-radius:8px;padding:4px 12px;font-family:monospace;font-size:13px;color:var(--amber);font-weight:700;margin-top:6px;}
+.pq-amount{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;color:var(--amber);flex-shrink:0;}
+.pq-actions{display:flex;gap:8px;flex-shrink:0;}
+.btn-confirm{padding:10px 18px;border-radius:10px;border:none;font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#1a7a3a,var(--green));color:#fff;transition:all .2s;}
+.btn-confirm:hover{box-shadow:0 4px 16px rgba(34,197,94,.3);transform:translateY(-1px);}
+.btn-reject{padding:10px 18px;border-radius:10px;border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.08);font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;color:var(--red);transition:all .2s;}
+.btn-reject:hover{background:rgba(239,68,68,.15);}
+.pq-status{padding:4px 10px;border-radius:50px;font-size:11px;font-weight:700;}
+.s-utr{background:rgba(240,180,41,.12);color:var(--amber);}
+.s-pend{background:rgba(160,160,192,.1);color:var(--tx3);}
+.empty-q{text-align:center;padding:40px;color:var(--tx3);}
+
+/* FORM */
+.frow{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:14px;}
+.fld{} .fld label{display:block;font-size:11px;font-weight:700;color:var(--tx3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.fld input,.fld select,.fld textarea{width:100%;padding:10px 14px;background:var(--ink4);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:'Instrument Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
+.fld input:focus,.fld select:focus{border-color:rgba(139,124,248,.5);}
+.fld select option{background:var(--ink3);}
+.fld textarea{resize:vertical;min-height:64px;}
+.btn-pr{padding:11px 22px;border-radius:10px;border:none;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--violet2),var(--violet));color:#fff;transition:all .2s;}
+.btn-pr:hover{box-shadow:0 4px 20px rgba(107,92,231,.3);transform:translateY(-1px);}
+.btn-gd{padding:8px 14px;border-radius:8px;border:none;font-family:'Instrument Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--amber2),var(--amber));color:#000;}
+.msg{padding:12px 16px;border-radius:10px;font-size:13px;margin-top:12px;display:none;}
+.msg.ok{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);color:var(--green);}
+.msg.err{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:var(--red);}
+
+/* TABLE */
 table{width:100%;border-collapse:collapse;font-size:13px;}
-th{text-align:left;padding:10px 14px;border-bottom:2px solid var(--bd);color:var(--mt);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px;}
-td{padding:10px 14px;border-bottom:1px solid var(--bd);}
+th{text-align:left;padding:10px 14px;border-bottom:2px solid var(--line);color:var(--tx3);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;}
+td{padding:10px 14px;border-bottom:1px solid var(--line);}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:var(--s2);}
-.pill{display:inline-block;border-radius:50px;padding:3px 10px;font-size:11px;font-weight:700;}
-.pill.paid{background:rgba(46,204,113,.15);color:var(--gr);}
-.pill.pend{background:rgba(245,200,66,.15);color:var(--gd);}
-.pill.ref{background:rgba(124,106,247,.15);color:var(--ac);}
-.pill.act{background:rgba(46,204,113,.15);color:var(--gr);}
-.pill.drawn{background:rgba(245,200,66,.15);color:var(--gd);}
-.msg{padding:12px 16px;border-radius:8px;font-size:14px;margin-top:12px;display:none;}
-.msg.ok{background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);color:var(--gr);}
-.msg.err{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);color:var(--rd);}
+tr:hover td{background:rgba(255,255,255,.02);}
+.pill{display:inline-block;border-radius:50px;padding:3px 10px;font-size:10px;font-weight:700;}
+.p-paid{background:rgba(34,197,94,.12);color:var(--green);}
+.p-utr{background:rgba(240,180,41,.12);color:var(--amber);}
+.p-pend{background:rgba(160,160,192,.1);color:var(--tx3);}
+.p-rej{background:rgba(239,68,68,.1);color:var(--red);}
+.p-ref{background:rgba(139,124,248,.12);color:var(--violet);}
+.p-win{background:rgba(240,180,41,.15);color:var(--amber);border:1px solid rgba(240,180,41,.3);}
+
+/* REFUND SECTION */
+.refund-item{background:var(--ink4);border:1px solid rgba(240,180,41,.2);border-radius:14px;padding:16px;margin-bottom:10px;}
+.refund-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.refund-name{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700;}
+.refund-amt{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:700;color:var(--amber);}
+.refund-meta{font-size:12px;color:var(--tx3);margin-bottom:12px;line-height:1.6;}
+.refund-input-row{display:flex;gap:8px;}
+.refund-input{flex:1;padding:9px 12px;background:var(--ink3);border:1px solid var(--line);border-radius:9px;color:var(--tx);font-family:'Instrument Sans',sans-serif;font-size:13px;outline:none;}
+.refund-input:focus{border-color:rgba(240,180,41,.4);}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--ink4);border-radius:12px;padding:4px;margin-bottom:20px;width:fit-content;}
+.tab{padding:8px 18px;border-radius:9px;border:none;background:transparent;color:var(--tx3);font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;}
+.tab.on{background:var(--ink3);color:var(--tx);}
+.badge-count{background:var(--amber);color:#000;border-radius:50px;padding:2px 8px;font-size:11px;font-weight:700;margin-left:6px;}
 </style>
 </head>
 <body>
 <nav>
   <div class="logo">🎰 LuckyCart Admin</div>
   <div style="display:flex;gap:10px;align-items:center">
-    <span style="font-size:13px;color:var(--mt)">{{ user.name }}</span>
+    <span style="font-size:13px;color:var(--tx3)">{{ user.name }}</span>
     <a href="/" class="bsm">← Storefront</a>
   </div>
 </nav>
 <main>
-  <div class="stats" id="statsGrid">
-    <div class="stat"><div class="stat-v">—</div><div class="stat-l">Total Users</div></div>
-    <div class="stat"><div class="stat-v">—</div><div class="stat-l">Active Draws</div></div>
-    <div class="stat"><div class="stat-v">—</div><div class="stat-l">Draws Completed</div></div>
-    <div class="stat"><div class="stat-v">—</div><div class="stat-l">Total Revenue</div></div>
-    <div class="stat"><div class="stat-v">—</div><div class="stat-l">Refunds Issued</div></div>
+
+  <!-- STATS -->
+  <div class="stats" id="statGrid">
+    <div class="stat"><div class="statv">—</div><div class="statl">Total Users</div></div>
+    <div class="stat"><div class="statv">—</div><div class="statl">Active Draws</div></div>
+    <div class="stat"><div class="statv">—</div><div class="statl">Draws Done</div></div>
+    <div class="stat alert" id="pendStat"><div class="statv">—</div><div class="statl">⏳ Payments Pending</div></div>
+    <div class="stat"><div class="statv">—</div><div class="statl">Total Revenue</div></div>
+    <div class="stat"><div class="statv">—</div><div class="statl">Refunds Sent</div></div>
   </div>
 
-  <!-- CREATE PRODUCT -->
-  <div class="card">
-    <h3>➕ Create New Draw</h3>
-    <div class="form-row">
-      <div class="fld"><label>Product Name</label><input type="text" id="pName" placeholder="iPhone 15 Pro"></div>
-      <div class="fld"><label>Category</label>
-        <select id="pCat">
-          <option>Electronics</option><option>Fashion</option>
-          <option>Lifestyle</option><option>Gaming</option><option>Sports</option>
-        </select>
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab on" onclick="swTab('payments',this)">⏳ Payments <span class="badge-count" id="pendBadge">0</span></button>
+    <button class="tab" onclick="swTab('refunds',this)">🏆 Refunds</button>
+    <button class="tab" onclick="swTab('draws',this)">🔥 Live Draws</button>
+    <button class="tab" onclick="swTab('create',this)">➕ New Draw</button>
+    <button class="tab" onclick="swTab('all',this)">📋 All Tickets</button>
+  </div>
+
+  <!-- ── PENDING PAYMENTS ──────────────────────────────────────────── -->
+  <div id="tabPayments">
+    <div class="card">
+      <div class="card-hdr">
+        <h3>⏳ Payments Awaiting Confirmation</h3>
+        <button class="bsm" onclick="loadPending()">↻ Refresh</button>
       </div>
-      <div class="fld"><label>Emoji</label><input type="text" id="pEmoji" placeholder="📱" maxlength="4"></div>
+      <p style="font-size:13px;color:var(--tx3);margin-bottom:18px">Customer pays via PhonePe/UPI → submits their UTR → you verify in your PhonePe app → click Confirm below.</p>
+      <div id="pendList"><div class="empty-q">Loading…</div></div>
     </div>
-    <div class="form-row">
-      <div class="fld"><label>Original Price (₹)</label><input type="number" id="pOrig" placeholder="29990"></div>
-      <div class="fld"><label>Ticket Price (₹)</label><input type="number" id="pTicket" placeholder="799"></div>
-      <div class="fld"><label>Total Slots</label><input type="number" id="pSlots" placeholder="60"></div>
-    </div>
-    <div class="fld" style="margin-bottom:16px"><label>Description</label><textarea id="pDesc" placeholder="Short product description..."></textarea></div>
-    <button class="btn pr" onclick="createProduct()">Create Draw</button>
-    <div class="msg" id="cpMsg"></div>
   </div>
 
-  <!-- ACTIVE DRAWS -->
-  <div class="card">
-    <h3>🔥 Active Draws</h3>
-    <div id="activeDraws" style="overflow-x:auto">Loading...</div>
+  <!-- ── PENDING REFUNDS ───────────────────────────────────────────── -->
+  <div id="tabRefunds" style="display:none">
+    <div class="card">
+      <div class="card-hdr"><h3>🏆 Winner Refunds to Send</h3><button class="bsm" onclick="loadRefunds()">↻ Refresh</button></div>
+      <p style="font-size:13px;color:var(--tx3);margin-bottom:18px">Send refund manually via PhonePe/UPI to winner's registered number, then enter the UTR and click Mark Sent.</p>
+      <div id="refundList"><div class="empty-q">Loading…</div></div>
+    </div>
   </div>
 
-  <!-- RECENT TICKETS -->
-  <div class="card">
-    <h3>🎟️ Recent Tickets</h3>
-    <div id="ticketsTable" style="overflow-x:auto">Loading...</div>
+  <!-- ── LIVE DRAWS ─────────────────────────────────────────────────── -->
+  <div id="tabDraws" style="display:none">
+    <div class="card">
+      <div class="card-hdr"><h3>🔥 Active Draws</h3><button class="bsm" onclick="loadDraws()">↻ Refresh</button></div>
+      <div id="drawList" style="overflow-x:auto">Loading…</div>
+    </div>
   </div>
+
+  <!-- ── CREATE PRODUCT ────────────────────────────────────────────── -->
+  <div id="tabCreate" style="display:none">
+    <div class="card">
+      <div class="card-hdr"><h3>➕ Create New Draw</h3></div>
+      <div class="frow">
+        <div class="fld"><label>Product Name</label><input type="text" id="pName" placeholder="iPhone 15 Pro"></div>
+        <div class="fld"><label>Category</label>
+          <select id="pCat"><option>Electronics</option><option>Fashion</option><option>Lifestyle</option><option>Gaming</option><option>Sports</option></select>
+        </div>
+        <div class="fld"><label>Emoji</label><input type="text" id="pEmoji" placeholder="📱" maxlength="4"></div>
+      </div>
+      <div class="frow">
+        <div class="fld"><label>Original Price (₹)</label><input type="number" id="pOrig" placeholder="29990"></div>
+        <div class="fld"><label>Ticket Price (₹)</label><input type="number" id="pTick" placeholder="799"></div>
+        <div class="fld"><label>Total Slots</label><input type="number" id="pSlots" placeholder="60"></div>
+      </div>
+      <div class="fld" style="margin-bottom:16px"><label>Description</label><textarea id="pDesc" placeholder="Short product description…"></textarea></div>
+      <button class="btn-pr" onclick="createProduct()">Create Draw</button>
+      <div class="msg" id="cpMsg"></div>
+    </div>
+  </div>
+
+  <!-- ── ALL TICKETS ───────────────────────────────────────────────── -->
+  <div id="tabAll" style="display:none">
+    <div class="card">
+      <div class="card-hdr"><h3>📋 All Tickets</h3><button class="bsm" onclick="loadAll()">↻ Refresh</button></div>
+      <div id="allTable" style="overflow-x:auto">Loading…</div>
+    </div>
+  </div>
+
 </main>
 
 <script>
+/* ── TABS ──────────────────────────────────────────────────────────── */
+const tabMap = {payments:'tabPayments',refunds:'tabRefunds',draws:'tabDraws',create:'tabCreate',all:'tabAll'};
+function swTab(name, btn){
+  Object.values(tabMap).forEach(id=>{ const el=g(id); if(el) el.style.display='none'; });
+  const el=g(tabMap[name]); if(el) el.style.display='block';
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  // load on first view
+  if(name==='payments') loadPending();
+  if(name==='refunds')  loadRefunds();
+  if(name==='draws')    loadDraws();
+  if(name==='all')      loadAll();
+}
+
+/* ── STATS ─────────────────────────────────────────────────────────── */
 async function loadStats(){
-  const r=await fetch('/api/admin/stats');const d=await r.json();
-  const els=document.querySelectorAll('.stat-v');
+  const d=await (await fetch('/api/admin/stats')).json();
+  const els=g('statGrid').querySelectorAll('.statv');
   els[0].textContent=d.total_users;
   els[1].textContent=d.active_draws;
   els[2].textContent=d.completed_draws;
-  els[3].textContent='₹'+fmt(d.total_revenue/100);
-  els[4].textContent='₹'+fmt(d.total_refunds/100);
+  els[3].textContent=d.pending_payments;
+  els[4].textContent='₹'+fmt(d.total_revenue/100);
+  els[5].textContent='₹'+fmt(d.total_refunds/100);
+  g('pendBadge').textContent=d.pending_payments;
+  if(d.pending_payments>0) g('pendStat').classList.add('alert');
 }
+
+/* ── PENDING PAYMENTS ──────────────────────────────────────────────── */
+async function loadPending(){
+  const d=await (await fetch('/api/admin/pending-payments')).json();
+  const el=g('pendList');
+  if(!d.length){
+    el.innerHTML=`<div class="empty-q">🎉 No pending payments right now!</div>`;
+    return;
+  }
+  el.innerHTML=d.map(t=>{
+    const orderRef = t.order_ref||'—';
+    const utr = t.utr||'Not submitted yet';
+    const isSubmitted = t.payment_status==='utr_submitted';
+    return `<div class="pq-item" id="pq-${t.id}">
+      <span class="pq-emoji">${t.emoji}</span>
+      <div class="pq-info">
+        <div class="pq-name">${t.pname}</div>
+        <div class="pq-meta">
+          👤 <strong>${t.uname}</strong> · ${t.email} ${t.phone?'· 📱 '+t.phone:''}
+          <br>🎟️ ${t.quantity} ticket${t.quantity>1?'s':''} · Order: <code>${orderRef}</code>
+          <br>📅 ${new Date(t.created_at).toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+          <br>${isSubmitted ? `<span class="pq-utr">UTR: ${utr}</span>` : '<span style="color:var(--tx3);font-size:12px">⚠️ Customer hasn\'t submitted UTR yet</span>'}
+        </div>
+      </div>
+      <div class="pq-amount">₹${fmt(t.amount_paid/100)}</div>
+      <div class="pq-actions">
+        ${isSubmitted ? `
+          <button class="btn-confirm" onclick="confirmPay(${t.id})">✅ Confirm</button>
+          <button class="btn-reject" onclick="rejectPay(${t.id})">✕ Reject</button>
+        ` : `<span class="pill s-pend">Awaiting UTR</span>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function confirmPay(tid){
+  if(!confirm('Confirm this payment? This will activate the ticket and fill slots.')) return;
+  const r=await post(`/api/admin/confirm-payment/${tid}`,{});
+  if(r.error){alert('Error: '+r.error);return;}
+  alert(r.draw_result
+    ? `🎰 DRAW TRIGGERED!\nWinner: ${r.draw_result.winner_name}\n📞 ${r.draw_result.winner_phone}\nRefund: ₹${fmt(r.draw_result.refund_amount/100)}`
+    : `✅ Confirmed! Slots: ${r.filled_slots}/${r.total_slots}`);
+  loadPending(); loadStats();
+}
+
+async function rejectPay(tid){
+  if(!confirm('Reject this payment? The ticket will be marked as rejected.')) return;
+  await post(`/api/admin/reject-payment/${tid}`,{});
+  loadPending(); loadStats();
+}
+
+/* ── REFUNDS ───────────────────────────────────────────────────────── */
+async function loadRefunds(){
+  const d=await (await fetch('/api/draws')).json();
+  const el=g('refundList');
+  const pending=d.filter(x=>x.refund_status==='pending');
+  if(!pending.length){el.innerHTML=`<div class="empty-q">✅ No pending refunds!</div>`;return;}
+  el.innerHTML=pending.map(r=>`
+    <div class="refund-item">
+      <div class="refund-hdr">
+        <div class="refund-name">${r.emoji} ${r.pname} — Draw #${r.id}</div>
+        <div class="refund-amt">₹${fmt(r.refund_amount/100)}</div>
+      </div>
+      <div class="refund-meta">
+        🏆 Winner: <strong>${r.wname}</strong><br>
+        📅 Draw on: ${new Date(r.drawn_at).toLocaleString('en-IN')}<br>
+        <span style="color:var(--amber)">Send ₹${fmt(r.refund_amount/100)} via PhonePe/UPI to winner's registered phone number, then enter the UTR below.</span>
+      </div>
+      <div class="refund-input-row">
+        <input class="refund-input" id="rUtr${r.id}" placeholder="Your outgoing UTR / Transaction ID">
+        <button class="btn-gd" onclick="markRefunded(${r.id})">Mark Sent ✓</button>
+      </div>
+    </div>`).join('');
+}
+
+async function markRefunded(drawId){
+  const utr=g('rUtr'+drawId).value.trim();
+  if(!utr){alert('Enter the UTR of the refund you sent.');return;}
+  const r=await post(`/api/admin/mark-refunded/${drawId}`,{upi_ref:utr});
+  alert(r.message); loadRefunds(); loadStats();
+}
+
+/* ── DRAWS ─────────────────────────────────────────────────────────── */
 async function loadDraws(){
-  const r=await fetch('/api/products');const prods=await r.json();
-  const el=document.getElementById('activeDraws');
-  if(!prods.length){el.innerHTML='<p style="color:var(--mt);padding:20px 0">No active draws.</p>';return;}
-  el.innerHTML=`<table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Slots</th><th>Fill %</th><th>Status</th><th>Action</th></tr></thead><tbody>
-  ${prods.map(p=>`<tr>
+  const d=await (await fetch('/api/products')).json();
+  const el=g('drawList');
+  if(!d.length){el.innerHTML='<p style="color:var(--tx3);padding:20px 0">No active draws.</p>';return;}
+  el.innerHTML=`<table><thead><tr><th>Product</th><th>Category</th><th>Ticket ₹</th><th>Slots</th><th>Fill</th><th>Action</th></tr></thead><tbody>
+  ${d.map(p=>`<tr>
     <td><strong>${p.emoji} ${p.name}</strong></td>
-    <td>${p.category}</td>
+    <td style="color:var(--tx3)">${p.category}</td>
     <td>₹${fmt(p.ticket_price_inr)}</td>
     <td>${p.filled_slots}/${p.total_slots}</td>
-    <td><div style="background:var(--s2);border-radius:4px;height:6px;width:80px"><div style="height:100%;background:linear-gradient(90deg,var(--ac),var(--gd));border-radius:4px;width:${p.fill_pct}%"></div></div> ${p.fill_pct}%</td>
-    <td><span class="pill act">${p.status}</span></td>
-    <td><button class="btn gd" onclick="forceDraw(${p.id},'${p.name}')" style="padding:6px 12px;font-size:12px">🎰 Force Draw</button></td>
+    <td><div style="background:var(--ink4);border-radius:4px;height:5px;width:80px"><div style="height:100%;background:linear-gradient(90deg,var(--violet2),var(--amber));border-radius:4px;width:${p.fill_pct}%"></div></div> ${p.fill_pct}%</td>
+    <td><button class="btn-gd" onclick="forceDraw(${p.id},'${p.name}')">🎰 Force Draw</button></td>
   </tr>`).join('')}
   </tbody></table>`;
 }
-async function loadTickets(){
-  const r=await fetch('/api/admin/tickets');const tix=await r.json();
-  const el=document.getElementById('ticketsTable');
-  if(!tix.length){el.innerHTML='<p style="color:var(--mt);padding:20px 0">No tickets yet.</p>';return;}
-  el.innerHTML=`<table><thead><tr><th>User</th><th>Product</th><th>Qty</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>
-  ${tix.slice(0,50).map(t=>`<tr>
-    <td><strong>${t.user_name}</strong><br><span style="color:var(--mt);font-size:12px">${t.email}</span></td>
-    <td>${t.product_name}</td>
+
+async function forceDraw(pid,name){
+  if(!confirm(`Force lucky draw for "${name}"?`)) return;
+  const r=await post(`/api/admin/draw/${pid}`,{});
+  if(r.error){alert('Error: '+r.error);return;}
+  alert(`🎉 Draw!\nWinner: ${r.winner_name}\n📞 ${r.winner_phone||'—'}\nSlot: ${r.winning_slot}/${r.total_slots}\nRefund: ₹${fmt(r.refund_amount/100)}`);
+  loadDraws(); loadStats();
+}
+
+/* ── CREATE ────────────────────────────────────────────────────────── */
+async function createProduct(){
+  const data={name:g('pName').value,category:g('pCat').value,emoji:g('pEmoji').value||'📦',
+    original_price:parseFloat(g('pOrig').value),ticket_price:parseFloat(g('pTick').value),
+    total_slots:parseInt(g('pSlots').value),description:g('pDesc').value};
+  const r=await post('/api/admin/products',data);
+  const msg=g('cpMsg'); msg.style.display='block';
+  if(r.product_id){msg.className='msg ok';msg.textContent='✅ Draw created!';loadDraws();}
+  else{msg.className='msg err';msg.textContent='❌ '+(r.error||'Error');}
+}
+
+/* ── ALL TICKETS ───────────────────────────────────────────────────── */
+async function loadAll(){
+  const d=await (await fetch('/api/admin/all-tickets')).json();
+  const el=g('allTable');
+  if(!d.length){el.innerHTML='<p style="color:var(--tx3);padding:20px">No tickets yet.</p>';return;}
+  el.innerHTML=`<table><thead><tr><th>User</th><th>Product</th><th>Qty</th><th>Amount</th><th>UTR</th><th>Status</th><th>Date</th></tr></thead><tbody>
+  ${d.slice(0,100).map(t=>`<tr>
+    <td><strong>${t.uname}</strong><br><span style="color:var(--tx3);font-size:11px">${t.email}</span></td>
+    <td>${t.emoji} ${t.pname}</td>
     <td>${t.quantity}</td>
     <td>₹${fmt(t.amount_paid/100)}</td>
-    <td><span class="pill ${t.payment_status==='paid'?'paid':t.payment_status==='refunded'?'ref':'pend'}">${t.payment_status}</span>${t.is_winner?'<span class="pill" style="margin-left:4px;background:rgba(245,200,66,.15);color:var(--gd)">🏆 Winner</span>':''}</td>
-    <td style="color:var(--mt)">${new Date(t.created_at).toLocaleDateString('en-IN')}</td>
+    <td><code style="font-size:11px;color:var(--tx3)">${t.utr||'—'}</code></td>
+    <td><span class="pill ${statusClass(t.payment_status)}">${t.payment_status}</span>${t.is_winner?'<span class="pill p-win" style="margin-left:4px">🏆</span>':''}</td>
+    <td style="color:var(--tx3);font-size:12px">${new Date(t.created_at).toLocaleDateString('en-IN')}</td>
   </tr>`).join('')}
   </tbody></table>`;
 }
-async function createProduct(){
-  const data={
-    name:document.getElementById('pName').value,
-    category:document.getElementById('pCat').value,
-    emoji:document.getElementById('pEmoji').value||'📦',
-    original_price:parseFloat(document.getElementById('pOrig').value),
-    ticket_price:parseFloat(document.getElementById('pTicket').value),
-    total_slots:parseInt(document.getElementById('pSlots').value),
-    description:document.getElementById('pDesc').value,
-  };
-  const r=await fetch('/api/admin/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-  const d=await r.json();const msg=document.getElementById('cpMsg');
-  msg.style.display='block';
-  if(r.ok){msg.className='msg ok';msg.textContent='✅ '+d.message;loadDraws();}
-  else{msg.className='msg err';msg.textContent='❌ '+d.error;}
+
+function statusClass(s){
+  return{paid:'p-paid',utr_submitted:'p-utr',pending:'p-pend',rejected:'p-rej',refunded:'p-ref'}[s]||'p-pend';
 }
-async function forceDraw(pid,name){
-  if(!confirm(`Force lucky draw for "${name}"? This cannot be undone.`))return;
-  const r=await fetch(`/api/admin/draw/${pid}`,{method:'POST'});
-  const d=await r.json();
-  if(d.error){alert('Error: '+d.error);return;}
-  alert(`🎉 Draw complete!\nWinner: ${d.winner_name}\nSlot: ${d.winning_slot}/${d.total_slots}\nRefund: ₹${fmt(d.refund_amount/100)}`);
-  loadDraws();loadStats();
+
+/* ── UTILS ─────────────────────────────────────────────────────────── */
+const g=id=>document.getElementById(id);
+const fmt=n=>Number(n).toLocaleString('en-IN');
+async function post(url,body){
+  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  return r.json();
 }
-function fmt(n){return Number(n).toLocaleString('en-IN');}
-loadStats();loadDraws();loadTickets();
+
+// Auto-refresh pending payments every 30 seconds
+loadStats(); loadPending();
+setInterval(()=>{ loadStats(); if(document.getElementById('tabPayments').style.display!=='none') loadPending(); }, 30000);
 </script>
 </body>
 </html>

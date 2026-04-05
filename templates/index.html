@@ -7,546 +7,234 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-/* ── DESIGN SYSTEM ──────────────────────────────────────────────────────── */
 :root {
-  --ink: #05050a;
-  --ink2: #0d0d18;
-  --ink3: #141424;
-  --ink4: #1c1c32;
-  --line: rgba(255,255,255,.07);
-  --line2: rgba(255,255,255,.12);
-  --tx: #f2f2fa;
-  --tx2: #a0a0c0;
-  --tx3: #606080;
-  --amber: #f0b429;
-  --amber2: #d4920a;
-  --amber3: rgba(240,180,41,.12);
-  --amber4: rgba(240,180,41,.06);
-  --violet: #8b7cf8;
-  --violet2: #6b5ce7;
-  --green: #22c55e;
-  --red: #ef4444;
-  --r: 18px;
-  --r2: 24px;
-  --glow-amber: 0 0 60px rgba(240,180,41,.15);
-  --glow-violet: 0 0 60px rgba(139,124,248,.12);
+  --ink:#05050a; --ink2:#0d0d18; --ink3:#141424; --ink4:#1c1c32;
+  --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.12);
+  --tx:#f2f2fa; --tx2:#a0a0c0; --tx3:#606080;
+  --amber:#f0b429; --amber2:#d4920a; --amber3:rgba(240,180,41,.12); --amber4:rgba(240,180,41,.06);
+  --violet:#8b7cf8; --violet2:#6b5ce7;
+  --green:#22c55e; --red:#ef4444; --blue:#3b82f6;
+  --phonepe:#5f259f;
+  --r:18px; --r2:24px;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Instrument Sans',sans-serif;background:var(--ink);color:var(--tx);min-height:100vh;overflow-x:hidden;}
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 900px 600px at 20% 10%,rgba(139,124,248,.06),transparent 70%),radial-gradient(ellipse 700px 500px at 80% 80%,rgba(240,180,41,.05),transparent 70%);}
+.noise{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'Instrument Sans', system-ui, sans-serif;
-  background: var(--ink);
-  color: var(--tx);
-  min-height: 100vh;
-  overflow-x: hidden;
-  cursor: default;
-}
+/* NAV */
+nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(5,5,10,.75);backdrop-filter:blur(28px) saturate(1.5);border-bottom:1px solid var(--line);}
+.logo{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px;text-decoration:none;}
+.lmark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--amber2),var(--amber));display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 4px 16px rgba(240,180,41,.35);}
+.ltxt{background:linear-gradient(120deg,var(--tx) 40%,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nc{display:flex;gap:2px;}
+.nl{color:var(--tx2);text-decoration:none;font-size:14px;font-weight:500;padding:8px 16px;border-radius:10px;transition:all .2s;}
+.nl:hover{color:var(--tx);background:var(--line);}
+.nr{display:flex;align-items:center;gap:10px;}
+.nb{padding:9px 20px;border-radius:12px;font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none;}
+.ng{background:transparent;color:var(--tx2);border:1px solid var(--line2);}
+.ng:hover{color:var(--tx);background:var(--line);}
+.np{background:var(--amber);color:#000;box-shadow:0 4px 20px rgba(240,180,41,.3);}
+.np:hover{background:var(--amber2);transform:translateY(-1px);}
+.cpill{display:flex;align-items:center;gap:8px;background:var(--ink3);border:1px solid var(--line2);border-radius:50px;padding:8px 16px 8px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--tx2);}
+.cpill:hover{border-color:var(--amber);color:var(--tx);}
+.cc{background:var(--amber);color:#000;border-radius:50%;width:20px;height:20px;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
 
-/* ── AMBIENT BG ─────────────────────────────────────────────────────────── */
-.ambient {
-  position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  background:
-    radial-gradient(ellipse 900px 600px at 20% 10%, rgba(139,124,248,.06) 0%, transparent 70%),
-    radial-gradient(ellipse 700px 500px at 80% 80%, rgba(240,180,41,.05) 0%, transparent 70%),
-    radial-gradient(ellipse 500px 400px at 60% 30%, rgba(139,124,248,.04) 0%, transparent 60%);
-}
-.noise {
-  position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 200px;
-}
+/* HERO */
+.hero{position:relative;z-index:1;padding:96px 48px 72px;text-align:center;overflow:hidden;}
+.heyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--amber4);border:1px solid rgba(240,180,41,.2);color:var(--amber);border-radius:50px;padding:7px 18px;font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:28px;animation:rise .7s ease both;}
+.heyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite;}
+.htitle{font-family:'Clash Display',sans-serif;font-size:clamp(44px,7vw,88px);font-weight:700;line-height:.95;letter-spacing:-2px;animation:rise .7s .08s ease both;}
+.htitle em{font-style:normal;background:linear-gradient(120deg,var(--amber),#ff9500 50%,var(--amber));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 4s linear infinite;}
+.hsub{margin:24px auto 0;max-width:480px;color:var(--tx2);font-size:17px;line-height:1.65;animation:rise .7s .16s ease both;}
+.hsteps{display:flex;align-items:center;justify-content:center;gap:0;margin:44px auto 0;max-width:720px;animation:rise .7s .24s ease both;background:var(--ink3);border:1px solid var(--line);border-radius:20px;overflow:hidden;}
+.hstep{flex:1;padding:20px 16px;text-align:center;border-right:1px solid var(--line);}
+.hstep:last-child{border-right:none;}
+.hn{font-family:'Clash Display',sans-serif;font-size:11px;font-weight:700;color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.ht{font-size:13px;font-weight:500;color:var(--tx2);line-height:1.4;}
+.hi{font-size:22px;margin-bottom:6px;display:block;}
 
-/* ── NAV ────────────────────────────────────────────────────────────────── */
-nav {
-  position: sticky; top: 0; z-index: 100;
-  height: 68px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 48px;
-  background: rgba(5,5,10,.7);
-  backdrop-filter: blur(28px) saturate(1.5);
-  border-bottom: 1px solid var(--line);
-}
-.logo {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 20px; font-weight: 700; letter-spacing: -.3px;
-  display: flex; align-items: center; gap: 10px;
-  text-decoration: none;
-}
-.logo-mark {
-  width: 34px; height: 34px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--amber2), var(--amber));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 17px; box-shadow: 0 4px 16px rgba(240,180,41,.35);
-}
-.logo-text {
-  background: linear-gradient(120deg, var(--tx) 40%, var(--amber));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.nav-center { display: flex; gap: 2px; }
-.nav-link {
-  color: var(--tx2); text-decoration: none; font-size: 14px; font-weight: 500;
-  padding: 8px 16px; border-radius: 10px; transition: all .2s;
-}
-.nav-link:hover { color: var(--tx); background: var(--line); }
-.nav-right { display: flex; align-items: center; gap: 10px; }
-.nb { padding: 9px 20px; border-radius: 12px; font-family: 'Instrument Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; border: none; }
-.nb-ghost { background: transparent; color: var(--tx2); border: 1px solid var(--line2); }
-.nb-ghost:hover { color: var(--tx); border-color: var(--line2); background: var(--line); }
-.nb-primary { background: var(--amber); color: #000; box-shadow: 0 4px 20px rgba(240,180,41,.3); }
-.nb-primary:hover { background: var(--amber2); box-shadow: 0 4px 28px rgba(240,180,41,.45); transform: translateY(-1px); }
-.cart-pill {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--ink3); border: 1px solid var(--line2);
-  border-radius: 50px; padding: 8px 16px 8px 14px;
-  font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s;
-  color: var(--tx2);
-}
-.cart-pill:hover { border-color: var(--amber); color: var(--tx); }
-.cart-count {
-  background: var(--amber); color: #000; border-radius: 50%;
-  width: 20px; height: 20px; font-size: 11px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-}
+/* TICKER */
+.ticker{position:relative;z-index:1;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--ink2);padding:14px 0;overflow:hidden;margin-bottom:64px;}
+.tlbl{position:absolute;left:48px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--amber);z-index:2;display:flex;align-items:center;gap:7px;}
+.tlbl::after{content:'';width:1px;height:20px;background:var(--line2);}
+.ttrack{display:flex;animation:ticker 35s linear infinite;padding-left:180px;width:max-content;}
+.titem{display:flex;align-items:center;gap:10px;padding:0 28px;border-right:1px solid var(--line);white-space:nowrap;font-size:13px;}
+.tav{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--violet2),var(--violet));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;}
+.ttag{background:rgba(34,197,94,.12);color:var(--green);border-radius:50px;padding:2px 9px;font-size:11px;font-weight:700;}
 
-/* ── HERO ───────────────────────────────────────────────────────────────── */
-.hero {
-  position: relative; z-index: 1;
-  padding: 96px 48px 72px;
-  text-align: center;
-  overflow: hidden;
-}
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--amber4); border: 1px solid rgba(240,180,41,.2);
-  color: var(--amber); border-radius: 50px; padding: 7px 18px;
-  font-size: 12px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase;
-  margin-bottom: 28px;
-  animation: rise .7s ease both;
-}
-.hero-eyebrow::before {
-  content: ''; width: 6px; height: 6px; border-radius: 50%;
-  background: var(--amber); animation: pulse 2s infinite;
-}
-.hero-title {
-  font-family: 'Clash Display', sans-serif;
-  font-size: clamp(44px, 7vw, 88px);
-  font-weight: 700; line-height: .95; letter-spacing: -2px;
-  animation: rise .7s .08s ease both;
-}
-.hero-title em {
-  font-style: normal;
-  background: linear-gradient(120deg, var(--amber) 0%, #ff9500 50%, var(--amber) 100%);
-  background-size: 200% 100%;
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  animation: shimmer 4s linear infinite;
-}
-.hero-sub {
-  margin: 24px auto 0; max-width: 480px;
-  color: var(--tx2); font-size: 17px; line-height: 1.65;
-  animation: rise .7s .16s ease both;
-}
-.hero-steps {
-  display: flex; align-items: center; justify-content: center;
-  gap: 0; margin: 44px auto 0; max-width: 720px;
-  animation: rise .7s .24s ease both;
-  background: var(--ink3); border: 1px solid var(--line);
-  border-radius: 20px; overflow: hidden;
-}
-.hstep {
-  flex: 1; padding: 20px 16px; text-align: center;
-  border-right: 1px solid var(--line); position: relative;
-}
-.hstep:last-child { border-right: none; }
-.hstep-num {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 11px; font-weight: 700; color: var(--amber);
-  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;
-}
-.hstep-text { font-size: 13px; font-weight: 500; color: var(--tx2); line-height: 1.4; }
-.hstep-icon { font-size: 22px; margin-bottom: 6px; display: block; }
+/* SECTION */
+.sec{position:relative;z-index:1;padding:0 48px 100px;}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}
+.st{font-family:'Clash Display',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.5px;}
+.cdb{display:flex;align-items:center;gap:10px;background:var(--ink3);border:1px solid var(--line2);border-radius:50px;padding:10px 20px;font-size:13px;font-weight:500;color:var(--tx2);}
+.cdv{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;color:var(--amber);letter-spacing:1px;}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
+.filts{display:flex;gap:8px;margin-bottom:36px;flex-wrap:wrap;}
+.filt{padding:9px 20px;border-radius:50px;background:var(--ink3);border:1px solid var(--line);color:var(--tx2);font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;}
+.filt:hover{border-color:var(--line2);color:var(--tx);}
+.filt.on{background:var(--amber3);border-color:rgba(240,180,41,.35);color:var(--amber);}
 
-/* ── WINNERS TICKER ─────────────────────────────────────────────────────── */
-.ticker-wrap {
-  position: relative; z-index: 1;
-  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-  background: var(--ink2); padding: 14px 0; overflow: hidden;
-  margin-bottom: 64px;
-}
-.ticker-label {
-  position: absolute; left: 48px; top: 50%; transform: translateY(-50%);
-  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px;
-  color: var(--amber); z-index: 2;
-  display: flex; align-items: center; gap: 7px;
-}
-.ticker-label::after {
-  content: ''; width: 1px; height: 20px; background: var(--line2); display: block;
-}
-.ticker-track {
-  display: flex; gap: 0; animation: ticker 35s linear infinite;
-  padding-left: 180px; width: max-content;
-}
-.ticker-item {
-  display: flex; align-items: center; gap: 10px; padding: 0 28px;
-  border-right: 1px solid var(--line); white-space: nowrap; font-size: 13px;
-}
-.ticker-avatar {
-  width: 26px; height: 26px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--violet2), var(--violet));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0;
-}
-.ticker-name { color: var(--tx2); }
-.ticker-product { color: var(--amber); font-weight: 600; }
-.ticker-tag {
-  background: rgba(34,197,94,.12); color: var(--green);
-  border-radius: 50px; padding: 2px 9px; font-size: 11px; font-weight: 700;
-}
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;}
+.pcard{background:var(--ink3);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .3s,box-shadow .3s;cursor:pointer;animation:rise .5s ease both;}
+.pcard:hover{transform:translateY(-6px) scale(1.01);border-color:rgba(240,180,41,.25);box-shadow:0 24px 64px rgba(0,0,0,.5),0 0 60px rgba(240,180,41,.08);}
+.pcimg{width:100%;height:220px;background:linear-gradient(135deg,var(--ink4),var(--ink2));display:flex;align-items:center;justify-content:center;font-size:80px;position:relative;}
+.pcig{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 80%,rgba(240,180,41,.08),transparent);}
+.pcio{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--ink3));}
+.pcem{position:relative;z-index:1;filter:drop-shadow(0 8px 24px rgba(0,0,0,.5));}
+.bhot{position:absolute;top:14px;left:14px;z-index:3;background:linear-gradient(135deg,var(--amber2),var(--amber));color:#000;font-size:10px;font-weight:800;border-radius:8px;padding:4px 10px;letter-spacing:.5px;text-transform:uppercase;box-shadow:0 4px 16px rgba(240,180,41,.4);}
+.bnew{position:absolute;top:14px;right:14px;z-index:3;background:var(--ink4);border:1px solid var(--line2);color:var(--violet);font-size:10px;font-weight:700;border-radius:8px;padding:4px 10px;text-transform:uppercase;}
+.pcb{padding:22px;}
+.pccat{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--violet);margin-bottom:8px;}
+.pcname{font-family:'Clash Display',sans-serif;font-size:19px;font-weight:700;letter-spacing:-.3px;line-height:1.25;margin-bottom:6px;}
+.pcdesc{font-size:12px;color:var(--tx3);margin-bottom:18px;line-height:1.55;}
+.pcpr{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.prm{font-family:'Clash Display',sans-serif;font-size:26px;font-weight:700;color:var(--amber);}
+.pro{font-size:13px;color:var(--tx3);text-decoration:line-through;}
+.prs{margin-left:auto;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green);border-radius:50px;padding:3px 11px;font-size:11px;font-weight:700;}
+.sli{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--tx3);margin-bottom:8px;}
+.slc{font-weight:600;color:var(--tx2);}
+.slbar{height:5px;background:var(--ink4);border-radius:50px;overflow:hidden;margin-bottom:18px;}
+.slfill{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--violet2),var(--amber));transition:width .6s ease;}
+.slfill.hot{background:linear-gradient(90deg,#ef4444,var(--amber));}
+.bentd{width:100%;padding:14px;border-radius:14px;border:none;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--violet2),var(--violet));color:#fff;transition:all .25s;box-shadow:0 4px 20px rgba(107,92,231,.25);}
+.bentd:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(107,92,231,.4);}
 
-/* ── SECTION ────────────────────────────────────────────────────────────── */
-.section { position: relative; z-index: 1; padding: 0 48px 100px; }
-.section-head {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 32px;
-}
-.section-title {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 28px; font-weight: 700; letter-spacing: -.5px;
-}
-.countdown-badge {
-  display: flex; align-items: center; gap: 10px;
-  background: var(--ink3); border: 1px solid var(--line2);
-  border-radius: 50px; padding: 10px 20px;
-  font-size: 13px; font-weight: 500; color: var(--tx2);
-}
-.countdown-val {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 16px; font-weight: 700; color: var(--amber);
-  letter-spacing: 1px;
-}
-.cd-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
+/* MODALS */
+.ov{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+.ov.open{opacity:1;pointer-events:all;}
+.sh2{background:var(--ink3);border:1px solid var(--line2);border-radius:28px;width:100%;max-width:480px;transform:translateY(24px) scale(.97);transition:transform .35s cubic-bezier(.34,1.2,.64,1);overflow:hidden;}
+.ov.open .sh2{transform:translateY(0) scale(1);}
+.shh{padding:26px 26px 0;display:flex;align-items:center;justify-content:space-between;}
+.sht{font-family:'Clash Display',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.3px;}
+.shc{width:34px;height:34px;border-radius:10px;background:var(--ink4);border:1px solid var(--line);color:var(--tx2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.shc:hover{color:var(--tx);}
+.shb{padding:22px 26px 28px;}
 
-/* ── FILTERS ────────────────────────────────────────────────────────────── */
-.filters {
-  display: flex; gap: 8px; margin-bottom: 36px; flex-wrap: wrap;
-}
-.filter {
-  padding: 9px 20px; border-radius: 50px;
-  background: var(--ink3); border: 1px solid var(--line);
-  color: var(--tx2); font-family: 'Instrument Sans', sans-serif;
-  font-size: 13px; font-weight: 500; cursor: pointer; transition: all .2s;
-}
-.filter:hover { border-color: var(--line2); color: var(--tx); }
-.filter.on { background: var(--amber3); border-color: rgba(240,180,41,.35); color: var(--amber); }
+/* AUTH */
+.atabs{display:flex;gap:4px;background:var(--ink4);border-radius:14px;padding:4px;margin-bottom:22px;}
+.atab{flex:1;padding:9px;border-radius:11px;border:none;background:transparent;color:var(--tx2);font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;}
+.atab.on{background:var(--ink3);color:var(--tx);box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.fld{margin-bottom:14px;}
+.fld label{display:block;font-size:12px;font-weight:600;color:var(--tx3);margin-bottom:6px;}
+.fld input{width:100%;padding:12px 15px;background:var(--ink4);border:1px solid var(--line);border-radius:12px;color:var(--tx);font-family:'Instrument Sans',sans-serif;font-size:14px;transition:border-color .2s;outline:none;}
+.fld input:focus{border-color:rgba(139,124,248,.5);box-shadow:0 0 0 3px rgba(139,124,248,.1);}
+.fld input::placeholder{color:var(--tx3);}
+.bfl{width:100%;padding:14px;border-radius:14px;border:none;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--violet2),var(--violet));color:#fff;transition:all .25s;box-shadow:0 4px 20px rgba(107,92,231,.3);}
+.bfl:hover{box-shadow:0 8px 32px rgba(107,92,231,.45);transform:translateY(-1px);}
+.bamber{width:100%;padding:16px;border-radius:14px;border:none;font-family:'Instrument Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--amber2),var(--amber));color:#000;transition:all .25s;box-shadow:0 4px 24px rgba(240,180,41,.3);}
+.bamber:hover{box-shadow:0 8px 36px rgba(240,180,41,.45);transform:translateY(-1px);}
+.errm{color:var(--red);font-size:13px;margin-top:12px;display:none;}
 
-/* ── PRODUCT GRID ───────────────────────────────────────────────────────── */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
-}
-.pcard {
-  background: var(--ink3);
-  border: 1px solid var(--line);
-  border-radius: var(--r2);
-  overflow: hidden;
-  transition: transform .3s cubic-bezier(.34,1.56,.64,1), border-color .3s, box-shadow .3s;
-  cursor: pointer;
-  animation: rise .5s ease both;
-  position: relative;
-}
-.pcard:hover {
-  transform: translateY(-6px) scale(1.01);
-  border-color: rgba(240,180,41,.25);
-  box-shadow: 0 24px 64px rgba(0,0,0,.5), 0 0 0 1px rgba(240,180,41,.08), var(--glow-amber);
-}
-.pcard-img {
-  width: 100%; height: 220px;
-  background: linear-gradient(135deg, var(--ink4) 0%, var(--ink2) 100%);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 80px; position: relative; overflow: hidden;
-}
-.pcard-img-glow {
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 60% 50% at 50% 80%, rgba(240,180,41,.08), transparent);
-}
-.pcard-img-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, transparent 40%, var(--ink3) 100%);
-}
-.pcard-emoji { position: relative; z-index: 1; filter: drop-shadow(0 8px 24px rgba(0,0,0,.5)); }
-.badge-hot {
-  position: absolute; top: 14px; left: 14px; z-index: 3;
-  background: linear-gradient(135deg, var(--amber2), var(--amber));
-  color: #000; font-size: 10px; font-weight: 800;
-  border-radius: 8px; padding: 4px 10px; letter-spacing: .5px; text-transform: uppercase;
-  box-shadow: 0 4px 16px rgba(240,180,41,.4);
-}
-.badge-new {
-  position: absolute; top: 14px; right: 14px; z-index: 3;
-  background: var(--ink4); border: 1px solid var(--line2);
-  color: var(--violet); font-size: 10px; font-weight: 700;
-  border-radius: 8px; padding: 4px 10px; letter-spacing: .5px; text-transform: uppercase;
-}
-.pcard-body { padding: 22px; }
-.pcard-cat {
-  font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
-  color: var(--violet); margin-bottom: 8px;
-}
-.pcard-name {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 19px; font-weight: 700; letter-spacing: -.3px;
-  line-height: 1.25; margin-bottom: 6px;
-}
-.pcard-desc { font-size: 12px; color: var(--tx3); margin-bottom: 18px; line-height: 1.55; }
-.pcard-price {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
-}
-.price-main {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 26px; font-weight: 700; color: var(--amber);
-}
-.price-orig { font-size: 13px; color: var(--tx3); text-decoration: line-through; }
-.price-save {
-  margin-left: auto;
-  background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.2);
-  color: var(--green); border-radius: 50px; padding: 3px 11px;
-  font-size: 11px; font-weight: 700;
-}
-.slot-info {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 11px; color: var(--tx3); margin-bottom: 8px;
-}
-.slot-count { font-weight: 600; color: var(--tx2); }
-.slot-bar { height: 5px; background: var(--ink4); border-radius: 50px; overflow: hidden; margin-bottom: 18px; }
-.slot-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, var(--violet2), var(--amber)); transition: width .6s ease; }
-.slot-fill.hot { background: linear-gradient(90deg, #ef4444, var(--amber)); }
-.btn-enter {
-  width: 100%; padding: 14px;
-  border-radius: 14px; border: none;
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 14px; font-weight: 600; cursor: pointer;
-  background: linear-gradient(135deg, var(--violet2) 0%, var(--violet) 100%);
-  color: #fff; letter-spacing: .2px;
-  transition: all .25s;
-  box-shadow: 0 4px 20px rgba(107,92,231,.25);
-}
-.btn-enter:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(107,92,231,.4); }
-.btn-enter:active { transform: translateY(0); }
+/* BUY MODAL — STEP 1: QUANTITY */
+.bpr{display:flex;align-items:center;gap:14px;background:var(--ink4);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:20px;}
+.qrow{display:flex;align-items:center;margin-bottom:20px;}
+.qlbl{flex:1;font-size:14px;font-weight:500;}
+.qsub{font-size:12px;color:var(--tx3);font-weight:400;}
+.qctrl{display:flex;align-items:center;gap:12px;}
+.qbtn{width:36px;height:36px;border-radius:10px;background:var(--ink4);border:1px solid var(--line2);color:var(--tx);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.qbtn:hover{border-color:var(--amber);color:var(--amber);}
+.qnum{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;min-width:36px;text-align:center;}
+.sumbox{background:var(--ink4);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:18px;}
+.sumr{display:flex;justify-content:space-between;font-size:13px;color:var(--tx3);margin-bottom:10px;}
+.sumr.tot{margin-bottom:0;border-top:1px solid var(--line);padding-top:12px;color:var(--tx);font-size:15px;font-weight:600;}
+.samb{color:var(--amber);font-weight:700;}
+.winnote{display:flex;gap:10px;align-items:flex-start;background:var(--amber4);border:1px solid rgba(240,180,41,.15);border-radius:14px;padding:14px;margin-bottom:20px;font-size:13px;color:var(--tx2);line-height:1.6;}
 
-/* ── OVERLAY / MODAL ────────────────────────────────────────────────────── */
-.overlay {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,.8); backdrop-filter: blur(12px);
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px; opacity: 0; pointer-events: none; transition: opacity .3s;
-}
-.overlay.open { opacity: 1; pointer-events: all; }
-.sheet {
-  background: var(--ink3);
-  border: 1px solid var(--line2);
-  border-radius: 28px;
-  width: 100%; max-width: 460px;
-  transform: translateY(24px) scale(.97);
-  transition: transform .35s cubic-bezier(.34,1.2,.64,1);
-  overflow: hidden;
-}
-.overlay.open .sheet { transform: translateY(0) scale(1); }
-.sheet-head {
-  padding: 26px 26px 0;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.sheet-title {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 21px; font-weight: 700; letter-spacing: -.3px;
-}
-.sheet-close {
-  width: 34px; height: 34px; border-radius: 10px;
-  background: var(--ink4); border: 1px solid var(--line);
-  color: var(--tx2); cursor: pointer; font-size: 16px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .2s;
-}
-.sheet-close:hover { color: var(--tx); border-color: var(--line2); }
-.sheet-body { padding: 22px 26px 28px; }
+/* UPI PAYMENT STEP */
+.upi-step{display:none;}
+.upi-step.show{display:block;}
+.upi-header{text-align:center;margin-bottom:20px;}
+.upi-amount{font-family:'Clash Display',sans-serif;font-size:36px;font-weight:700;color:var(--amber);margin-bottom:4px;}
+.upi-ref{font-size:12px;color:var(--tx3);}
 
-/* ── AUTH MODAL ─────────────────────────────────────────────────────────── */
-.auth-tabs {
-  display: flex; gap: 4px; background: var(--ink4);
-  border-radius: 14px; padding: 4px; margin-bottom: 22px;
-}
-.auth-tab {
-  flex: 1; padding: 9px; border-radius: 11px; border: none;
-  background: transparent; color: var(--tx2);
-  font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 500;
-  cursor: pointer; transition: all .2s;
-}
-.auth-tab.on { background: var(--ink3); color: var(--tx); box-shadow: 0 2px 8px rgba(0,0,0,.3); }
-.field { margin-bottom: 14px; }
-.field label { display: block; font-size: 12px; font-weight: 600; color: var(--tx3); margin-bottom: 6px; letter-spacing: .3px; }
-.field input {
-  width: 100%; padding: 12px 15px;
-  background: var(--ink4); border: 1px solid var(--line);
-  border-radius: 12px; color: var(--tx);
-  font-family: 'Instrument Sans', sans-serif; font-size: 14px;
-  transition: border-color .2s, box-shadow .2s; outline: none;
-}
-.field input:focus { border-color: rgba(139,124,248,.5); box-shadow: 0 0 0 3px rgba(139,124,248,.1); }
-.field input::placeholder { color: var(--tx3); }
-.btn-full {
-  width: 100%; padding: 14px; border-radius: 14px; border: none;
-  font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 600;
-  cursor: pointer; background: linear-gradient(135deg, var(--violet2), var(--violet));
-  color: #fff; transition: all .25s; box-shadow: 0 4px 20px rgba(107,92,231,.3);
-}
-.btn-full:hover { box-shadow: 0 8px 32px rgba(107,92,231,.45); transform: translateY(-1px); }
-.err-msg { color: var(--red); font-size: 13px; margin-top: 12px; display: none; }
+/* PhonePe QR box */
+.qr-box{background:var(--ink4);border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:16px;text-align:center;}
+.qr-img-wrap{width:160px;height:160px;background:#fff;border-radius:14px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.qr-img-wrap img{width:100%;height:100%;object-fit:cover;}
+.qr-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:100%;color:#333;}
+.qr-placeholder svg{width:80px;height:80px;}
+.qr-upi-id{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700;color:var(--tx);margin-bottom:4px;}
+.qr-upi-name{font-size:12px;color:var(--tx3);}
 
-/* ── BUY MODAL ──────────────────────────────────────────────────────────── */
-.buy-product-row {
-  display: flex; align-items: center; gap: 14px;
-  background: var(--ink4); border: 1px solid var(--line);
-  border-radius: 16px; padding: 16px; margin-bottom: 20px;
-}
-.buy-emoji { font-size: 38px; }
-.buy-product-name { font-family: 'Clash Display', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 3px; }
-.buy-product-sub { font-size: 12px; color: var(--tx3); }
-.qty-row { display: flex; align-items: center; margin-bottom: 20px; }
-.qty-label { flex: 1; font-size: 14px; font-weight: 500; }
-.qty-sub { font-size: 12px; color: var(--tx3); font-weight: 400; }
-.qty-ctrl { display: flex; align-items: center; gap: 12px; }
-.qty-btn {
-  width: 36px; height: 36px; border-radius: 10px;
-  background: var(--ink4); border: 1px solid var(--line2);
-  color: var(--tx); font-size: 20px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .2s;
-}
-.qty-btn:hover { border-color: var(--amber); color: var(--amber); }
-.qty-num { font-family: 'Clash Display', sans-serif; font-size: 22px; font-weight: 700; min-width: 36px; text-align: center; }
-.summary {
-  background: var(--ink4); border: 1px solid var(--line);
-  border-radius: 16px; padding: 18px; margin-bottom: 18px;
-}
-.sum-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--tx3); margin-bottom: 10px; }
-.sum-row.total { margin-bottom: 0; border-top: 1px solid var(--line); padding-top: 12px; color: var(--tx); font-size: 15px; font-weight: 600; }
-.sum-amber { color: var(--amber); font-weight: 700; }
-.win-note {
-  display: flex; gap: 10px; align-items: flex-start;
-  background: var(--amber4); border: 1px solid rgba(240,180,41,.15);
-  border-radius: 14px; padding: 14px; margin-bottom: 20px;
-  font-size: 13px; color: var(--tx2); line-height: 1.6;
-}
-.win-note-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
-.btn-amber {
-  width: 100%; padding: 16px; border-radius: 14px; border: none;
-  font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 700;
-  cursor: pointer; background: linear-gradient(135deg, var(--amber2), var(--amber));
-  color: #000; letter-spacing: .2px;
-  transition: all .25s; box-shadow: 0 4px 24px rgba(240,180,41,.3);
-}
-.btn-amber:hover { box-shadow: 0 8px 36px rgba(240,180,41,.45); transform: translateY(-1px); }
+/* UPI app buttons */
+.upi-apps{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.upi-app{padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--ink4);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;color:var(--tx);transition:all .2s;}
+.upi-app:hover{border-color:var(--line2);background:var(--ink3);}
+.upi-app-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.upi-pp{background:#5f259f;}
+.upi-gp{background:#fff;}
+.upi-pt{background:#002970;}
+.upi-bh{background:#00b9f1;}
 
-/* ── WINNER MODAL ───────────────────────────────────────────────────────── */
-.winner-body { text-align: center; padding: 44px 32px; }
-.winner-burst { font-size: 72px; margin-bottom: 16px; animation: burst .7s cubic-bezier(.34,1.56,.64,1) both; display: block; }
-.winner-title {
-  font-family: 'Clash Display', sans-serif;
-  font-size: 32px; font-weight: 700; letter-spacing: -.5px; margin-bottom: 10px;
-}
-.winner-sub { color: var(--tx2); font-size: 15px; line-height: 1.65; margin-bottom: 24px; }
-.winner-refund {
-  background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.25);
-  border-radius: 16px; padding: 18px;
-  color: var(--green); font-weight: 600; font-size: 15px; margin-bottom: 24px;
-}
-.confetti-wrap { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.confetti-dot {
-  position: absolute; width: 8px; height: 8px; border-radius: 2px;
-  animation: confetti-fall 3s ease both;
-}
+/* UTR input */
+.utr-box{background:var(--ink4);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px;}
+.utr-label{font-size:12px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.utr-input{width:100%;padding:12px 15px;background:var(--ink3);border:1px solid var(--line);border-radius:12px;color:var(--tx);font-family:'Instrument Sans',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;outline:none;transition:border-color .2s;}
+.utr-input:focus{border-color:rgba(240,180,41,.5);box-shadow:0 0 0 3px rgba(240,180,41,.08);}
+.utr-input::placeholder{font-size:13px;font-weight:400;letter-spacing:0;color:var(--tx3);}
+.utr-hint{font-size:11px;color:var(--tx3);margin-top:8px;line-height:1.5;}
 
-/* ── CART DRAWER ────────────────────────────────────────────────────────── */
-.drawer-wrap { position: fixed; inset: 0; z-index: 300; pointer-events: none; display: flex; justify-content: flex-end; }
-.drawer-bg {
-  position: absolute; inset: 0;
-  background: rgba(0,0,0,.7); backdrop-filter: blur(6px);
-  opacity: 0; transition: opacity .3s; pointer-events: none;
-}
-.drawer-wrap.open .drawer-bg { opacity: 1; pointer-events: all; }
-.drawer-panel {
-  position: relative; width: 400px; height: 100%;
-  background: var(--ink3); border-left: 1px solid var(--line);
-  display: flex; flex-direction: column;
-  transform: translateX(100%); transition: transform .35s cubic-bezier(.4,0,.2,1);
-  pointer-events: all;
-}
-.drawer-wrap.open .drawer-panel { transform: translateX(0); }
-.drawer-head {
-  padding: 26px 24px; border-bottom: 1px solid var(--line);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.drawer-title { font-family: 'Clash Display', sans-serif; font-size: 20px; font-weight: 700; }
-.drawer-items { flex: 1; overflow-y: auto; padding: 16px 24px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
-.ditem {
-  display: flex; align-items: center; gap: 14px;
-  background: var(--ink4); border: 1px solid var(--line);
-  border-radius: 16px; padding: 14px; margin-bottom: 10px;
-}
-.ditem-em { font-size: 32px; flex-shrink: 0; }
-.ditem-info { flex: 1; }
-.ditem-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
-.ditem-sub { font-size: 12px; color: var(--tx3); }
-.ditem-price { font-family: 'Clash Display', sans-serif; font-size: 16px; font-weight: 700; color: var(--amber); }
-.ditem-rm { background: none; border: none; color: var(--tx3); cursor: pointer; font-size: 17px; padding: 4px; transition: color .2s; }
-.ditem-rm:hover { color: var(--red); }
-.drawer-foot { padding: 18px 24px; border-top: 1px solid var(--line); }
-.drawer-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.drawer-total-label { font-size: 14px; color: var(--tx2); }
-.drawer-total-val { font-family: 'Clash Display', sans-serif; font-size: 24px; font-weight: 700; color: var(--amber); }
-.drawer-empty { text-align: center; padding: 64px 20px; color: var(--tx3); }
-.drawer-empty-icon { font-size: 56px; margin-bottom: 14px; display: block; }
+/* Status badge */
+.pending-note{background:rgba(240,180,41,.06);border:1px solid rgba(240,180,41,.2);border-radius:14px;padding:14px;font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;}
 
-/* ── TOAST ──────────────────────────────────────────────────────────────── */
-.toast-stack { position: fixed; bottom: 28px; right: 28px; z-index: 999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-.toast {
-  background: var(--ink3); border: 1px solid var(--line2);
-  border-radius: 16px; padding: 14px 18px;
-  display: flex; align-items: center; gap: 12px;
-  font-size: 14px; font-weight: 500; max-width: 340px;
-  box-shadow: 0 8px 40px rgba(0,0,0,.5);
-  animation: toast-in .3s cubic-bezier(.34,1.2,.64,1) both;
-  pointer-events: all;
-}
-.toast-icon { font-size: 20px; flex-shrink: 0; }
-.toast.t-ok  { border-color: rgba(34,197,94,.25); }
-.toast.t-gd  { border-color: rgba(240,180,41,.3); background: rgba(240,180,41,.05); }
-.toast.t-err { border-color: rgba(239,68,68,.3); }
+/* WINNER */
+.winbody{text-align:center;padding:44px 32px;}
+.wburst{font-size:72px;margin-bottom:16px;animation:burst .7s cubic-bezier(.34,1.56,.64,1) both;display:block;}
+.wtitle{font-family:'Clash Display',sans-serif;font-size:32px;font-weight:700;letter-spacing:-.5px;margin-bottom:10px;}
+.wsub{color:var(--tx2);font-size:15px;line-height:1.65;margin-bottom:24px;}
+.wref{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:16px;padding:18px;color:var(--green);font-weight:600;font-size:15px;margin-bottom:24px;}
+.cwrap{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.cdot{position:absolute;width:8px;height:8px;border-radius:2px;animation:fall 3s ease both;}
 
-/* ── SPINNER ────────────────────────────────────────────────────────────── */
-.spin { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.25); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; vertical-align: middle; }
+/* CART */
+.cdraw{position:fixed;inset:0;z-index:300;display:flex;justify-content:flex-end;pointer-events:none;}
+.cdbg{position:absolute;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);opacity:0;transition:opacity .3s;pointer-events:none;}
+.cdraw.open .cdbg{opacity:1;pointer-events:all;}
+.cdpanel{position:relative;width:400px;height:100%;background:var(--ink3);border-left:1px solid var(--line);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);pointer-events:all;}
+.cdraw.open .cdpanel{transform:translateX(0);}
+.cdhead{padding:26px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.cdtitle{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;}
+.cditems{flex:1;overflow-y:auto;padding:16px 24px;}
+.cdi{display:flex;align-items:center;gap:14px;background:var(--ink4);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;}
+.cdii{flex:1;}
+.cdin{font-size:14px;font-weight:600;margin-bottom:3px;}
+.cdis{font-size:12px;color:var(--tx3);}
+.cdip{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;color:var(--amber);}
+.cdirm{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:17px;padding:4px;transition:color .2s;}
+.cdirm:hover{color:var(--red);}
+.cdfoot{padding:18px 24px;border-top:1px solid var(--line);}
+.cdtrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.cdtl{font-size:14px;color:var(--tx2);}
+.cdtv{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:700;color:var(--amber);}
+.cdempty{text-align:center;padding:64px 20px;color:var(--tx3);}
 
-/* ── KEYFRAMES ──────────────────────────────────────────────────────────── */
-@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
-@keyframes burst { 0% { transform: scale(0) rotate(-20deg); } 70% { transform: scale(1.15) rotate(5deg); } 100% { transform: scale(1) rotate(0); } }
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes confetti-fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
-@keyframes toast-in { from { opacity: 0; transform: translateX(20px) scale(.95); } to { opacity: 1; transform: translateX(0) scale(1); } }
+/* TOAST */
+.twrap{position:fixed;bottom:28px;right:28px;z-index:999;display:flex;flex-direction:column;gap:10px;pointer-events:none;}
+.tst{background:var(--ink3);border:1px solid var(--line2);border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500;max-width:340px;box-shadow:0 8px 40px rgba(0,0,0,.5);animation:tin .3s cubic-bezier(.34,1.2,.64,1) both;pointer-events:all;}
+.tok{border-color:rgba(34,197,94,.25);}
+.tgd{border-color:rgba(240,180,41,.3);background:rgba(240,180,41,.05);}
+.terr{border-color:rgba(239,68,68,.3);}
+.spin{width:18px;height:18px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:inline-block;vertical-align:middle;}
 
-/* ── RESPONSIVE ─────────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  nav { padding: 0 20px; }
-  .nav-center { display: none; }
-  .hero { padding: 64px 20px 48px; }
-  .hero-steps { flex-direction: column; }
-  .hstep { border-right: none; border-bottom: 1px solid var(--line); }
-  .hstep:last-child { border-bottom: none; }
-  .section { padding: 0 20px 64px; }
-  .ticker-label { left: 20px; }
-  .drawer-panel { width: 100%; }
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes burst{0%{transform:scale(0) rotate(-20deg)}70%{transform:scale(1.15) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes sp{to{transform:rotate(360deg)}}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+@keyframes tin{from{opacity:0;transform:translateX(20px) scale(.95)}to{opacity:1;transform:translateX(0) scale(1)}}
+
+@media(max-width:768px){
+  nav{padding:0 20px;} .nc{display:none;}
+  .hero{padding:64px 20px 48px;} .hsteps{flex-direction:column;}
+  .hstep{border-right:none;border-bottom:1px solid var(--line);}
+  .hstep:last-child{border-bottom:none;}
+  .sec{padding:0 20px 64px;} .tlbl{left:20px;}
+  .cdpanel{width:100%;}
 }
 </style>
 </head>
@@ -555,217 +243,269 @@ nav {
 <div class="ambient"></div>
 <div class="noise"></div>
 
-<!-- ── NAV ────────────────────────────────────────────────────────────── -->
 <nav>
-  <a href="/" class="logo">
-    <div class="logo-mark">🎰</div>
-    <span class="logo-text">LuckyCart</span>
-  </a>
-  <div class="nav-center">
-    <a href="#draws" class="nav-link">Live Draws</a>
-    <a href="#winners" class="nav-link">Winners</a>
-    <a href="#how" class="nav-link">How It Works</a>
+  <a href="/" class="logo"><div class="lmark">🎰</div><span class="ltxt">LuckyCart</span></a>
+  <div class="nc">
+    <a href="#draws" class="nl">Live Draws</a>
+    <a href="#winners" class="nl">Winners</a>
+    <a href="#how" class="nl">How It Works</a>
   </div>
-  <div class="nav-right" id="navR">
-    <button class="nb nb-ghost" onclick="openAuth('login')">Login</button>
-    <button class="nb nb-primary" onclick="openAuth('register')">Sign Up Free</button>
-    <div class="cart-pill" onclick="toggleDrawer()">
-      🎟️ <span class="cart-count" id="cCount">0</span>
-    </div>
+  <div class="nr" id="navR">
+    <button class="nb ng" onclick="openAuth('login')">Login</button>
+    <button class="nb np" onclick="openAuth('register')">Sign Up Free</button>
+    <div class="cpill" onclick="toggleDraw()">🎟️ <span class="cc" id="cCnt">0</span></div>
   </div>
 </nav>
 
-<!-- ── HERO ───────────────────────────────────────────────────────────── -->
+<!-- HERO -->
 <section class="hero" id="how">
-  <div class="hero-eyebrow">Every purchase enters you to win it free</div>
-  <h1 class="hero-title">
-    Buy at a<br><em>Discount.</em><br>Win it <em>Free.</em>
-  </h1>
-  <p class="hero-sub">
-    Shop products at exclusive discounted prices. When all slots fill, one lucky buyer gets a complete refund — the product costs them nothing.
-  </p>
-  <div class="hero-steps">
-    <div class="hstep">
-      <span class="hstep-icon">🛍️</span>
-      <div class="hstep-num">Step 01</div>
-      <div class="hstep-text">Browse live draws</div>
-    </div>
-    <div class="hstep">
-      <span class="hstep-icon">🎟️</span>
-      <div class="hstep-num">Step 02</div>
-      <div class="hstep-text">Buy ticket at discount</div>
-    </div>
-    <div class="hstep">
-      <span class="hstep-icon">⚡</span>
-      <div class="hstep-num">Step 03</div>
-      <div class="hstep-text">Draw runs when slots fill</div>
-    </div>
-    <div class="hstep">
-      <span class="hstep-icon">🏆</span>
-      <div class="hstep-num">Step 04</div>
-      <div class="hstep-text">Winner gets full refund!</div>
-    </div>
+  <div class="heyebrow">Every purchase enters you to win it free</div>
+  <h1 class="htitle">Buy at a<br><em>Discount.</em><br>Win it <em>Free.</em></h1>
+  <p class="hsub">Shop at exclusive discounted prices. When all slots fill, one lucky buyer gets a complete refund via UPI — the product is free.</p>
+  <div class="hsteps">
+    <div class="hstep"><span class="hi">🛍️</span><div class="hn">Step 01</div><div class="ht">Browse live draws</div></div>
+    <div class="hstep"><span class="hi">📱</span><div class="hn">Step 02</div><div class="ht">Pay via PhonePe / UPI</div></div>
+    <div class="hstep"><span class="hi">⚡</span><div class="hn">Step 03</div><div class="ht">Draw runs when slots fill</div></div>
+    <div class="hstep"><span class="hi">🏆</span><div class="hn">Step 04</div><div class="ht">Winner gets UPI refund!</div></div>
   </div>
 </section>
 
-<!-- ── WINNERS TICKER ──────────────────────────────────────────────── -->
-<div class="ticker-wrap" id="winners">
-  <div class="ticker-label"><span class="cd-dot"></span> Live Winners</div>
-  <div class="ticker-track" id="tickerTrack">
-    <!-- duplicated for seamless loop -->
-    <div class="ticker-item"><div class="ticker-avatar">RM</div><span class="ticker-name">Rahul M. won</span> <span class="ticker-product">iPhone 14 Pro</span><span class="ticker-tag">FREE</span></div>
-    <div class="ticker-item"><div class="ticker-avatar">PS</div><span class="ticker-name">Priya S. won</span> <span class="ticker-product">Samsung 65" TV</span><span class="ticker-tag">FREE</span></div>
-    <div class="ticker-item"><div class="ticker-avatar">AK</div><span class="ticker-name">Aditya K. won</span> <span class="ticker-product">Google Pixel 8</span><span class="ticker-tag">FREE</span></div>
-    <div class="ticker-item"><div class="ticker-avatar">VT</div><span class="ticker-name">Vikram T. won</span> <span class="ticker-product">iPad Air M2</span><span class="ticker-tag">FREE</span></div>
-    <div class="ticker-item"><div class="ticker-avatar">MJ</div><span class="ticker-name">Meera J. won</span> <span class="ticker-product">Bose QC45</span><span class="ticker-tag">FREE</span></div>
-    <div class="ticker-item"><div class="ticker-avatar">SR</div><span class="ticker-name">Sneha R. won</span> <span class="ticker-product">MacBook Air M2</span><span class="ticker-tag">FREE</span></div>
-    <!-- duplicate -->
-    <div class="ticker-item"><div class="ticker-avatar">RM</div><span class="ticker-name">Rahul M. won</span> <span class="ticker-product">iPhone 14 Pro</span><span class="ticker-tag">FREE</span></div>
-    <div class="ticker-item"><div class="ticker-avatar">PS</div><span class="ticker-name">Priya S. won</span> <span class="ticker-product">Samsung 65" TV</span><span class="ticker-tag">FREE</span></div>
-    <div class="ticker-item"><div class="ticker-avatar">AK</div><span class="ticker-name">Aditya K. won</span> <span class="ticker-product">Google Pixel 8</span><span class="ticker-tag">FREE</span></div>
-    <div class="ticker-item"><div class="ticker-avatar">VT</div><span class="ticker-name">Vikram T. won</span> <span class="ticker-product">iPad Air M2</span><span class="ticker-tag">FREE</span></div>
-    <div class="ticker-item"><div class="ticker-avatar">MJ</div><span class="ticker-name">Meera J. won</span> <span class="ticker-product">Bose QC45</span><span class="ticker-tag">FREE</span></div>
-    <div class="ticker-item"><div class="ticker-avatar">SR</div><span class="ticker-name">Sneha R. won</span> <span class="ticker-product">MacBook Air M2</span><span class="ticker-tag">FREE</span></div>
+<!-- WINNERS TICKER -->
+<div class="ticker" id="winners">
+  <div class="tlbl"><span class="ldot"></span>Live Winners</div>
+  <div class="ttrack" id="ttrack">
+    <div class="titem"><div class="tav">RM</div><span style="color:var(--tx2)">Rahul M. won</span><span style="color:var(--amber);font-weight:600">iPhone 14 Pro</span><span class="ttag">FREE</span></div>
+    <div class="titem"><div class="tav">PS</div><span style="color:var(--tx2)">Priya S. won</span><span style="color:var(--amber);font-weight:600">Samsung TV</span><span class="ttag">FREE</span></div>
+    <div class="titem"><div class="tav">AK</div><span style="color:var(--tx2)">Aditya K. won</span><span style="color:var(--amber);font-weight:600">Pixel 8</span><span class="ttag">FREE</span></div>
+    <div class="titem"><div class="tav">VT</div><span style="color:var(--tx2)">Vikram T. won</span><span style="color:var(--amber);font-weight:600">iPad Air M2</span><span class="ttag">FREE</span></div>
+    <div class="titem"><div class="tav">MJ</div><span style="color:var(--tx2)">Meera J. won</span><span style="color:var(--amber);font-weight:600">Bose QC45</span><span class="ttag">FREE</span></div>
+    <!-- duplicate for seamless loop -->
+    <div class="titem"><div class="tav">RM</div><span style="color:var(--tx2)">Rahul M. won</span><span style="color:var(--amber);font-weight:600">iPhone 14 Pro</span><span class="ttag">FREE</span></div>
+    <div class="titem"><div class="tav">PS</div><span style="color:var(--tx2)">Priya S. won</span><span style="color:var(--amber);font-weight:600">Samsung TV</span><span class="ttag">FREE</span></div>
+    <div class="titem"><div class="tav">AK</div><span style="color:var(--tx2)">Aditya K. won</span><span style="color:var(--amber);font-weight:600">Pixel 8</span><span class="ttag">FREE</span></div>
+    <div class="titem"><div class="tav">VT</div><span style="color:var(--tx2)">Vikram T. won</span><span style="color:var(--amber);font-weight:600">iPad Air M2</span><span class="ttag">FREE</span></div>
+    <div class="titem"><div class="tav">MJ</div><span style="color:var(--tx2)">Meera J. won</span><span style="color:var(--amber);font-weight:600">Bose QC45</span><span class="ttag">FREE</span></div>
   </div>
 </div>
 
-<!-- ── LIVE DRAWS ──────────────────────────────────────────────────── -->
-<section class="section" id="draws">
-  <div class="section-head">
-    <h2 class="section-title">🔥 Live Draws</h2>
-    <div class="countdown-badge">
-      <span class="cd-dot"></span>
-      <span style="color:var(--tx2)">Next scheduled draw</span>
-      <span class="countdown-val" id="cdVal">23:14:07</span>
-    </div>
+<!-- LIVE DRAWS -->
+<section class="sec" id="draws">
+  <div class="sh">
+    <h2 class="st">🔥 Live Draws</h2>
+    <div class="cdb"><span class="ldot"></span><span style="color:var(--tx2)">Next draw in</span><span class="cdv" id="cdv">23:14:07</span></div>
   </div>
-
-  <div class="filters" id="filterRow">
-    <button class="filter on" onclick="setFilter('all',this)">All Draws</button>
-    <button class="filter" onclick="setFilter('Electronics',this)">📱 Electronics</button>
-    <button class="filter" onclick="setFilter('Fashion',this)">👗 Fashion</button>
-    <button class="filter" onclick="setFilter('Lifestyle',this)">🏠 Lifestyle</button>
-    <button class="filter" onclick="setFilter('Gaming',this)">🎮 Gaming</button>
-    <button class="filter" onclick="setFilter('Sports',this)">⚽ Sports</button>
+  <div class="filts">
+    <button class="filt on" onclick="sf('all',this)">All Draws</button>
+    <button class="filt" onclick="sf('Electronics',this)">📱 Electronics</button>
+    <button class="filt" onclick="sf('Fashion',this)">👗 Fashion</button>
+    <button class="filt" onclick="sf('Lifestyle',this)">🏠 Lifestyle</button>
+    <button class="filt" onclick="sf('Gaming',this)">🎮 Gaming</button>
+    <button class="filt" onclick="sf('Sports',this)">⚽ Sports</button>
   </div>
-
-  <div class="grid" id="pGrid">
+  <div class="grid" id="pgrid">
     <div style="grid-column:1/-1;text-align:center;padding:80px;color:var(--tx3)">
-      <div class="spin" style="width:28px;height:28px;border-width:3px;margin:0 auto 16px"></div>
-      Loading live draws…
+      <div class="spin" style="width:28px;height:28px;border-width:3px;margin:0 auto 16px"></div>Loading…
     </div>
   </div>
 </section>
 
-<!-- ── AUTH MODAL ──────────────────────────────────────────────────── -->
-<div class="overlay" id="authOv" onclick="bgClose(event,'authOv')">
-  <div class="sheet">
-    <div class="sheet-head">
-      <div class="sheet-title" id="authT">Welcome back</div>
-      <button class="sheet-close" onclick="closeOv('authOv')">✕</button>
-    </div>
-    <div class="sheet-body">
-      <div class="auth-tabs">
-        <button class="auth-tab on" id="tabLg" onclick="swTab('login')">Login</button>
-        <button class="auth-tab" id="tabRg" onclick="swTab('register')">Sign Up</button>
+<!-- AUTH MODAL -->
+<div class="ov" id="authOv" onclick="bgc(event,'authOv')">
+  <div class="sh2">
+    <div class="shh"><div class="sht" id="authT">Welcome back</div><button class="shc" onclick="cov('authOv')">✕</button></div>
+    <div class="shb">
+      <div class="atabs">
+        <button class="atab on" id="tLg" onclick="sw('login')">Login</button>
+        <button class="atab" id="tRg" onclick="sw('register')">Sign Up</button>
       </div>
       <div id="lgF">
-        <div class="field"><label>Email address</label><input type="email" id="lgEm" placeholder="you@example.com"></div>
-        <div class="field"><label>Password</label><input type="password" id="lgPw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-        <button class="btn-full" onclick="doLogin()">Login to LuckyCart</button>
+        <div class="fld"><label>Email</label><input type="email" id="lgE" placeholder="you@example.com"></div>
+        <div class="fld"><label>Password</label><input type="password" id="lgP" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <button class="bfl" onclick="doLogin()">Login to LuckyCart</button>
       </div>
       <div id="rgF" style="display:none">
-        <div class="field"><label>Full name</label><input type="text" id="rgNm" placeholder="Rahul Sharma"></div>
-        <div class="field"><label>Email address</label><input type="email" id="rgEm" placeholder="you@example.com"></div>
-        <div class="field"><label>Phone (optional)</label><input type="tel" id="rgPh" placeholder="+91 98765 43210"></div>
-        <div class="field"><label>Password (min 8 chars)</label><input type="password" id="rgPw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doReg()"></div>
-        <button class="btn-full" onclick="doReg()">Create Free Account</button>
+        <div class="fld"><label>Full name</label><input type="text" id="rgN" placeholder="Rahul Sharma"></div>
+        <div class="fld"><label>Email</label><input type="email" id="rgE" placeholder="you@example.com"></div>
+        <div class="fld"><label>Phone</label><input type="tel" id="rgPh" placeholder="+91 98765 43210"></div>
+        <div class="fld"><label>Password (min 8 chars)</label><input type="password" id="rgP" placeholder="••••••••" onkeydown="if(event.key==='Enter')doReg()"></div>
+        <button class="bfl" onclick="doReg()">Create Free Account</button>
       </div>
-      <div class="err-msg" id="authErr"></div>
+      <div class="errm" id="authErr"></div>
     </div>
   </div>
 </div>
 
-<!-- ── BUY MODAL ───────────────────────────────────────────────────── -->
-<div class="overlay" id="buyOv" onclick="bgClose(event,'buyOv')">
-  <div class="sheet">
-    <div class="sheet-head">
-      <div class="sheet-title">Enter the Draw 🎰</div>
-      <button class="sheet-close" onclick="closeOv('buyOv')">✕</button>
+<!-- BUY MODAL -->
+<div class="ov" id="buyOv" onclick="bgc(event,'buyOv')">
+  <div class="sh2">
+    <div class="shh">
+      <div class="sht" id="buyTitle">Enter the Draw 🎰</div>
+      <button class="shc" onclick="cov('buyOv')">✕</button>
     </div>
-    <div class="sheet-body">
-      <div class="buy-product-row">
-        <span class="buy-emoji" id="bEm"></span>
-        <div>
-          <div class="buy-product-name" id="bNm"></div>
-          <div class="buy-product-sub" id="bSb"></div>
+    <div class="shb">
+
+      <!-- STEP 1: SELECT QUANTITY -->
+      <div id="step1">
+        <div class="bpr">
+          <span style="font-size:38px" id="bEm"></span>
+          <div>
+            <div style="font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700;margin-bottom:3px" id="bNm"></div>
+            <div style="font-size:12px;color:var(--tx3)" id="bSb"></div>
+          </div>
         </div>
-      </div>
-      <div class="qty-row">
-        <div class="qty-label">
-          Tickets
-          <div class="qty-sub">More tickets = better odds</div>
+        <div class="qrow">
+          <div class="qlbl">Tickets <div class="qsub">More = better odds</div></div>
+          <div class="qctrl">
+            <button class="qbtn" onclick="chQ(-1)">−</button>
+            <div class="qnum" id="qN">1</div>
+            <button class="qbtn" onclick="chQ(1)">+</button>
+          </div>
         </div>
-        <div class="qty-ctrl">
-          <button class="qty-btn" onclick="chQ(-1)">−</button>
-          <div class="qty-num" id="qN">1</div>
-          <button class="qty-btn" onclick="chQ(1)">+</button>
+        <div class="sumbox">
+          <div class="sumr"><span>Ticket price</span><span id="sTk">₹0</span></div>
+          <div class="sumr"><span>Quantity</span><span id="sQt">×1</span></div>
+          <div class="sumr"><span>Original value</span><span id="sOg" style="text-decoration:line-through;color:var(--tx3)">₹0</span></div>
+          <div class="sumr tot"><span>You pay</span><span class="samb" id="sTl">₹0</span></div>
         </div>
+        <div class="winnote"><span style="font-size:17px;margin-top:1px">🏆</span><span>If selected in the lucky draw, you get a <strong>full UPI refund</strong> — the product is completely free!</span></div>
+        <button class="bamber" id="step1Btn" onclick="proceedToPay()">Continue to Payment →</button>
       </div>
-      <div class="summary">
-        <div class="sum-row"><span>Ticket price</span><span id="sTk">₹0</span></div>
-        <div class="sum-row"><span>Quantity</span><span id="sQt">×1</span></div>
-        <div class="sum-row"><span>Original value</span><span id="sOg" style="text-decoration:line-through;color:var(--tx3)">₹0</span></div>
-        <div class="sum-row total"><span>You pay</span><span class="sum-amber" id="sTl">₹0</span></div>
+
+      <!-- STEP 2: UPI PAYMENT -->
+      <div id="step2" class="upi-step">
+        <div class="upi-header">
+          <div style="font-size:13px;color:var(--tx3);margin-bottom:6px">Pay exactly</div>
+          <div class="upi-amount" id="upiAmt">₹0</div>
+          <div class="upi-ref">Order ref: <strong id="upiRef">—</strong></div>
+        </div>
+
+        <!-- QR Box -->
+        <div class="qr-box">
+          <div class="qr-img-wrap" id="qrWrap">
+            <!-- PhonePe-style QR placeholder — replace with your actual QR image -->
+            <div class="qr-placeholder">
+              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5" y="5" width="35" height="35" rx="3" stroke="#5f259f" stroke-width="4"/>
+                <rect x="15" y="15" width="15" height="15" fill="#5f259f" rx="1"/>
+                <rect x="60" y="5" width="35" height="35" rx="3" stroke="#5f259f" stroke-width="4"/>
+                <rect x="70" y="15" width="15" height="15" fill="#5f259f" rx="1"/>
+                <rect x="5" y="60" width="35" height="35" rx="3" stroke="#5f259f" stroke-width="4"/>
+                <rect x="15" y="70" width="15" height="15" fill="#5f259f" rx="1"/>
+                <rect x="60" y="60" width="10" height="10" fill="#5f259f" rx="1"/>
+                <rect x="75" y="60" width="10" height="10" fill="#5f259f" rx="1"/>
+                <rect x="60" y="75" width="10" height="10" fill="#5f259f" rx="1"/>
+                <rect x="75" y="75" width="10" height="10" fill="#5f259f" rx="1"/>
+                <rect x="45" y="5" width="8" height="8" fill="#5f259f" rx="1"/>
+                <rect x="45" y="20" width="8" height="8" fill="#5f259f" rx="1"/>
+                <rect x="45" y="35" width="8" height="8" fill="#5f259f" rx="1"/>
+                <rect x="5" y="45" width="8" height="8" fill="#5f259f" rx="1"/>
+                <rect x="20" y="45" width="8" height="8" fill="#5f259f" rx="1"/>
+                <rect x="35" y="45" width="8" height="8" fill="#5f259f" rx="1"/>
+                <rect x="50" y="50" width="8" height="8" fill="#5f259f" rx="1"/>
+                <rect x="65" y="50" width="8" height="8" fill="#5f259f" rx="1"/>
+                <rect x="80" y="50" width="12" height="8" fill="#5f259f" rx="1"/>
+              </svg>
+              <div style="font-size:10px;color:#5f259f;font-weight:700;margin-top:4px">Scan with any UPI app</div>
+            </div>
+          </div>
+          <div class="qr-upi-id" id="qrUpiId">{{ upi_id }}</div>
+          <div class="qr-upi-name" id="qrUpiName">{{ upi_name }}</div>
+        </div>
+
+        <!-- Open in UPI app buttons -->
+        <div class="upi-apps">
+          <a class="upi-app" id="ppLink" href="#" onclick="openUPI(event,'phonepe')">
+            <div class="upi-app-icon upi-pp">
+              <svg width="16" height="16" viewBox="0 0 100 100" fill="white"><path d="M50 5C25.1 5 5 25.1 5 50s20.1 45 45 45 45-20.1 45-45S74.9 5 50 5zm16.5 64.5L45 48.5V70H30V30h15l22 21.5V30h15v40H66.5z"/></svg>
+            </div>
+            PhonePe
+          </a>
+          <a class="upi-app" id="gpLink" href="#" onclick="openUPI(event,'gpay')">
+            <div class="upi-app-icon upi-gp">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 11.2V13h3.7c-.2 1-1.2 3-3.7 3-2.2 0-4-1.8-4-4s1.8-4 4-4c1.2 0 2.1.5 2.6 1l1.4-1.4C14.9 6.6 13.5 6 12 6c-3.3 0-6 2.7-6 6s2.7 6 6 6c3.5 0 5.8-2.5 5.8-5.9 0-.4 0-.7-.1-1H12z" fill="#4285F4"/></svg>
+            </div>
+            Google Pay
+          </a>
+          <a class="upi-app" id="ptLink" href="#" onclick="openUPI(event,'paytm')">
+            <div class="upi-app-icon upi-pt">
+              <span style="color:white;font-size:10px;font-weight:800">P</span>
+            </div>
+            Paytm
+          </a>
+          <a class="upi-app" id="bhLink" href="#" onclick="openUPI(event,'bhim')">
+            <div class="upi-app-icon upi-bh">
+              <span style="color:white;font-size:10px;font-weight:800">B</span>
+            </div>
+            BHIM UPI
+          </a>
+        </div>
+
+        <!-- UTR input -->
+        <div class="utr-box">
+          <div class="utr-label">✅ After paying, enter your UTR / Transaction ID</div>
+          <input class="utr-input" type="text" id="utrInput" placeholder="12-digit UTR or Transaction ID" maxlength="30">
+          <div class="utr-hint">Find it in your UPI app → Payment History → Transaction ID (UTR). Usually 12 digits.</div>
+        </div>
+
+        <button class="bamber" id="step2Btn" onclick="submitUTR()">Submit Payment Proof →</button>
       </div>
-      <div class="win-note">
-        <span class="win-note-icon">🏆</span>
-        <span>If you're selected in the lucky draw, you receive a <strong>complete refund</strong> — the product is 100% free.</span>
+
+      <!-- STEP 3: SUBMITTED -->
+      <div id="step3" class="upi-step">
+        <div style="text-align:center;padding:20px 0">
+          <div style="font-size:56px;margin-bottom:16px">⏳</div>
+          <div style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;margin-bottom:10px">Payment Under Review</div>
+          <div style="color:var(--tx2);font-size:14px;line-height:1.7;margin-bottom:24px">We'll verify your UPI transaction and activate your ticket within <strong>30 minutes</strong>. Check <a href="/my-tickets" style="color:var(--amber)">My Tickets</a> for status updates.</div>
+          <div style="background:var(--amber4);border:1px solid rgba(240,180,41,.2);border-radius:14px;padding:14px;font-size:13px;color:var(--tx2)">
+            🔒 Your slot is reserved. If payment isn't confirmed within 2 hours, it will be released automatically.
+          </div>
+        </div>
+        <button class="bamber" style="margin-top:20px" onclick="cov('buyOv')">Done — I'll Check My Tickets</button>
       </div>
-      <button class="btn-amber" id="buyBtn" onclick="doBuy()">💳 Buy Ticket & Enter Draw</button>
+
     </div>
   </div>
 </div>
 
-<!-- ── WINNER MODAL ─────────────────────────────────────────────────── -->
-<div class="overlay" id="winOv">
-  <div class="sheet" style="position:relative;overflow:hidden">
-    <div class="confetti-wrap" id="confetti"></div>
-    <div class="winner-body">
-      <span class="winner-burst">🎉</span>
-      <div class="winner-title">You Won!</div>
-      <div class="winner-sub" id="winTx">You've been selected as the lucky winner!</div>
-      <div class="winner-refund">✅ Full refund of <strong id="winAmt">₹0</strong> is being processed</div>
-      <button class="btn-amber" onclick="closeOv('winOv')">🎊 Amazing, thank you!</button>
+<!-- WINNER MODAL -->
+<div class="ov" id="winOv">
+  <div class="sh2" style="position:relative;overflow:hidden">
+    <div class="cwrap" id="confetti"></div>
+    <div class="winbody">
+      <span class="wburst">🎉</span>
+      <div class="wtitle">You Won!</div>
+      <div class="wsub" id="winTx">You've been selected as the lucky winner!</div>
+      <div class="wref">✅ Full UPI refund of <strong id="winAmt">₹0</strong> will be sent within 24 hours</div>
+      <button class="bamber" onclick="cov('winOv')">🎊 Amazing!</button>
     </div>
   </div>
 </div>
 
-<!-- ── CART DRAWER ──────────────────────────────────────────────────── -->
-<div class="drawer-wrap" id="cartDraw">
-  <div class="drawer-bg" onclick="toggleDrawer()"></div>
-  <div class="drawer-panel">
-    <div class="drawer-head">
-      <div class="drawer-title">Your Tickets 🎟️</div>
-      <button class="sheet-close" onclick="toggleDrawer()">✕</button>
-    </div>
-    <div class="drawer-items" id="dItems"></div>
-    <div class="drawer-foot" id="dFoot">
-      <div class="drawer-total">
-        <div class="drawer-total-label">Total paid</div>
-        <div class="drawer-total-val" id="dTotal">₹0</div>
-      </div>
-      <button class="btn-amber" onclick="goCheckout()">💳 Checkout</button>
+<!-- CART -->
+<div class="cdraw" id="cartDraw">
+  <div class="cdbg" onclick="toggleDraw()"></div>
+  <div class="cdpanel">
+    <div class="cdhead"><div class="cdtitle">Your Tickets 🎟️</div><button class="shc" onclick="toggleDraw()">✕</button></div>
+    <div class="cditems" id="cdItems"></div>
+    <div class="cdfoot" id="cdFoot">
+      <div class="cdtrow"><div class="cdtl">Total paid</div><div class="cdtv" id="cdTotal">₹0</div></div>
+      <button class="bamber" onclick="goChk()">View My Tickets →</button>
     </div>
   </div>
 </div>
 
-<!-- ── TOAST STACK ──────────────────────────────────────────────────── -->
-<div class="toast-stack" id="toasts"></div>
+<div class="twrap" id="toasts"></div>
+
+<!-- Jinja: pass UPI details to JS -->
+<script>
+const UPI_ID   = "{{ upi_id }}";
+const UPI_NAME = "{{ upi_name }}";
+</script>
 
 <script>
 /* ── STATE ─────────────────────────────────────────────────────────── */
 let prods=[], cart=[], buyP=null, buyQ=1, cat='all', me=null;
+let curTicketId=null, curOrderRef=null, curUpiLink=null, curAmt=0;
 
 /* ── BOOT ──────────────────────────────────────────────────────────── */
 (async()=>{ await chkMe(); await loadProds(); startCD(); fetchWinners(); })();
@@ -775,28 +515,19 @@ async function chkMe(){
   try{ const r=await fetch('/api/auth/me'); const d=await r.json(); if(d.logged_in){me=d;rnav();} }catch{}
 }
 function rnav(){
-  const el=document.getElementById('navR');
-  if(!me){
-    el.innerHTML=`<button class="nb nb-ghost" onclick="openAuth('login')">Login</button><button class="nb nb-primary" onclick="openAuth('register')">Sign Up Free</button><div class="cart-pill" onclick="toggleDrawer()">🎟️ <span class="cart-count" id="cCount">0</span></div>`;
-    return;
-  }
-  el.innerHTML=`<span style="font-size:13px;color:var(--tx2)">Hi, <strong style="color:var(--tx)">${me.name.split(' ')[0]}</strong></span>${me.is_admin?'<a href="/admin" class="nb nb-ghost" style="text-decoration:none">Admin</a>':''}<a href="/my-tickets" class="nb nb-ghost" style="text-decoration:none">My Tickets</a><button class="nb nb-ghost" onclick="doLogout()">Logout</button><div class="cart-pill" onclick="toggleDrawer()">🎟️ <span class="cart-count" id="cCount">0</span></div>`;
+  const el=g('navR');
+  if(!me){ el.innerHTML=`<button class="nb ng" onclick="openAuth('login')">Login</button><button class="nb np" onclick="openAuth('register')">Sign Up Free</button><div class="cpill" onclick="toggleDraw()">🎟️ <span class="cc" id="cCnt">0</span></div>`; return; }
+  el.innerHTML=`<span style="font-size:13px;color:var(--tx2)">Hi, <strong style="color:var(--tx)">${me.name.split(' ')[0]}</strong></span>${me.is_admin?'<a href="/admin" class="nb ng" style="text-decoration:none">Admin</a>':''}<a href="/my-tickets" class="nb ng" style="text-decoration:none">My Tickets</a><button class="nb ng" onclick="doLogout()">Logout</button><div class="cpill" onclick="toggleDraw()">🎟️ <span class="cc" id="cCnt">0</span></div>`;
 }
 async function doLogin(){
-  const em=g('lgEm').value, pw=g('lgPw').value;
-  const r=await api('/api/auth/login',{email:em,password:pw});
-  if(r.error){shErr(r.error);return;}
-  me=r; rnav(); closeOv('authOv'); toast('👋',`Welcome back, ${r.name}!`,'t-ok');
+  const r=await post('/api/auth/login',{email:g('lgE').value,password:g('lgP').value});
+  if(r.error){shErr(r.error);return;} me=r; rnav(); cov('authOv'); toast('👋',`Welcome back, ${r.name}!`,'tok');
 }
 async function doReg(){
-  const nm=g('rgNm').value,em=g('rgEm').value,ph=g('rgPh').value,pw=g('rgPw').value;
-  const r=await api('/api/auth/register',{name:nm,email:em,phone:ph,password:pw});
-  if(r.error){shErr(r.error);return;}
-  me=r; rnav(); closeOv('authOv'); toast('🎉',`Welcome, ${nm}!`,'t-ok');
+  const r=await post('/api/auth/register',{name:g('rgN').value,email:g('rgE').value,phone:g('rgPh').value,password:g('rgP').value});
+  if(r.error){shErr(r.error);return;} me=r; rnav(); cov('authOv'); toast('🎉',`Welcome, ${r.name}!`,'tok');
 }
-async function doLogout(){
-  await fetch('/api/auth/logout',{method:'POST'}); me=null; rnav(); toast('👋','Logged out.','t-ok');
-}
+async function doLogout(){ await fetch('/api/auth/logout',{method:'POST'}); me=null; rnav(); toast('👋','Logged out.','tok'); }
 function shErr(m){ const e=g('authErr'); e.textContent=m; e.style.display='block'; }
 
 /* ── PRODUCTS ──────────────────────────────────────────────────────── */
@@ -806,57 +537,39 @@ async function loadProds(){
     if(!r.ok) throw new Error(await r.text());
     prods=await r.json(); renderProds();
   }catch(e){
-    g('pGrid').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--tx3)"><div style="font-size:40px;margin-bottom:12px">⚠️</div>Could not load products.<br><small style="font-size:12px;opacity:.6">${e.message}</small></div>`;
+    g('pgrid').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--tx3)"><div style="font-size:40px;margin-bottom:12px">⚠️</div>Could not load products.<br><small style="opacity:.5">${e.message}</small></div>`;
   }
 }
 function renderProds(){
-  const grid=g('pGrid');
+  const grid=g('pgrid');
   const list=cat==='all'?prods:prods.filter(p=>p.category===cat);
-  if(!list.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:80px;color:var(--tx3)"><div style="font-size:48px;margin-bottom:14px">🔍</div>No active draws in this category.</div>`;return;}
+  if(!list.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:80px;color:var(--tx3)"><div style="font-size:48px;margin-bottom:14px">🔍</div>No draws in this category.</div>`;return;}
   grid.innerHTML=list.map((p,i)=>{
     const hot=p.fill_pct>=80;
     return `<div class="pcard" style="animation-delay:${i*.06}s" onclick="openBuy(${p.id})">
-      <div class="pcard-img">
-        <div class="pcard-img-glow"></div>
-        ${hot?'<div class="badge-hot">🔥 Almost Full</div>':''}
-        ${i<4?'<div class="badge-new">HOT</div>':''}
-        <span class="pcard-emoji">${p.emoji}</span>
-        <div class="pcard-img-overlay"></div>
-      </div>
-      <div class="pcard-body">
-        <div class="pcard-cat">${p.category}</div>
-        <div class="pcard-name">${p.name}</div>
-        <div class="pcard-desc">${p.description||''}</div>
-        <div class="pcard-price">
-          <div class="price-main">₹${fmt(p.ticket_price_inr)}</div>
-          <div class="price-orig">₹${fmt(p.original_price_inr)}</div>
-          <div class="price-save">Save ${p.discount_pct}%</div>
-        </div>
-        <div class="slot-info">
-          <span>${p.filled_slots} of ${p.total_slots} slots filled</span>
-          <span class="slot-count">${p.slots_left} left</span>
-        </div>
-        <div class="slot-bar"><div class="slot-fill${hot?' hot':''}" style="width:${p.fill_pct}%"></div></div>
-        <button class="btn-enter" onclick="event.stopPropagation();openBuy(${p.id})">🎰 Enter Draw</button>
-      </div>
-    </div>`;
+      <div class="pcimg">${hot?'<div class="bhot">🔥 Almost Full</div>':''}<div class="pcig"></div><span class="pcem">${p.emoji}</span><div class="pcio"></div></div>
+      <div class="pcb">
+        <div class="pccat">${p.category}</div>
+        <div class="pcname">${p.name}</div>
+        <div class="pcdesc">${p.description||''}</div>
+        <div class="pcpr"><div class="prm">₹${fmt(p.ticket_price_inr)}</div><div class="pro">₹${fmt(p.original_price_inr)}</div><div class="prs">Save ${p.discount_pct}%</div></div>
+        <div class="sli"><span>${p.filled_slots} of ${p.total_slots} slots filled</span><span class="slc">${p.slots_left} left</span></div>
+        <div class="slbar"><div class="slfill${hot?' hot':''}" style="width:${p.fill_pct}%"></div></div>
+        <button class="bentd" onclick="event.stopPropagation();openBuy(${p.id})">🎰 Enter Draw</button>
+      </div></div>`;
   }).join('');
 }
-function setFilter(c,btn){
-  cat=c;
-  document.querySelectorAll('.filter').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  renderProds();
-}
+function sf(c,btn){ cat=c; document.querySelectorAll('.filt').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); renderProds(); }
 
-/* ── BUY ───────────────────────────────────────────────────────────── */
+/* ── BUY: STEP 1 ───────────────────────────────────────────────────── */
 function openBuy(pid){
-  if(!me){openAuth('login');toast('ℹ️','Please login to enter a draw.','t-gd');return;}
+  if(!me){openAuth('login');toast('ℹ️','Please login to enter a draw.','tgd');return;}
   buyP=prods.find(x=>x.id===pid); if(!buyP)return;
-  buyQ=1;
+  buyQ=1; curTicketId=null;
+  showStep(1); g('buyTitle').textContent='Enter the Draw 🎰';
   g('bEm').textContent=buyP.emoji;
   g('bNm').textContent=buyP.name;
-  g('bSb').textContent=`${buyP.category} · ${buyP.slots_left} slots remaining`;
+  g('bSb').textContent=`${buyP.category} · ${buyP.slots_left} slots left`;
   updBS(); openOv('buyOv');
 }
 function updBS(){
@@ -868,134 +581,143 @@ function updBS(){
 }
 function chQ(d){ buyQ=Math.max(1,Math.min(buyP.slots_left,buyQ+d)); updBS(); }
 
-async function doBuy(){
-  const btn=g('buyBtn');
-  btn.innerHTML='<span class="spin"></span> Processing…'; btn.disabled=true;
+/* ── BUY: STEP 2 — show UPI ────────────────────────────────────────── */
+async function proceedToPay(){
+  const btn=g('step1Btn');
+  btn.innerHTML='<span class="spin"></span> Preparing…'; btn.disabled=true;
   try{
-    const ord=await api('/api/orders/create',{product_id:buyP.id,quantity:buyQ});
-    if(ord.error){toast('❌',ord.error,'t-err');return;}
-    if(ord.key_id){launchRZ(ord);}
-    else{ const res=await api('/api/orders/demo-pay',{ticket_id:ord.ticket_id}); handleResult(res); }
-  }finally{ btn.innerHTML='💳 Buy Ticket & Enter Draw'; btn.disabled=false; }
-}
-function launchRZ(ord){
-  new Razorpay({key:ord.key_id,amount:ord.amount,currency:ord.currency,name:'LuckyCart',
-    description:`Ticket for ${ord.product_name}`,order_id:ord.order_id,
-    handler:async rsp=>{
-      const res=await api('/api/orders/verify',{razorpay_order_id:rsp.razorpay_order_id,razorpay_payment_id:rsp.razorpay_payment_id,razorpay_signature:rsp.razorpay_signature,ticket_id:ord.ticket_id});
-      handleResult(res);
-    },theme:{color:'#8b7cf8'}}).open();
-}
-function handleResult(d){
-  closeOv('buyOv');
-  cart.push({name:buyP.name,emoji:buyP.emoji,qty:buyQ,price:buyP.ticket_price_inr});
-  updCount();
-  const lp=prods.find(x=>x.id===buyP.id);
-  if(lp){lp.filled_slots=d.filled_slots;lp.fill_pct=Math.round(d.filled_slots/d.total_slots*1000)/10;lp.slots_left=d.total_slots-d.filled_slots;}
-  renderProds();
-  if(d.draw_result&&!d.draw_result.error){
-    const dr=d.draw_result;
-    if(me&&dr.winner_email===me.email){
-      g('winTx').textContent=`You won the draw for ${buyP.name}! Your full payment will be refunded.`;
-      g('winAmt').textContent='₹'+fmt(dr.refund_amount/100);
-      spawnConfetti();
-      openOv('winOv');
-    } else {
-      toast('🎰',`Draw complete! ${dr.winner_name} won ${buyP.name} for free!`,'t-gd');
+    const r=await post('/api/orders/create',{product_id:buyP.id,quantity:buyQ});
+    if(r.error){toast('❌',r.error,'terr');return;}
+
+    curTicketId = r.ticket_id;
+    curOrderRef = r.order_ref;
+    curUpiLink  = r.upi_link;
+    curAmt      = r.amount_inr;
+
+    g('upiAmt').textContent = '₹'+fmt(r.amount_inr);
+    g('upiRef').textContent = r.order_ref;
+
+    // Set UPI deep links for each app
+    g('ppLink').href = r.upi_link;
+    g('gpLink').href = r.upi_link;
+    g('ptLink').href = r.upi_link;
+    g('bhLink').href = r.upi_link;
+
+    // If custom QR image URL provided, show it
+    if(r.upi_qr_url){
+      g('qrWrap').innerHTML=`<img src="${r.upi_qr_url}" alt="UPI QR Code">`;
     }
-  } else {
-    toast('🎉',d.message||"You're in the draw! Good luck!",'t-ok');
+
+    g('utrInput').value='';
+    g('buyTitle').textContent='Pay via PhonePe / UPI';
+    showStep(2);
+  }finally{ btn.innerHTML='Continue to Payment →'; btn.disabled=false; }
+}
+
+function openUPI(e, app){
+  e.preventDefault();
+  if(curUpiLink){
+    window.location.href=curUpiLink;
+    setTimeout(()=>toast('📱','If app didn\'t open, scan the QR code instead.','tgd'),2000);
   }
 }
 
-/* ── WINNER TICKER FROM DB ─────────────────────────────────────────── */
+/* ── BUY: STEP 3 — submit UTR ──────────────────────────────────────── */
+async function submitUTR(){
+  const utr=g('utrInput').value.trim();
+  if(!utr||utr.length<6){toast('❌','Please enter your UTR / transaction ID','terr');return;}
+
+  const btn=g('step2Btn');
+  btn.innerHTML='<span class="spin"></span> Submitting…'; btn.disabled=true;
+  try{
+    const r=await post('/api/orders/submit-utr',{ticket_id:curTicketId,utr:utr});
+    if(r.error){toast('❌',r.error,'terr');return;}
+
+    // Add to cart display
+    cart.push({name:buyP.name,emoji:buyP.emoji,qty:buyQ,price:buyP.ticket_price_inr,status:'pending'});
+    updCnt();
+
+    g('buyTitle').textContent='Ticket Submitted!';
+    showStep(3);
+    toast('✅','Payment submitted! We\'ll verify and activate your ticket shortly.','tok');
+  }finally{ btn.innerHTML='Submit Payment Proof →'; btn.disabled=false; }
+}
+
+function showStep(n){
+  ['step1','step2','step3'].forEach((id,i)=>{
+    const el=g(id);
+    el.style.display = (i===n-1) ? 'block' : 'none';
+    el.classList.toggle('show', i===n-1);
+  });
+}
+
+/* ── WINNERS TICKER ────────────────────────────────────────────────── */
 async function fetchWinners(){
   try{
-    const r=await fetch('/api/draws'); const draws=await r.json();
-    if(!draws.length)return;
-    const track=g('tickerTrack');
-    const items=draws.slice(0,8).map(d=>{
-      const ini=d.wname.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      return `<div class="ticker-item"><div class="ticker-avatar">${ini}</div><span class="ticker-name">${d.wname} won</span> <span class="ticker-product">${d.emoji} ${d.pname}</span><span class="ticker-tag">FREE</span></div>`;
+    const r=await fetch('/api/draws'); const d=await r.json();
+    if(!d.length)return;
+    const track=g('ttrack');
+    const html=d.slice(0,8).map(w=>{
+      const ini=w.wname.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase();
+      return `<div class="titem"><div class="tav">${ini}</div><span style="color:var(--tx2)">${w.wname} won</span><span style="color:var(--amber);font-weight:600">${w.emoji} ${w.pname}</span><span class="ttag">FREE</span></div>`;
     }).join('');
-    track.innerHTML=items+items; // duplicate for seamless loop
+    track.innerHTML=html+html;
   }catch{}
 }
 
 /* ── CART ──────────────────────────────────────────────────────────── */
-function toggleDrawer(){
-  g('cartDraw').classList.toggle('open'); renderCart();
-}
-function renderCart(){
-  const el=g('dItems'),ft=g('dFoot');
+function toggleDraw(){ g('cartDraw').classList.toggle('open'); rCart(); }
+function rCart(){
+  const el=g('cdItems'),ft=g('cdFoot');
   if(!cart.length){
-    el.innerHTML=`<div class="drawer-empty"><span class="drawer-empty-icon">🎟️</span><div style="font-size:15px;font-weight:600;margin-bottom:6px">No tickets yet</div><div style="font-size:13px">Browse draws and enter!</div></div>`;
+    el.innerHTML=`<div class="cdempty"><span style="font-size:56px;display:block;margin-bottom:14px">🎟️</span><div style="font-size:15px;font-weight:600;margin-bottom:6px">No tickets yet</div><div style="font-size:13px">Browse draws and enter!</div></div>`;
     ft.style.display='none'; return;
   }
   ft.style.display='block';
-  el.innerHTML=cart.map((c,i)=>`<div class="ditem"><span class="ditem-em">${c.emoji}</span><div class="ditem-info"><div class="ditem-name">${c.name}</div><div class="ditem-sub">${c.qty} ticket${c.qty>1?'s':''} × ₹${fmt(c.price)}</div></div><div class="ditem-price">₹${fmt(c.price*c.qty)}</div><button class="ditem-rm" onclick="rmCart(${i})">×</button></div>`).join('');
-  g('dTotal').textContent='₹'+fmt(cart.reduce((s,c)=>s+c.price*c.qty,0));
-  updCount();
+  el.innerHTML=cart.map((c,i)=>`<div class="cdi"><span style="font-size:32px;flex-shrink:0">${c.emoji}</span><div class="cdii"><div class="cdin">${c.name}</div><div class="cdis">${c.qty} ticket${c.qty>1?'s':''} · <span style="color:${c.status==='pending'?'var(--amber)':'var(--green)'}">${c.status==='pending'?'⏳ Awaiting verification':'✅ Active'}</span></div></div><div class="cdip">₹${fmt(c.price*c.qty)}</div></div>`).join('');
+  g('cdTotal').textContent='₹'+fmt(cart.reduce((s,c)=>s+c.price*c.qty,0));
+  updCnt();
 }
-function rmCart(i){ cart.splice(i,1); renderCart(); updCount(); }
-function updCount(){ const el=g('cCount'); if(el) el.textContent=cart.reduce((s,c)=>s+c.qty,0); }
-function goCheckout(){ toast('💳','All tickets already paid — check My Tickets!','t-gd'); toggleDrawer(); }
+function updCnt(){ const el=g('cCnt'); if(el) el.textContent=cart.reduce((s,c)=>s+c.qty,0); }
+function goChk(){ window.location.href='/my-tickets'; }
 
 /* ── COUNTDOWN ─────────────────────────────────────────────────────── */
 function startCD(){
   let t=23*3600+14*60+7;
-  setInterval(()=>{
-    t=(t-1+86400)%86400;
-    const h=pad(Math.floor(t/3600)),m=pad(Math.floor((t%3600)/60)),s=pad(t%60);
-    const el=g('cdVal'); if(el) el.textContent=`${h}:${m}:${s}`;
-  },1000);
+  setInterval(()=>{ t=(t-1+86400)%86400; const el=g('cdv'); if(el) el.textContent=`${pad(Math.floor(t/3600))}:${pad(Math.floor((t%3600)/60))}:${pad(t%60)}`; },1000);
 }
 function pad(n){return String(n).padStart(2,'0');}
 
-/* ── CONFETTI ──────────────────────────────────────────────────────── */
-function spawnConfetti(){
-  const wrap=g('confetti'); wrap.innerHTML='';
-  const colors=['#f0b429','#8b7cf8','#22c55e','#ef4444','#fff'];
-  for(let i=0;i<40;i++){
-    const dot=document.createElement('div');
-    dot.className='confetti-dot';
-    dot.style.cssText=`left:${Math.random()*100}%;top:${-10-Math.random()*20}px;background:${colors[i%colors.length]};animation-delay:${Math.random()*.8}s;animation-duration:${2+Math.random()*2}s;transform:rotate(${Math.random()*360}deg)`;
-    wrap.appendChild(dot);
-  }
-}
-
 /* ── MODALS ────────────────────────────────────────────────────────── */
 function openOv(id){ g(id).classList.add('open'); }
-function closeOv(id){ g(id).classList.remove('open'); }
-function bgClose(e,id){ if(e.target===g(id)) closeOv(id); }
-function openAuth(tab){ g('authErr').style.display='none'; swTab(tab); openOv('authOv'); }
-function swTab(t){
+function cov(id){ g(id).classList.remove('open'); }
+function bgc(e,id){ if(e.target===g(id)) cov(id); }
+function openAuth(tab){ g('authErr').style.display='none'; sw(tab); openOv('authOv'); }
+function sw(t){
   g('lgF').style.display=t==='login'?'block':'none';
   g('rgF').style.display=t==='register'?'block':'none';
-  g('tabLg').classList.toggle('on',t==='login');
-  g('tabRg').classList.toggle('on',t==='register');
+  g('tLg').classList.toggle('on',t==='login');
+  g('tRg').classList.toggle('on',t==='register');
   g('authT').textContent=t==='login'?'Welcome back':'Create account';
   g('authErr').style.display='none';
 }
 
 /* ── TOAST ─────────────────────────────────────────────────────────── */
-function toast(icon,msg,cls='t-ok'){
-  const wrap=g('toasts'), el=document.createElement('div');
-  el.className=`toast ${cls}`;
-  el.innerHTML=`<span class="toast-icon">${icon}</span><span>${msg}</span>`;
-  wrap.appendChild(el);
-  setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateX(20px)'; el.style.transition='all .3s'; setTimeout(()=>el.remove(),300); },4000);
+function toast(icon,msg,cls='tok'){
+  const w=g('toasts'),el=document.createElement('div');
+  el.className=`tst ${cls}`;
+  el.innerHTML=`<span style="font-size:20px">${icon}</span><span>${msg}</span>`;
+  w.appendChild(el);
+  setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateX(20px)'; el.style.transition='all .3s'; setTimeout(()=>el.remove(),300); },4500);
 }
 
 /* ── UTILS ─────────────────────────────────────────────────────────── */
-function g(id){ return document.getElementById(id); }
-function fmt(n){ return Number(n).toLocaleString('en-IN'); }
-async function api(url, body){
+const g=id=>document.getElementById(id);
+const fmt=n=>Number(n).toLocaleString('en-IN');
+async function post(url,body){
   const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   return r.json();
 }
 </script>
-
-{% if razorpay_key %}<script src="https://checkout.razorpay.com/v1/checkout.js"></script>{% endif %}
 </body>
 </html>
