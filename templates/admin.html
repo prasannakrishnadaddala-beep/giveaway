@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuckyCart Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--s:#12121a;--s2:#1a1a26;--bd:#2a2a3f;--gd:#f5c842;--ac:#7c6af7;--ac2:#5b4fcf;--gr:#2ecc71;--rd:#e74c3c;--tx:#f0f0fa;--mt:#7a7a9a;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
+nav{background:var(--s);border-bottom:1px solid var(--bd);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;background:linear-gradient(135deg,var(--gd),var(--ac));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.bsm{padding:7px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--s2);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;transition:all .2s;}
+.bsm:hover{border-color:var(--ac);}
+main{max-width:1100px;margin:0 auto;padding:32px;}
+h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:20px;}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:36px;}
+.stat{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:20px;}
+.stat-v{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--gd);margin-bottom:4px;}
+.stat-l{font-size:13px;color:var(--mt);}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:14px;padding:24px;margin-bottom:24px;}
+.card h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:18px;}
+.form-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:16px;}
+.fld label{display:block;font-size:12px;font-weight:600;color:var(--mt);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.fld input,.fld select,.fld textarea{width:100%;padding:10px 14px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;}
+.fld input:focus,.fld select:focus{outline:none;border-color:var(--ac);}
+.fld textarea{resize:vertical;min-height:70px;}
+.fld select option{background:var(--s);}
+.btn{padding:10px 20px;border-radius:9px;border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn.pr{background:linear-gradient(135deg,var(--ac2),var(--ac));color:#fff;}
+.btn.pr:hover{box-shadow:0 6px 20px rgba(124,106,247,.35);}
+.btn.dng{background:linear-gradient(135deg,#c0392b,var(--rd));color:#fff;}
+.btn.gd{background:linear-gradient(135deg,#e8a020,var(--gd));color:#000;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;padding:10px 14px;border-bottom:2px solid var(--bd);color:var(--mt);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px;}
+td{padding:10px 14px;border-bottom:1px solid var(--bd);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--s2);}
+.pill{display:inline-block;border-radius:50px;padding:3px 10px;font-size:11px;font-weight:700;}
+.pill.paid{background:rgba(46,204,113,.15);color:var(--gr);}
+.pill.pend{background:rgba(245,200,66,.15);color:var(--gd);}
+.pill.ref{background:rgba(124,106,247,.15);color:var(--ac);}
+.pill.act{background:rgba(46,204,113,.15);color:var(--gr);}
+.pill.drawn{background:rgba(245,200,66,.15);color:var(--gd);}
+.msg{padding:12px 16px;border-radius:8px;font-size:14px;margin-top:12px;display:none;}
+.msg.ok{background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);color:var(--gr);}
+.msg.err{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);color:var(--rd);}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">🎰 LuckyCart Admin</div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <span style="font-size:13px;color:var(--mt)">{{ user.name }}</span>
+    <a href="/" class="bsm">← Storefront</a>
+  </div>
+</nav>
+<main>
+  <div class="stats" id="statsGrid">
+    <div class="stat"><div class="stat-v">—</div><div class="stat-l">Total Users</div></div>
+    <div class="stat"><div class="stat-v">—</div><div class="stat-l">Active Draws</div></div>
+    <div class="stat"><div class="stat-v">—</div><div class="stat-l">Draws Completed</div></div>
+    <div class="stat"><div class="stat-v">—</div><div class="stat-l">Total Revenue</div></div>
+    <div class="stat"><div class="stat-v">—</div><div class="stat-l">Refunds Issued</div></div>
+  </div>
+
+  <!-- CREATE PRODUCT -->
+  <div class="card">
+    <h3>➕ Create New Draw</h3>
+    <div class="form-row">
+      <div class="fld"><label>Product Name</label><input type="text" id="pName" placeholder="iPhone 15 Pro"></div>
+      <div class="fld"><label>Category</label>
+        <select id="pCat">
+          <option>Electronics</option><option>Fashion</option>
+          <option>Lifestyle</option><option>Gaming</option><option>Sports</option>
+        </select>
+      </div>
+      <div class="fld"><label>Emoji</label><input type="text" id="pEmoji" placeholder="📱" maxlength="4"></div>
+    </div>
+    <div class="form-row">
+      <div class="fld"><label>Original Price (₹)</label><input type="number" id="pOrig" placeholder="29990"></div>
+      <div class="fld"><label>Ticket Price (₹)</label><input type="number" id="pTicket" placeholder="799"></div>
+      <div class="fld"><label>Total Slots</label><input type="number" id="pSlots" placeholder="60"></div>
+    </div>
+    <div class="fld" style="margin-bottom:16px"><label>Description</label><textarea id="pDesc" placeholder="Short product description..."></textarea></div>
+    <button class="btn pr" onclick="createProduct()">Create Draw</button>
+    <div class="msg" id="cpMsg"></div>
+  </div>
+
+  <!-- ACTIVE DRAWS -->
+  <div class="card">
+    <h3>🔥 Active Draws</h3>
+    <div id="activeDraws" style="overflow-x:auto">Loading...</div>
+  </div>
+
+  <!-- RECENT TICKETS -->
+  <div class="card">
+    <h3>🎟️ Recent Tickets</h3>
+    <div id="ticketsTable" style="overflow-x:auto">Loading...</div>
+  </div>
+</main>
+
+<script>
+async function loadStats(){
+  const r=await fetch('/api/admin/stats');const d=await r.json();
+  const els=document.querySelectorAll('.stat-v');
+  els[0].textContent=d.total_users;
+  els[1].textContent=d.active_draws;
+  els[2].textContent=d.completed_draws;
+  els[3].textContent='₹'+fmt(d.total_revenue/100);
+  els[4].textContent='₹'+fmt(d.total_refunds/100);
+}
+async function loadDraws(){
+  const r=await fetch('/api/products');const prods=await r.json();
+  const el=document.getElementById('activeDraws');
+  if(!prods.length){el.innerHTML='<p style="color:var(--mt);padding:20px 0">No active draws.</p>';return;}
+  el.innerHTML=`<table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Slots</th><th>Fill %</th><th>Status</th><th>Action</th></tr></thead><tbody>
+  ${prods.map(p=>`<tr>
+    <td><strong>${p.emoji} ${p.name}</strong></td>
+    <td>${p.category}</td>
+    <td>₹${fmt(p.ticket_price_inr)}</td>
+    <td>${p.filled_slots}/${p.total_slots}</td>
+    <td><div style="background:var(--s2);border-radius:4px;height:6px;width:80px"><div style="height:100%;background:linear-gradient(90deg,var(--ac),var(--gd));border-radius:4px;width:${p.fill_pct}%"></div></div> ${p.fill_pct}%</td>
+    <td><span class="pill act">${p.status}</span></td>
+    <td><button class="btn gd" onclick="forceDraw(${p.id},'${p.name}')" style="padding:6px 12px;font-size:12px">🎰 Force Draw</button></td>
+  </tr>`).join('')}
+  </tbody></table>`;
+}
+async function loadTickets(){
+  const r=await fetch('/api/admin/tickets');const tix=await r.json();
+  const el=document.getElementById('ticketsTable');
+  if(!tix.length){el.innerHTML='<p style="color:var(--mt);padding:20px 0">No tickets yet.</p>';return;}
+  el.innerHTML=`<table><thead><tr><th>User</th><th>Product</th><th>Qty</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>
+  ${tix.slice(0,50).map(t=>`<tr>
+    <td><strong>${t.user_name}</strong><br><span style="color:var(--mt);font-size:12px">${t.email}</span></td>
+    <td>${t.product_name}</td>
+    <td>${t.quantity}</td>
+    <td>₹${fmt(t.amount_paid/100)}</td>
+    <td><span class="pill ${t.payment_status==='paid'?'paid':t.payment_status==='refunded'?'ref':'pend'}">${t.payment_status}</span>${t.is_winner?'<span class="pill" style="margin-left:4px;background:rgba(245,200,66,.15);color:var(--gd)">🏆 Winner</span>':''}</td>
+    <td style="color:var(--mt)">${new Date(t.created_at).toLocaleDateString('en-IN')}</td>
+  </tr>`).join('')}
+  </tbody></table>`;
+}
+async function createProduct(){
+  const data={
+    name:document.getElementById('pName').value,
+    category:document.getElementById('pCat').value,
+    emoji:document.getElementById('pEmoji').value||'📦',
+    original_price:parseFloat(document.getElementById('pOrig').value),
+    ticket_price:parseFloat(document.getElementById('pTicket').value),
+    total_slots:parseInt(document.getElementById('pSlots').value),
+    description:document.getElementById('pDesc').value,
+  };
+  const r=await fetch('/api/admin/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+  const d=await r.json();const msg=document.getElementById('cpMsg');
+  msg.style.display='block';
+  if(r.ok){msg.className='msg ok';msg.textContent='✅ '+d.message;loadDraws();}
+  else{msg.className='msg err';msg.textContent='❌ '+d.error;}
+}
+async function forceDraw(pid,name){
+  if(!confirm(`Force lucky draw for "${name}"? This cannot be undone.`))return;
+  const r=await fetch(`/api/admin/draw/${pid}`,{method:'POST'});
+  const d=await r.json();
+  if(d.error){alert('Error: '+d.error);return;}
+  alert(`🎉 Draw complete!\nWinner: ${d.winner_name}\nSlot: ${d.winning_slot}/${d.total_slots}\nRefund: ₹${fmt(d.refund_amount/100)}`);
+  loadDraws();loadStats();
+}
+function fmt(n){return Number(n).toLocaleString('en-IN');}
+loadStats();loadDraws();loadTickets();
+</script>
+</body>
+</html>

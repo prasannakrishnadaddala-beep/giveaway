@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Tickets — LuckyCart</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--s:#12121a;--s2:#1a1a26;--bd:#2a2a3f;--gd:#f5c842;--ac:#7c6af7;--ac2:#5b4fcf;--gr:#2ecc71;--rd:#e74c3c;--tx:#f0f0fa;--mt:#7a7a9a;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
+nav{background:var(--s);border-bottom:1px solid var(--bd);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;background:linear-gradient(135deg,var(--gd),var(--ac));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.bsm{padding:7px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--s2);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;}
+main{max-width:900px;margin:0 auto;padding:40px 24px;}
+h2{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px;}
+.sub{color:var(--mt);font-size:15px;margin-bottom:32px;}
+.tabs{display:flex;gap:4px;background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:4px;margin-bottom:24px;width:fit-content;}
+.tab{padding:9px 20px;border-radius:9px;border:none;background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;}
+.tab.act{background:var(--s2);color:var(--tx);}
+.tcard{background:var(--s);border:1px solid var(--bd);border-radius:14px;padding:20px;margin-bottom:14px;display:flex;align-items:center;gap:16px;}
+.tc-em{font-size:40px;flex-shrink:0;}
+.tc-info{flex:1;}
+.tc-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px;}
+.tc-meta{font-size:13px;color:var(--mt);display:flex;gap:14px;flex-wrap:wrap;}
+.tc-price{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--gd);flex-shrink:0;}
+.pill{display:inline-block;border-radius:50px;padding:3px 10px;font-size:11px;font-weight:700;}
+.pill.paid{background:rgba(46,204,113,.15);color:var(--gr);}
+.pill.pend{background:rgba(245,200,66,.15);color:var(--gd);}
+.pill.ref{background:rgba(124,106,247,.15);color:var(--ac);}
+.pill.win{background:rgba(245,200,66,.2);color:var(--gd);border:1px solid rgba(245,200,66,.4);}
+.win-card{background:linear-gradient(135deg,rgba(245,200,66,.08),rgba(124,106,247,.08));border:1px solid rgba(245,200,66,.3);border-radius:14px;padding:28px;text-align:center;margin-bottom:14px;}
+.wc-em{font-size:48px;margin-bottom:10px;}
+.wc-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px;color:var(--gd);}
+.wc-sub{font-size:14px;color:var(--mt);margin-bottom:14px;}
+.wc-ref{background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);border-radius:8px;padding:10px 16px;color:var(--gr);font-weight:600;font-size:14px;display:inline-block;}
+.verify-link{font-size:12px;color:var(--ac);margin-top:8px;display:block;text-decoration:none;}
+.verify-link:hover{color:var(--tx);}
+.empty{text-align:center;padding:60px;color:var(--mt);}
+.empty-icon{font-size:48px;margin-bottom:12px;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">🎰 LuckyCart</div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <span style="font-size:13px;color:var(--mt)">{{ user.name }}</span>
+    <a href="/" class="bsm">← Back to Draws</a>
+  </div>
+</nav>
+<main>
+  <h2>My Tickets 🎟️</h2>
+  <p class="sub">All your draw entries and wins</p>
+
+  <div class="tabs">
+    <button class="tab act" onclick="swTab('tickets',this)">All Tickets</button>
+    <button class="tab" onclick="swTab('wins',this)">🏆 My Wins</button>
+  </div>
+
+  <div id="ticketsView"></div>
+  <div id="winsView" style="display:none"></div>
+</main>
+
+<script>
+let tickets=[], wins=[];
+(async()=>{ await loadTickets(); await loadWins(); })();
+
+async function loadTickets(){
+  const r=await fetch('/api/my/tickets'); tickets=await r.json();
+  renderTickets();
+}
+async function loadWins(){
+  const r=await fetch('/api/my/wins'); wins=await r.json();
+  renderWins();
+}
+function renderTickets(){
+  const el=document.getElementById('ticketsView');
+  if(!tickets.length){el.innerHTML=`<div class="empty"><div class="empty-icon">🎟️</div><div>No tickets yet. <a href="/" style="color:var(--ac)">Browse draws</a></div></div>`;return;}
+  el.innerHTML=tickets.map(t=>`
+    <div class="tcard${t.is_winner?' winner-tcard':''}">
+      <div class="tc-em">${t.emoji}</div>
+      <div class="tc-info">
+        <div class="tc-name">${t.product_name} ${t.is_winner?'🏆':''}</div>
+        <div class="tc-meta">
+          <span>${t.quantity} ticket${t.quantity>1?'s':''}</span>
+          <span>${t.category}</span>
+          <span>${new Date(t.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span>
+          <span class="pill ${t.payment_status==='paid'?'paid':t.payment_status==='refunded'?'ref':'pend'}">${t.payment_status}</span>
+          ${t.is_winner?'<span class="pill win">🏆 Winner</span>':''}
+          ${t.product_status==='active'?'<span style="font-size:12px;color:var(--gr)">• Draw pending</span>':''}
+        </div>
+      </div>
+      <div class="tc-price">₹${fmt(t.amount_paid/100)}</div>
+    </div>`).join('');
+}
+function renderWins(){
+  const el=document.getElementById('winsView');
+  if(!wins.length){el.innerHTML=`<div class="empty"><div class="empty-icon">🏆</div><div>No wins yet — keep entering draws!</div></div>`;return;}
+  el.innerHTML=wins.map(w=>`
+    <div class="win-card">
+      <div class="wc-em">${w.emoji}</div>
+      <div class="wc-title">You won ${w.product_name}!</div>
+      <div class="wc-sub">Draw held on ${new Date(w.drawn_at).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</div>
+      <div class="wc-ref">✅ Refund of ₹${fmt(w.refund_amount/100)} — ${w.refund_status==='processed'?'Processed':'Processing in 24h'}</div>
+      <a class="verify-link" href="/api/draws/${w.id}/verify" target="_blank">🔍 Verify this draw is fair →</a>
+    </div>`).join('');
+}
+function swTab(tab, btn){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('act'));btn.classList.add('act');
+  document.getElementById('ticketsView').style.display=tab==='tickets'?'block':'none';
+  document.getElementById('winsView').style.display=tab==='wins'?'block':'none';
+}
+function fmt(n){return Number(n).toLocaleString('en-IN');}
+</script>
+</body>
+</html>

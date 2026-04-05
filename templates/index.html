@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuckyCart — Win What You Buy</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0a0f;--s:#12121a;--s2:#1a1a26;--bd:#2a2a3f;--gd:#f5c842;--gd2:#e8a020;--ac:#7c6af7;--ac2:#5b4fcf;--gr:#2ecc71;--rd:#e74c3c;--tx:#f0f0fa;--mt:#7a7a9a;--r:16px;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;}
+  nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--gd),var(--ac));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:flex;align-items:center;gap:8px;}
+  .logo i{-webkit-text-fill-color:initial;font-style:normal;}
+  .nav-links{display:flex;gap:24px;list-style:none;}
+  .nav-links a{color:var(--mt);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s;}
+  .nav-links a:hover{color:var(--tx);}
+  .nav-r{display:flex;align-items:center;gap:10px;}
+  .bsm{padding:8px 16px;border-radius:10px;border:1px solid var(--bd);background:var(--s2);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+  .bsm:hover{border-color:var(--ac);}
+  .bsm.pri{background:linear-gradient(135deg,var(--ac2),var(--ac));border-color:transparent;color:#fff;}
+  .bdg{background:var(--gd);color:#000;border-radius:50%;width:18px;height:18px;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .hero{position:relative;overflow:hidden;padding:80px 32px 60px;text-align:center;}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(124,106,247,.18),transparent 70%),radial-gradient(ellipse 50% 40% at 80% 100%,rgba(245,200,66,.1),transparent 60%);}
+  .hbadge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,200,66,.12);border:1px solid rgba(245,200,66,.3);color:var(--gd);border-radius:50px;padding:6px 16px;font-size:13px;font-weight:600;margin-bottom:24px;animation:fu .6s ease both;}
+  h1{font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,68px);font-weight:800;line-height:1.05;animation:fu .6s .1s ease both;position:relative;}
+  h1 span{background:linear-gradient(135deg,var(--gd),#ff9f43);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hsub{margin:20px auto 0;max-width:520px;color:var(--mt);font-size:18px;line-height:1.6;animation:fu .6s .2s ease both;position:relative;}
+  .steps{display:flex;justify-content:center;gap:8px;margin:36px 0 0;flex-wrap:wrap;animation:fu .6s .3s ease both;position:relative;}
+  .step{display:flex;align-items:center;gap:8px;background:var(--s);border:1px solid var(--bd);border-radius:50px;padding:10px 20px;font-size:14px;font-weight:500;}
+  .sn{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--gd),var(--gd2));color:#000;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;}
+  .arr{color:var(--mt);font-size:18px;}
+  .ws{background:var(--s);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:20px 32px;margin-bottom:48px;}
+  .ws-t{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--mt);font-weight:600;margin-bottom:14px;}
+  .ws-sc{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;}
+  .ws-sc::-webkit-scrollbar{display:none;}
+  .wchip{background:var(--s2);border:1px solid var(--bd);border-radius:50px;padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:13px;white-space:nowrap;flex-shrink:0;}
+  .wav{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--ac2),var(--ac));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;}
+  .filt{padding:0 32px 24px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .fb{background:var(--s);border:1px solid var(--bd);color:var(--mt);border-radius:50px;padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+  .fb:hover,.fb.act{background:var(--ac2);border-color:var(--ac);color:#fff;}
+  .sec{padding:0 32px 80px;}
+  .sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+  .st{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;}
+  .cdb{display:flex;align-items:center;gap:8px;background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);border-radius:8px;padding:6px 14px;font-size:13px;color:var(--gd);}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
+  .card{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s;cursor:pointer;position:relative;animation:fu .5s ease both;}
+  .card:hover{transform:translateY(-4px);border-color:rgba(124,106,247,.4);box-shadow:0 20px 60px rgba(0,0,0,.4);}
+  .ci{width:100%;aspect-ratio:4/3;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:64px;position:relative;}
+  .ci::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(10,10,15,.6) 100%);}
+  .hbdg{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,var(--gd),var(--gd2));color:#000;font-weight:800;font-size:11px;border-radius:6px;padding:4px 10px;z-index:2;}
+  .nbdg{position:absolute;top:12px;right:12px;background:var(--ac2);color:#fff;font-weight:700;font-size:11px;border-radius:6px;padding:4px 10px;z-index:2;}
+  .cb{padding:20px;}
+  .ccat{font-size:11px;color:var(--ac);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+  .cname{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:6px;line-height:1.3;}
+  .cdesc{font-size:13px;color:var(--mt);margin-bottom:16px;line-height:1.5;}
+  .pr{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .pt{font-size:22px;font-weight:700;color:var(--gd);font-family:'Syne',sans-serif;}
+  .po{font-size:13px;color:var(--mt);text-decoration:line-through;}
+  .sp{background:rgba(46,204,113,.15);color:var(--gr);border-radius:50px;padding:3px 10px;font-size:11px;font-weight:700;}
+  .slr{margin-bottom:16px;}
+  .sll{display:flex;justify-content:space-between;font-size:12px;color:var(--mt);margin-bottom:6px;}
+  .sll span:last-child{color:var(--tx);font-weight:600;}
+  .slb{height:6px;background:var(--s2);border-radius:50px;overflow:hidden;}
+  .slf{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--ac),var(--gd));transition:width .5s ease;}
+  .slf.dng{background:linear-gradient(90deg,#e74c3c,#f39c12);}
+  .bby{width:100%;padding:13px;border-radius:10px;border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;background:linear-gradient(135deg,var(--ac2),var(--ac));color:#fff;}
+  .bby:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(124,106,247,.35);}
+  .mo{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+  .mo.open{opacity:1;pointer-events:all;}
+  .md{background:var(--s);border:1px solid var(--bd);border-radius:20px;width:100%;max-width:440px;transform:translateY(20px);transition:transform .3s;overflow:hidden;}
+  .mo.open .md{transform:translateY(0);}
+  .mdh{padding:24px 24px 0;display:flex;justify-content:space-between;align-items:center;}
+  .mdt{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;}
+  .mdc{background:var(--s2);border:1px solid var(--bd);color:var(--mt);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+  .mdc:hover{color:var(--tx);}
+  .mdb{padding:20px 24px 24px;}
+  .tabs{display:flex;gap:4px;background:var(--s2);border-radius:10px;padding:4px;margin-bottom:20px;}
+  .tab{flex:1;padding:8px;border-radius:8px;border:none;background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;}
+  .tab.act{background:var(--s);color:var(--tx);}
+  .fld{margin-bottom:14px;}
+  .fld label{display:block;font-size:13px;font-weight:500;color:var(--mt);margin-bottom:6px;}
+  .fld input{width:100%;padding:11px 14px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .2s;}
+  .fld input:focus{outline:none;border-color:var(--ac);}
+  .bfl{width:100%;padding:13px;border-radius:10px;border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--ac2),var(--ac));color:#fff;transition:all .2s;}
+  .bfl:hover{box-shadow:0 8px 24px rgba(124,106,247,.35);}
+  .bgd{width:100%;padding:15px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--gd2),var(--gd));color:#000;transition:all .2s;}
+  .bgd:hover{box-shadow:0 8px 28px rgba(245,200,66,.3);}
+  .err{color:var(--rd);font-size:13px;margin-top:10px;display:none;}
+  .mprod{display:flex;align-items:center;gap:14px;background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:20px;}
+  .qr{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+  .ql{font-size:14px;font-weight:500;flex:1;}
+  .qc{display:flex;align-items:center;gap:8px;}
+  .qb{width:34px;height:34px;border-radius:8px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s;}
+  .qb:hover{border-color:var(--ac);}
+  .qv{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;min-width:32px;text-align:center;}
+  .sbox{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:20px;}
+  .sr{display:flex;justify-content:space-between;font-size:14px;color:var(--mt);margin-bottom:8px;}
+  .sr:last-child{margin-bottom:0;border-top:1px solid var(--bd);padding-top:10px;color:var(--tx);font-weight:600;font-size:16px;}
+  .shi{color:var(--gd);font-weight:700;}
+  .winfo{display:flex;gap:8px;background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.2);border-radius:10px;padding:12px;margin-bottom:20px;font-size:13px;color:var(--mt);line-height:1.5;}
+  .wmod{text-align:center;padding:40px 32px;}
+  .wburst{font-size:64px;margin-bottom:16px;animation:burst .6s ease both;}
+  .wtitle{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px;}
+  .wsub{color:var(--mt);font-size:15px;line-height:1.6;margin-bottom:24px;}
+  .wref{background:rgba(46,204,113,.12);border:1px solid rgba(46,204,113,.3);border-radius:12px;padding:16px;color:var(--gr);font-weight:600;font-size:15px;margin-bottom:20px;}
+  .cd{position:fixed;inset:0;z-index:300;display:flex;justify-content:flex-end;pointer-events:none;}
+  .cdbg{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;transition:opacity .3s;backdrop-filter:blur(4px);}
+  .cd.open .cdbg{opacity:1;pointer-events:all;}
+  .cdp{position:relative;width:380px;height:100%;background:var(--s);border-left:1px solid var(--bd);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s ease;pointer-events:all;}
+  .cd.open .cdp{transform:translateX(0);}
+  .cdh{padding:24px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+  .cdht{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;}
+  .cditems{flex:1;overflow-y:auto;padding:16px 20px;}
+  .cdi{display:flex;align-items:center;gap:12px;background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:10px;}
+  .cdi-i{flex:1;}
+  .cdi-n{font-size:14px;font-weight:600;margin-bottom:2px;}
+  .cdi-s{font-size:12px;color:var(--mt);}
+  .cdi-p{font-weight:700;color:var(--gd);font-size:15px;}
+  .cdirm{background:none;border:none;color:var(--mt);cursor:pointer;font-size:16px;padding:4px;transition:color .2s;}
+  .cdirm:hover{color:var(--rd);}
+  .cdf{padding:16px 20px;border-top:1px solid var(--bd);}
+  .ctr{display:flex;justify-content:space-between;margin-bottom:14px;}
+  .ctl{font-size:14px;color:var(--mt);}
+  .ctv{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--gd);}
+  .twrap{position:fixed;bottom:28px;right:28px;z-index:999;display:flex;flex-direction:column;gap:10px;}
+  .toast{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:14px 18px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px;animation:si .3s ease;max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,.4);}
+  .toast.s{border-color:rgba(46,204,113,.3);}
+  .toast.g{border-color:rgba(245,200,66,.4);background:rgba(245,200,66,.08);}
+  .toast.e{border-color:rgba(231,76,60,.3);}
+  .spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:inline-block;vertical-align:middle;}
+  .ldot{width:8px;height:8px;border-radius:50%;background:var(--gr);display:inline-block;animation:pl 1.5s infinite;}
+  @keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes si{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes burst{0%{transform:scale(0) rotate(-20deg)}70%{transform:scale(1.2) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  @keyframes pl{0%,100%{opacity:1}50%{opacity:.4}}
+  @media(max-width:600px){nav,section,.filt,.ws{padding-left:16px;padding-right:16px;}.cdp{width:100%;}.hero{padding:48px 16px 40px;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo"><i>🎰</i> LuckyCart</div>
+  <ul class="nav-links">
+    <li><a href="#draws">Live Draws</a></li>
+    <li><a href="#winners">Winners</a></li>
+    <li><a href="#how">How It Works</a></li>
+  </ul>
+  <div class="nav-r" id="navR">
+    <button class="bsm" onclick="openAuth('login')">Login</button>
+    <button class="bsm pri" onclick="openAuth('register')">Sign Up</button>
+    <button class="bsm" onclick="toggleCart()">🛒 <span class="bdg" id="cBdg">0</span></button>
+  </div>
+</nav>
+
+<section class="hero" id="how">
+  <div class="hbadge">✨ Every purchase is a chance to win it FREE</div>
+  <h1>Buy at a <span>Discount.</span><br>One Lucky Buyer <span>Wins Free.</span></h1>
+  <p class="hsub">Shop at exclusive discounts — and you could be the one who gets a full refund. Every order enters the draw automatically.</p>
+  <div class="steps">
+    <div class="step"><div class="sn">1</div>Browse products</div>
+    <div class="arr">→</div>
+    <div class="step"><div class="sn">2</div>Buy discounted ticket</div>
+    <div class="arr">→</div>
+    <div class="step"><div class="sn">3</div>Draw when slots fill</div>
+    <div class="arr">→</div>
+    <div class="step"><div class="sn">4</div>🏆 Winner refunded!</div>
+  </div>
+</section>
+
+<div class="ws" id="winners">
+  <div class="ws-t"><span class="ldot"></span> &nbsp;Recent Winners</div>
+  <div class="ws-sc" id="wList">
+    <div class="wchip"><div class="wav">RM</div>Rahul won <span style="color:var(--gd);margin-left:4px;font-weight:600">iPhone 14 FREE</span></div>
+    <div class="wchip"><div class="wav">PS</div>Priya won <span style="color:var(--gd);margin-left:4px;font-weight:600">Samsung TV FREE</span></div>
+    <div class="wchip"><div class="wav">AK</div>Aditya won <span style="color:var(--gd);margin-left:4px;font-weight:600">Pixel 8 FREE</span></div>
+    <div class="wchip"><div class="wav">VT</div>Vikram won <span style="color:var(--gd);margin-left:4px;font-weight:600">iPad Air FREE</span></div>
+  </div>
+</div>
+
+<div class="filt" id="draws">
+  <span style="color:var(--mt);font-size:13px;font-weight:500;margin-right:4px">Category:</span>
+  <button class="fb act" onclick="filt('all',this)">All</button>
+  <button class="fb" onclick="filt('Electronics',this)">📱 Electronics</button>
+  <button class="fb" onclick="filt('Fashion',this)">👗 Fashion</button>
+  <button class="fb" onclick="filt('Lifestyle',this)">🏠 Lifestyle</button>
+  <button class="fb" onclick="filt('Gaming',this)">🎮 Gaming</button>
+  <button class="fb" onclick="filt('Sports',this)">⚽ Sports</button>
+</div>
+
+<section class="sec">
+  <div class="sh">
+    <div class="st">🔥 Live Draws</div>
+    <div class="cdb">⏱ Next draw in <strong id="cd" style="margin-left:4px">23:14:07</strong></div>
+  </div>
+  <div class="grid" id="pGrid"><div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--mt)"><div class="spin" style="margin:0 auto 12px;width:24px;height:24px;border-width:3px"></div>Loading draws...</div></div>
+</section>
+
+<!-- AUTH MODAL -->
+<div class="mo" id="authMo" onclick="ovClick(event,'authMo')">
+  <div class="md">
+    <div class="mdh"><div class="mdt" id="authT">Welcome back</div><button class="mdc" onclick="closeMo('authMo')">✕</button></div>
+    <div class="mdb">
+      <div class="tabs">
+        <button class="tab act" id="tLg" onclick="swTab('login')">Login</button>
+        <button class="tab" id="tRg" onclick="swTab('register')">Sign Up</button>
+      </div>
+      <div id="lgFm">
+        <div class="fld"><label>Email</label><input type="email" id="lgEm" placeholder="you@example.com"></div>
+        <div class="fld"><label>Password</label><input type="password" id="lgPw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <button class="bfl" onclick="doLogin()">Login</button>
+      </div>
+      <div id="rgFm" style="display:none">
+        <div class="fld"><label>Full Name</label><input type="text" id="rgNm" placeholder="Rahul Sharma"></div>
+        <div class="fld"><label>Email</label><input type="email" id="rgEm" placeholder="you@example.com"></div>
+        <div class="fld"><label>Phone</label><input type="tel" id="rgPh" placeholder="+91 98765 43210"></div>
+        <div class="fld"><label>Password</label><input type="password" id="rgPw" placeholder="Min 8 characters" onkeydown="if(event.key==='Enter')doReg()"></div>
+        <button class="bfl" onclick="doReg()">Create Account</button>
+      </div>
+      <div class="err" id="authErr"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BUY MODAL -->
+<div class="mo" id="buyMo" onclick="ovClick(event,'buyMo')">
+  <div class="md">
+    <div class="mdh"><div class="mdt">Enter the Draw 🎰</div><button class="mdc" onclick="closeMo('buyMo')">✕</button></div>
+    <div class="mdb">
+      <div class="mprod">
+        <span style="font-size:36px" id="mpEm"></span>
+        <div>
+          <div style="font-weight:600;font-size:15px;margin-bottom:4px" id="mpNm"></div>
+          <div style="font-size:13px;color:var(--mt)" id="mpSb"></div>
+        </div>
+      </div>
+      <div class="qr">
+        <div class="ql">Tickets <small style="color:var(--mt)">(more = better odds)</small></div>
+        <div class="qc">
+          <button class="qb" onclick="chQty(-1)">−</button>
+          <div class="qv" id="qv">1</div>
+          <button class="qb" onclick="chQty(1)">+</button>
+        </div>
+      </div>
+      <div class="sbox">
+        <div class="sr"><span>Ticket price</span><span id="sTk">₹0</span></div>
+        <div class="sr"><span>Quantity</span><span id="sQt">×1</span></div>
+        <div class="sr"><span>Original value</span><span id="sOr" style="text-decoration:line-through;color:var(--mt)">₹0</span></div>
+        <div class="sr"><span>You Pay</span><span class="shi" id="sTl">₹0</span></div>
+      </div>
+      <div class="winfo"><span style="font-size:16px;margin-top:1px">🏆</span><span>If selected in the lucky draw, you get a <strong>full refund</strong>. Draw runs when all slots fill!</span></div>
+      <button class="bgd" id="buyBtn" onclick="confirmBuy()">💳 Buy Ticket & Enter Draw</button>
+    </div>
+  </div>
+</div>
+
+<!-- WINNER MODAL -->
+<div class="mo" id="winMo">
+  <div class="md">
+    <div class="wmod">
+      <div class="wburst">🎉</div>
+      <div class="wtitle">You Won!</div>
+      <div class="wsub" id="winTx">You've been selected as the lucky winner!</div>
+      <div class="wref">✅ Full refund of <span id="winRf">₹0</span> processing in 24 hours</div>
+      <button class="bgd" onclick="closeMo('winMo')">🎊 Awesome, thanks!</button>
+    </div>
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cd" id="cDraw">
+  <div class="cdbg" onclick="toggleCart()"></div>
+  <div class="cdp">
+    <div class="cdh"><div class="cdht">🎟️ Your Tickets</div><button class="mdc" onclick="toggleCart()">✕</button></div>
+    <div class="cditems" id="cItems"></div>
+    <div class="cdf" id="cFoot">
+      <div class="ctr"><div class="ctl">Total paid</div><div class="ctv" id="cTotal">₹0</div></div>
+      <button class="bgd" onclick="goCheckout()">💳 Checkout</button>
+    </div>
+  </div>
+</div>
+
+<div class="twrap" id="twrap"></div>
+
+<script>
+let prods=[], cart=[], buyP=null, buyQ=1, activeCat='all', me=null;
+
+(async()=>{ await chkAuth(); await loadProds(); startCD(); loadWinners(); })();
+
+async function chkAuth(){
+  try{const r=await fetch('/api/auth/me');const d=await r.json();if(d.logged_in){me=d;rnav();}}catch{}
+}
+function rnav(){
+  const el=document.getElementById('navR');
+  if(!me){el.innerHTML=`<button class="bsm" onclick="openAuth('login')">Login</button><button class="bsm pri" onclick="openAuth('register')">Sign Up</button><button class="bsm" onclick="toggleCart()">🛒 <span class="bdg" id="cBdg">0</span></button>`;return;}
+  el.innerHTML=`<span style="font-size:13px;color:var(--mt)">Hi, <strong style="color:var(--tx)">${me.name.split(' ')[0]}</strong></span>${me.is_admin?'<a href="/admin" class="bsm">Admin</a>':''}<a href="/my-tickets" class="bsm">My Tickets</a><button class="bsm" onclick="doLogout()">Logout</button><button class="bsm" onclick="toggleCart()">🛒 <span class="bdg" id="cBdg">0</span></button>`;
+}
+async function doLogin(){
+  const em=document.getElementById('lgEm').value, pw=document.getElementById('lgPw').value;
+  const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw})});
+  const d=await r.json();
+  if(!r.ok){shErr(d.error);return;}
+  me=d;rnav();closeMo('authMo');toast('👋',`Welcome back, ${d.name}!`,'s');
+}
+async function doReg(){
+  const nm=document.getElementById('rgNm').value,em=document.getElementById('rgEm').value,ph=document.getElementById('rgPh').value,pw=document.getElementById('rgPw').value;
+  const r=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:nm,email:em,phone:ph,password:pw})});
+  const d=await r.json();
+  if(!r.ok){shErr(d.error);return;}
+  me=d;rnav();closeMo('authMo');toast('🎉',`Welcome, ${nm}!`,'s');
+}
+async function doLogout(){await fetch('/api/auth/logout',{method:'POST'});me=null;rnav();toast('👋','Logged out.','s');}
+function shErr(m){const e=document.getElementById('authErr');e.textContent=m;e.style.display='block';}
+
+async function loadProds(){
+  const r=await fetch('/api/products');prods=await r.json();renderProds();
+}
+function renderProds(){
+  const grid=document.getElementById('pGrid');
+  const list=activeCat==='all'?prods:prods.filter(p=>p.category===activeCat);
+  if(!list.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--mt)"><div style="font-size:48px;margin-bottom:12px">🔍</div>No active draws here.</div>`;return;}
+  grid.innerHTML=list.map((p,i)=>{
+    const dng=p.fill_pct>=80;
+    return `<div class="card" style="animation-delay:${i*.05}s" onclick="openBuy(${p.id})">
+      <div class="ci">${dng?'<div class="hbdg">🔥 Almost Full</div>':''}<span style="position:relative;z-index:1">${p.emoji}</span></div>
+      <div class="cb">
+        <div class="ccat">${p.category}</div>
+        <div class="cname">${p.name}</div>
+        <div class="cdesc">${p.description||''}</div>
+        <div class="pr"><div class="pt">₹${fmt(p.ticket_price_inr)}</div><div class="po">₹${fmt(p.original_price_inr)}</div><div class="sp">Save ${p.discount_pct}%</div></div>
+        <div class="slr"><div class="sll"><span>Slots filled</span><span>${p.filled_slots}/${p.total_slots} (${p.slots_left} left)</span></div><div class="slb"><div class="slf ${dng?'dng':''}" style="width:${p.fill_pct}%"></div></div></div>
+        <button class="bby" onclick="event.stopPropagation();openBuy(${p.id})">🎰 Buy Ticket</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function filt(cat,btn){activeCat=cat;document.querySelectorAll('.fb').forEach(b=>b.classList.remove('act'));btn.classList.add('act');renderProds();}
+
+async function openBuy(pid){
+  if(!me){openAuth('login');toast('ℹ️','Login to buy a ticket.','g');return;}
+  const p=prods.find(x=>x.id===pid);if(!p)return;
+  buyP=p;buyQ=1;
+  document.getElementById('mpEm').textContent=p.emoji;
+  document.getElementById('mpNm').textContent=p.name;
+  document.getElementById('mpSb').textContent=`${p.category} · ${p.slots_left} slots left`;
+  updBS();openMo('buyMo');
+}
+function updBS(){
+  document.getElementById('qv').textContent=buyQ;
+  document.getElementById('sTk').textContent='₹'+fmt(buyP.ticket_price_inr);
+  document.getElementById('sQt').textContent='×'+buyQ;
+  document.getElementById('sOr').textContent='₹'+fmt(buyP.original_price_inr*buyQ);
+  document.getElementById('sTl').textContent='₹'+fmt(buyP.ticket_price_inr*buyQ);
+}
+function chQty(d){buyQ=Math.max(1,Math.min(buyP.slots_left,buyQ+d));updBS();}
+
+async function confirmBuy(){
+  const btn=document.getElementById('buyBtn');
+  btn.innerHTML='<span class="spin"></span> Processing...';btn.disabled=true;
+  try{
+    const r1=await fetch('/api/orders/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product_id:buyP.id,quantity:buyQ})});
+    const ord=await r1.json();
+    if(!r1.ok){toast('❌',ord.error,'e');return;}
+    if(ord.key_id){launchRZ(ord);}else{await demoPay(ord);}
+  }finally{btn.innerHTML='💳 Buy Ticket & Enter Draw';btn.disabled=false;}
+}
+function launchRZ(ord){
+  new Razorpay({key:ord.key_id,amount:ord.amount,currency:ord.currency,name:'LuckyCart',description:`Ticket for ${ord.product_name}`,order_id:ord.order_id,
+    handler:async(rsp)=>{await verifyPay({razorpay_order_id:rsp.razorpay_order_id,razorpay_payment_id:rsp.razorpay_payment_id,razorpay_signature:rsp.razorpay_signature,ticket_id:ord.ticket_id});},
+    theme:{color:'#7c6af7'}}).open();
+}
+async function demoPay(ord){
+  const r=await fetch('/api/orders/demo-pay',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ticket_id:ord.ticket_id})});
+  const d=await r.json();if(!r.ok){toast('❌',d.error,'e');return;}
+  handleResult(d);
+}
+async function verifyPay(pl){
+  const r=await fetch('/api/orders/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pl)});
+  const d=await r.json();handleResult(d);
+}
+function handleResult(d){
+  closeMo('buyMo');
+  cart.push({name:buyP.name,emoji:buyP.emoji,quantity:buyQ,ticket_price:buyP.ticket_price_inr});
+  updBdg();
+  const lp=prods.find(x=>x.id===buyP.id);
+  if(lp){lp.filled_slots=d.filled_slots;lp.fill_pct=Math.round(d.filled_slots/d.total_slots*1000)/10;lp.slots_left=d.total_slots-d.filled_slots;}
+  renderProds();
+  if(d.draw_result&&!d.draw_result.error){
+    const dr=d.draw_result;
+    const won=dr.winner_email&&me&&dr.winner_email===me.email;
+    if(won){document.getElementById('winTx').textContent=`You won the draw for ${buyP.name}!`;document.getElementById('winRf').textContent='₹'+fmt(dr.refund_amount/100);openMo('winMo');}
+    else toast('🎰',`Draw complete! ${dr.winner_name} won ${buyP.name} for free!`,'g');
+  }else toast('🎉',d.message||"You're in the draw! Good luck!",'s');
+}
+
+async function loadWinners(){
+  try{const r=await fetch('/api/draws');const draws=await r.json();
+  if(!draws.length)return;
+  document.getElementById('wList').innerHTML=draws.slice(0,8).map(d=>{
+    const ini=d.winner_name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    return `<div class="wchip"><div class="wav">${ini}</div>${d.winner_name} won <span style="color:var(--gd);margin-left:4px;font-weight:600">${d.emoji} ${d.product_name} FREE</span></div>`;
+  }).join('');}catch{}
+}
+
+function toggleCart(){document.getElementById('cDraw').classList.toggle('open');rCart();}
+function rCart(){
+  const el=document.getElementById('cItems'),ft=document.getElementById('cFoot');
+  if(!cart.length){el.innerHTML=`<div style="text-align:center;padding:60px 20px;color:var(--mt)"><div style="font-size:48px;margin-bottom:12px">🎟️</div>No tickets yet!</div>`;ft.style.display='none';return;}
+  ft.style.display='block';
+  el.innerHTML=cart.map((c,i)=>`<div class="cdi"><span style="font-size:28px">${c.emoji}</span><div class="cdi-i"><div class="cdi-n">${c.name}</div><div class="cdi-s">${c.quantity} ticket${c.quantity>1?'s':''} × ₹${fmt(c.ticket_price)}</div></div><div class="cdi-p">₹${fmt(c.ticket_price*c.quantity)}</div><button class="cdirm" onclick="rmCart(${i})">✕</button></div>`).join('');
+  document.getElementById('cTotal').textContent='₹'+fmt(cart.reduce((s,c)=>s+c.ticket_price*c.quantity,0));
+  updBdg();
+}
+function rmCart(i){cart.splice(i,1);rCart();updBdg();}
+function updBdg(){const el=document.getElementById('cBdg');if(el)el.textContent=cart.reduce((s,c)=>s+c.quantity,0);}
+function goCheckout(){toast('💳','All tickets already paid — check My Tickets!','g');toggleCart();}
+
+function startCD(){let t=23*3600+14*60+7;setInterval(()=>{t=(t-1+86400)%86400;const h=String(Math.floor(t/3600)).padStart(2,'0'),m=String(Math.floor((t%3600)/60)).padStart(2,'0'),s=String(t%60).padStart(2,'0');const el=document.getElementById('cd');if(el)el.textContent=`${h}:${m}:${s}`;},1000);}
+
+function openMo(id){document.getElementById(id).classList.add('open');}
+function closeMo(id){document.getElementById(id).classList.remove('open');}
+function ovClick(e,id){if(e.target===document.getElementById(id))closeMo(id);}
+function openAuth(tab){document.getElementById('authErr').style.display='none';swTab(tab);openMo('authMo');}
+function swTab(t){
+  document.getElementById('lgFm').style.display=t==='login'?'block':'none';
+  document.getElementById('rgFm').style.display=t==='register'?'block':'none';
+  document.getElementById('tLg').classList.toggle('act',t==='login');
+  document.getElementById('tRg').classList.toggle('act',t==='register');
+  document.getElementById('authT').textContent=t==='login'?'Welcome back':'Create account';
+  document.getElementById('authErr').style.display='none';
+}
+function toast(icon,msg,type='s'){
+  const w=document.getElementById('twrap'),el=document.createElement('div');
+  el.className=`toast ${type}`;el.innerHTML=`<span style="font-size:18px">${icon}</span> ${msg}`;
+  w.appendChild(el);setTimeout(()=>{el.style.opacity='0';el.style.transform='translateX(20px)';el.style.transition='all .3s';setTimeout(()=>el.remove(),300);},3500);
+}
+function fmt(n){return Number(n).toLocaleString('en-IN');}
+</script>
+{% if razorpay_key %}<script src="https://checkout.razorpay.com/v1/checkout.js"></script>{% endif %}
+</body>
+</html>
