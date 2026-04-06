@@ -459,14 +459,46 @@ def update_product(pid):
 @login_required
 @admin_required
 def delete_product(pid):
-    # Block delete if confirmed/paid tickets exist
     paid = query("SELECT COUNT(*) AS c FROM tickets WHERE product_id=%s AND payment_status='paid'",(pid,),one=True)
     if paid["c"] > 0:
         return jsonify({"error":f"Cannot delete: {paid['c']} confirmed ticket(s) exist. Close the draw instead."}),400
-    # Remove pending/rejected tickets
     query("DELETE FROM tickets WHERE product_id=%s AND payment_status IN ('pending','utr_submitted','rejected')",(pid,),commit=True)
     query("DELETE FROM products WHERE id=%s",(pid,),commit=True)
     return jsonify({"message":"Draw deleted"})
+
+@app.route("/api/admin/products/bulk-delete", methods=["POST"])
+@login_required
+@admin_required
+def bulk_delete_products():
+    ids = request.json.get("ids", [])
+    if not ids or not isinstance(ids, list):
+        return jsonify({"error": "No IDs provided"}), 400
+    ids = [int(i) for i in ids]
+    blocked, deleted = [], 0
+    for pid in ids:
+        paid = query("SELECT COUNT(*) AS c FROM tickets WHERE product_id=%s AND payment_status='paid'",(pid,),one=True)
+        if paid["c"] > 0:
+            prod = query("SELECT name FROM products WHERE id=%s",(pid,),one=True)
+            blocked.append(prod["name"] if prod else f"ID {pid}")
+            continue
+        query("DELETE FROM tickets WHERE product_id=%s AND payment_status IN ('pending','utr_submitted','rejected')",(pid,),commit=True)
+        query("DELETE FROM products WHERE id=%s",(pid,),commit=True)
+        deleted += 1
+    msg = f"Deleted {deleted} draw(s)."
+    if blocked:
+        msg += f" Skipped {len(blocked)} with paid tickets: {', '.join(blocked)}"
+    return jsonify({"message": msg, "deleted": deleted, "skipped": blocked})
+
+@app.route("/api/admin/expire-pending", methods=["POST"])
+@login_required
+@admin_required
+def expire_pending():
+    """Release tickets stuck in 'pending' (no UTR submitted) for more than 15 minutes."""
+    n = query(
+        "DELETE FROM tickets WHERE payment_status='pending' AND created_at < NOW() - INTERVAL '15 minutes'",
+        commit=True
+    )
+    return jsonify({"message": f"Expired {n} stale pending ticket(s)."})
 
 # ═══════════════════════════════════════════════════════════════════════════════
 #  PAYMENTS
@@ -477,67 +509,82 @@ def create_order():
     d=request.json or {}
     product_id=d.get("product_id"); quantity=max(1,min(10,int(d.get("quantity",1))))
     use_referral=d.get("use_referral_balance",False)
-    prod=query("SELECT * FROM products WHERE id=%s AND status='active'",(product_id,),one=True)
-    if not prod: return jsonify({"error":"Product not available"}),404
-    slots_left=prod["total_slots"]-prod["filled_slots"]
-    if quantity>slots_left: return jsonify({"error":f"Only {slots_left} slot(s) left"}),400
 
-    amount_paise=prod["ticket_price"]*quantity
-    referral_discount=0
-
-    if use_referral:
-        u=query("SELECT referral_balance FROM users WHERE id=%s",(session["user_id"],),one=True)
-        avail=u["referral_balance"] if u else 0
-        referral_discount=min(avail, amount_paise)
-        amount_paise=max(0, amount_paise-referral_discount)
-
-    order_ref="LC"+secrets.token_hex(4).upper()
     conn=get_db(); cur=conn.cursor()
-    cur.execute(
-        "INSERT INTO tickets (product_id,user_id,quantity,amount_paid,referral_discount,order_ref,payment_status) VALUES (%s,%s,%s,%s,%s,%s,%s) RETURNING id",
-        (product_id,session["user_id"],quantity,amount_paise,referral_discount,order_ref,
-         "paid" if amount_paise==0 else "pending")
-    )
-    tid=cur.fetchone()["id"]
-    if referral_discount>0:
-        cur.execute("UPDATE users SET referral_balance=referral_balance-%s WHERE id=%s",
-                    (referral_discount,session["user_id"]))
-    conn.commit(); conn.close()
+    try:
+        # Lock the product row to prevent slot race condition
+        cur.execute("SELECT * FROM products WHERE id=%s AND status='active' FOR UPDATE",(product_id,))
+        prod=cur.fetchone()
+        if not prod:
+            conn.rollback(); conn.close()
+            return jsonify({"error":"Product not available"}),404
+        slots_left=prod["total_slots"]-prod["filled_slots"]
+        if quantity>slots_left:
+            conn.rollback(); conn.close()
+            return jsonify({"error":f"Only {slots_left} slot(s) left"}),400
 
-    # If fully covered by balance, auto-confirm
-    if amount_paise == 0:
-        conn2=get_db(); cur2=conn2.cursor()
-        cur2.execute("UPDATE tickets SET confirmed_at=NOW() WHERE id=%s",(tid,))
-        cur2.execute("UPDATE products SET filled_slots=filled_slots+%s WHERE id=%s RETURNING filled_slots,total_slots,id",
-                     (quantity,product_id))
-        uprod=cur2.fetchone(); conn2.commit(); conn2.close()
-        draw_result=None
-        if uprod["filled_slots"]>=uprod["total_slots"]:
-            draw_result=run_draw(uprod["id"])
-        return jsonify({"ticket_id":tid,"order_ref":order_ref,"amount_paise":0,"amount_inr":0,
-                        "free_via_referral":True,"draw_result":draw_result,
-                        "product_name":prod["name"]})
+        amount_paise=prod["ticket_price"]*quantity
+        referral_discount=0
 
-    return jsonify({
-        "ticket_id":       tid,
-        "order_ref":       order_ref,
-        "amount_paise":    amount_paise,
-        "amount_inr":      amount_paise/100,
-        "referral_discount": referral_discount/100,
-        "upi_id":          UPI_ID,
-        "upi_name":        UPI_NAME,
-        "upi_link":        upi_link(amount_paise, order_ref),
-        "upi_qr_url":      UPI_QR_URL,
-        "product_name":    prod["name"],
-    })
+        if use_referral:
+            cur.execute("SELECT referral_balance FROM users WHERE id=%s FOR UPDATE",(session["user_id"],))
+            u=cur.fetchone()
+            avail=u["referral_balance"] if u else 0
+            referral_discount=min(avail, amount_paise)
+            amount_paise=max(0, amount_paise-referral_discount)
+
+        order_ref="LC"+secrets.token_hex(4).upper()
+        status="paid" if amount_paise==0 else "pending"
+        cur.execute(
+            "INSERT INTO tickets (product_id,user_id,quantity,amount_paid,referral_discount,order_ref,payment_status) VALUES (%s,%s,%s,%s,%s,%s,%s) RETURNING id",
+            (product_id,session["user_id"],quantity,amount_paise,referral_discount,order_ref,status)
+        )
+        tid=cur.fetchone()["id"]
+        if referral_discount>0:
+            cur.execute("UPDATE users SET referral_balance=referral_balance-%s WHERE id=%s",
+                        (referral_discount,session["user_id"]))
+
+        # If free via referral, auto-fill the slot immediately inside same transaction
+        if amount_paise == 0:
+            cur.execute("UPDATE tickets SET confirmed_at=NOW() WHERE id=%s",(tid,))
+            cur.execute(
+                "UPDATE products SET filled_slots=filled_slots+%s WHERE id=%s RETURNING filled_slots,total_slots,id",
+                (quantity,product_id)
+            )
+            uprod=cur.fetchone()
+            conn.commit(); conn.close()
+            draw_result=None
+            if uprod["filled_slots"]>=uprod["total_slots"]:
+                draw_result=run_draw(uprod["id"])
+            return jsonify({"ticket_id":tid,"order_ref":order_ref,"amount_paise":0,"amount_inr":0,
+                            "free_via_referral":True,"draw_result":draw_result,
+                            "product_name":prod["name"]})
+
+        conn.commit(); conn.close()
+        return jsonify({
+            "ticket_id":       tid,
+            "order_ref":       order_ref,
+            "amount_paise":    amount_paise,
+            "amount_inr":      amount_paise/100,
+            "referral_discount": referral_discount/100,
+            "upi_id":          UPI_ID,
+            "upi_name":        UPI_NAME,
+            "upi_link":        upi_link(amount_paise, order_ref),
+            "upi_qr_url":      UPI_QR_URL,
+            "product_name":    prod["name"],
+        })
+    except Exception as e:
+        conn.rollback(); conn.close()
+        log.error("create_order error: %s", e)
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/api/orders/submit-utr", methods=["POST"])
 @login_required
 def submit_utr():
     d=request.json or {}
     tid=d.get("ticket_id"); utr=d.get("utr","").strip()
-    if not utr or len(utr)<6:
-        return jsonify({"error":"Please enter a valid UTR / transaction ID"}),400
+    if not utr or not utr.isdigit() or len(utr) != 12:
+        return jsonify({"error":"Please enter a valid 12-digit UTR number (digits only)"}),400
     conn=get_db(); cur=conn.cursor()
     cur.execute("SELECT * FROM tickets WHERE id=%s AND user_id=%s",(tid,session["user_id"]))
     ticket=cur.fetchone()
