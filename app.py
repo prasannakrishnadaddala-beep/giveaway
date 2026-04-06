@@ -1,13 +1,12 @@
 """
-LuckyCart — Lucky Draw E-Commerce Platform
+LuckyCart v5 — Lucky Draw E-Commerce Platform
 Flask + PostgreSQL | Railway-ready
 
-Business model:
-  - Products listed with a ticket_price (far below original_price)
-  - Buyers pay ticket_price → enter the draw
-  - When all slots fill → lucky draw runs
-  - ONE winner gets the actual PRODUCT shipped to them (not a refund)
-  - Everyone else just paid a small ticket entry fee
+New in v5:
+  - Referral system with ₹50 reward per referred signup
+  - Delete draw endpoint (safe — blocked if paid tickets exist)
+  - Edit draw: all fields including image_url
+  - Referral balance applied at checkout
 """
 
 import os, hashlib, secrets, logging
@@ -29,8 +28,9 @@ ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@luckycart.in")
 UPI_ID      = os.environ.get("UPI_ID",   "yourupi@ybl")
 UPI_NAME    = os.environ.get("UPI_NAME", "LuckyCart")
 UPI_QR_URL  = os.environ.get("UPI_QR_URL", "")
+REFERRAL_BONUS_PAISE = int(os.environ.get("REFERRAL_BONUS", "5000"))  # ₹50 default
 
-# ── global error handlers → always return JSON, never HTML ───────────────────
+# ── global error handlers ─────────────────────────────────────────────────────
 @app.errorhandler(400)
 def e400(e): return jsonify({"error": str(e)}), 400
 @app.errorhandler(401)
@@ -73,6 +73,9 @@ SCHEMA = [
         id SERIAL PRIMARY KEY, name TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL, phone TEXT, address TEXT,
         password TEXT NOT NULL, is_admin BOOLEAN DEFAULT FALSE,
+        referral_code TEXT UNIQUE,
+        referred_by INTEGER,
+        referral_balance INTEGER DEFAULT 0,
         created_at TIMESTAMPTZ DEFAULT NOW()
     )""",
     """CREATE TABLE IF NOT EXISTS products (
@@ -94,6 +97,7 @@ SCHEMA = [
         user_id        INTEGER NOT NULL,
         quantity       INTEGER NOT NULL DEFAULT 1,
         amount_paid    INTEGER NOT NULL,
+        referral_discount INTEGER DEFAULT 0,
         order_ref      TEXT,
         utr            TEXT,
         payment_status TEXT DEFAULT 'pending',
@@ -115,44 +119,63 @@ SCHEMA = [
         tracking_info    TEXT,
         drawn_at         TIMESTAMPTZ DEFAULT NOW()
     )""",
+    """CREATE TABLE IF NOT EXISTS referrals (
+        id          SERIAL PRIMARY KEY,
+        referrer_id INTEGER NOT NULL,
+        referred_id INTEGER NOT NULL,
+        bonus_paise INTEGER NOT NULL,
+        created_at  TIMESTAMPTZ DEFAULT NOW()
+    )""",
+    # Migrate existing tables safely
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS referral_code TEXT",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS referred_by INTEGER",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS referral_balance INTEGER DEFAULT 0",
+    "ALTER TABLE tickets ADD COLUMN IF NOT EXISTS referral_discount INTEGER DEFAULT 0",
+    "ALTER TABLE products ADD COLUMN IF NOT EXISTS image_url TEXT",
+    # Indexes
     "CREATE INDEX IF NOT EXISTS idx_tix_prod    ON tickets(product_id)",
     "CREATE INDEX IF NOT EXISTS idx_tix_user    ON tickets(user_id)",
     "CREATE INDEX IF NOT EXISTS idx_tix_status  ON tickets(payment_status)",
     "CREATE INDEX IF NOT EXISTS idx_prod_status ON products(status)",
+    "CREATE UNIQUE INDEX IF NOT EXISTS idx_users_ref_code ON users(referral_code) WHERE referral_code IS NOT NULL",
 ]
 
 SEED = [
-    ("iPhone 15 Pro",    "256GB Natural Titanium · A17 Pro · USB-C",      "Electronics","📱",134900,3499,100),
-    ("Sony WH-1000XM5", "Industry-leading ANC · 30h battery · LDAC",      "Electronics","🎧",29990,799,60),
-    ("Nike Air Max 270", "Max Air unit · breathable mesh · iconic look",   "Fashion",    "👟",13995,349,50),
-    ("PS5 Console",      "DualSense · 825GB SSD · 4K 120fps",             "Gaming",     "🎮",54990,1299,80),
-    ("Dyson V15 Detect", "Laser dust detection · 60-min · HEPA",          "Lifestyle",  "🌀",52900,1199,40),
-    ("MacBook Air M3",   "15-inch · 8GB · 256GB SSD · 18h battery",       "Electronics","💻",134900,2999,120),
-    ("JBL Flip 6",       "IP67 waterproof · 12h playtime · PartyBoost",   "Electronics","🔊",9999,249,55),
-    ("Adidas Ultraboost","Continental™ rubber · Boost · Primeknit upper", "Sports",     "🏃",16999,429,60),
-    ("Kindle Paperwhite","6.8\" 300ppi · warm light · 10 weeks battery",  "Lifestyle",  "📚",14999,349,40),
-    ("Xbox Series X",    "4K 120fps · 1TB SSD · Quick Resume",            "Gaming",     "🕹️",49990,1199,75),
-    ("Fossil Gen 6",     "Wear OS · SpO2 · GPS · 24h battery",            "Fashion",    "⌚",22995,549,45),
-    ("Ray-Ban Wayfarer", "Classic polarised · UV400 · acetate frame",      "Fashion",    "🕶️",12500,299,50),
+    ("iPhone 15 Pro",    "256GB Natural Titanium · A17 Pro · USB-C",      "Electronics","📱","",134900,3499,100),
+    ("Sony WH-1000XM5", "Industry-leading ANC · 30h battery · LDAC",      "Electronics","🎧","",29990,799,60),
+    ("Nike Air Max 270", "Max Air unit · breathable mesh · iconic look",   "Fashion",    "👟","",13995,349,50),
+    ("PS5 Console",      "DualSense · 825GB SSD · 4K 120fps",             "Gaming",     "🎮","",54990,1299,80),
+    ("Dyson V15 Detect", "Laser dust detection · 60-min · HEPA",          "Lifestyle",  "🌀","",52900,1199,40),
+    ("MacBook Air M3",   "15-inch · 8GB · 256GB SSD · 18h battery",       "Electronics","💻","",134900,2999,120),
+    ("JBL Flip 6",       "IP67 waterproof · 12h playtime · PartyBoost",   "Electronics","🔊","",9999,249,55),
+    ("Adidas Ultraboost","Continental™ rubber · Boost · Primeknit upper", "Sports",     "🏃","",16999,429,60),
+    ("Kindle Paperwhite","6.8\" 300ppi · warm light · 10 weeks battery",  "Lifestyle",  "📚","",14999,349,40),
+    ("Xbox Series X",    "4K 120fps · 1TB SSD · Quick Resume",            "Gaming",     "🕹️","",49990,1199,75),
+    ("Fossil Gen 6",     "Wear OS · SpO2 · GPS · 24h battery",            "Fashion",    "⌚","",22995,549,45),
+    ("Ray-Ban Wayfarer", "Classic polarised · UV400 · acetate frame",      "Fashion",    "🕶️","",12500,299,50),
 ]
 
 _db_ok = False
+
+def make_referral_code(name):
+    prefix = "".join(c for c in name.upper()[:3] if c.isalpha()) or "LC"
+    return prefix + secrets.token_hex(3).upper()
 
 def init_db():
     global _db_ok
     if _db_ok:
         return
-    conn = get_db()   # raises if DB_URL missing — caught by caller
+    conn = get_db()
     try:
         cur = conn.cursor()
         for stmt in SCHEMA:
             cur.execute(stmt)
         cur.execute("SELECT COUNT(*) AS c FROM products")
         if cur.fetchone()["c"] == 0:
-            for name,desc,cat,emoji,orig,ticket,slots in SEED:
+            for name,desc,cat,emoji,img,orig,ticket,slots in SEED:
                 cur.execute(
-                    "INSERT INTO products (name,description,category,emoji,original_price,ticket_price,total_slots) VALUES (%s,%s,%s,%s,%s,%s,%s)",
-                    (name,desc,cat,emoji,orig*100,ticket*100,slots)
+                    "INSERT INTO products (name,description,category,emoji,image_url,original_price,ticket_price,total_slots) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+                    (name,desc,cat,emoji,img,orig*100,ticket*100,slots)
                 )
             log.info("Seeded %d products.", len(SEED))
         conn.commit()
@@ -165,7 +188,6 @@ def init_db():
     finally:
         conn.close()
 
-# Try at import time — if it fails, before_request will retry
 try:
     init_db()
 except Exception as e:
@@ -173,10 +195,8 @@ except Exception as e:
 
 @app.before_request
 def ensure_db():
-    """Retry DB init on every request. Returns clean JSON 503 on failure (never raises)."""
     if _db_ok:
         return
-    # Health check always succeeds so Railway marks deployment healthy
     if request.path == "/health":
         return
     try:
@@ -219,11 +239,6 @@ def upi_link(amount_paise, ref):
 
 # ── draw engine ───────────────────────────────────────────────────────────────
 def run_draw(product_id):
-    """
-    Pick one winner from paid tickets.
-    Winner gets the PRODUCT shipped to them.
-    Everyone else paid a small ticket fee — that's the deal.
-    """
     conn = get_db(); cur = conn.cursor()
     try:
         cur.execute("SELECT * FROM products WHERE id=%s FOR UPDATE",(product_id,))
@@ -238,19 +253,15 @@ def run_draw(product_id):
             (product_id,)
         )
         tickets = cur.fetchall()
-        # Expand: each ticket gives quantity slots
         slots = [t for t in tickets for _ in range(t["quantity"])]
         if not slots:
             return {"error":"No paid tickets to draw from"}
 
-        # Verifiable randomness: SHA-256(seed:product_id:total_slots)
         seed         = secrets.token_hex(32)
         h            = hashlib.sha256(f"{seed}:{product_id}:{len(slots)}".encode()).hexdigest()
         winning_slot = int(h, 16) % len(slots)
         winner       = slots[winning_slot]
-
-        # prize_value = original product price (what we're shipping)
-        prize_value = prod["original_price"]
+        prize_value  = prod["original_price"]
 
         cur.execute(
             "INSERT INTO draws (product_id,winner_ticket_id,winner_user_id,seed,winning_slot,total_slots,prize_value,delivery_address) "
@@ -280,7 +291,7 @@ def run_draw(product_id):
             "winning_slot":  winning_slot,
             "total_slots":   len(slots),
             "seed":          seed,
-            "prize_value":   prize_value,   # original product price in paise
+            "prize_value":   prize_value,
         }
     except Exception as e:
         conn.rollback()
@@ -297,20 +308,46 @@ def register():
     d=request.json or {}
     name=d.get("name","").strip(); email=d.get("email","").strip().lower()
     phone=d.get("phone","").strip(); pwd=d.get("password","")
+    ref_code=d.get("referral_code","").strip().upper()
     if not name or not email or not pwd:
         return jsonify({"error":"Name, email and password are required"}),400
     if len(pwd)<8:
         return jsonify({"error":"Password must be at least 8 characters"}),400
     if query("SELECT id FROM users WHERE email=%s",(email,),one=True):
         return jsonify({"error":"Email already registered"}),409
+
+    # Resolve referrer
+    referrer_id = None
+    if ref_code:
+        ref_user = query("SELECT id FROM users WHERE referral_code=%s",(ref_code,),one=True)
+        if ref_user:
+            referrer_id = ref_user["id"]
+
+    my_code = make_referral_code(name)
+    # Ensure unique
+    while query("SELECT id FROM users WHERE referral_code=%s",(my_code,),one=True):
+        my_code = make_referral_code(name)
+
     conn=get_db(); cur=conn.cursor()
     cur.execute(
-        "INSERT INTO users (name,email,phone,password,is_admin) VALUES (%s,%s,%s,%s,%s) RETURNING id,is_admin",
-        (name,email,phone,generate_password_hash(pwd),email==ADMIN_EMAIL)
+        "INSERT INTO users (name,email,phone,password,is_admin,referral_code,referred_by) VALUES (%s,%s,%s,%s,%s,%s,%s) RETURNING id,is_admin",
+        (name,email,phone,generate_password_hash(pwd),email==ADMIN_EMAIL,my_code,referrer_id)
     )
-    row=cur.fetchone(); conn.commit(); conn.close()
+    row=cur.fetchone()
+    new_user_id = row["id"]
+
+    # Credit referrer
+    if referrer_id:
+        cur.execute("UPDATE users SET referral_balance=referral_balance+%s WHERE id=%s",
+                    (REFERRAL_BONUS_PAISE, referrer_id))
+        cur.execute("INSERT INTO referrals (referrer_id,referred_id,bonus_paise) VALUES (%s,%s,%s)",
+                    (referrer_id, new_user_id, REFERRAL_BONUS_PAISE))
+        log.info("Referral: user %s referred by %s, bonus ₹%.0f", new_user_id, referrer_id, REFERRAL_BONUS_PAISE/100)
+
+    conn.commit(); conn.close()
     session["user_id"]=row["id"]; session["is_admin"]=row["is_admin"]
-    return jsonify({"message":"Registered!","user_id":row["id"],"is_admin":row["is_admin"]}),201
+    return jsonify({"message":"Registered!","user_id":row["id"],"is_admin":row["is_admin"],
+                    "referral_code":my_code}),201
 
 @app.route("/api/auth/login", methods=["POST"])
 def login():
@@ -329,7 +366,37 @@ def logout():
 def me():
     u=current_user()
     if not u: return jsonify({"logged_in":False})
-    return jsonify({"logged_in":True,"id":u["id"],"name":u["name"],"email":u["email"],"is_admin":u["is_admin"]})
+    return jsonify({"logged_in":True,"id":u["id"],"name":u["name"],"email":u["email"],
+                    "is_admin":u["is_admin"],"referral_code":u["referral_code"],
+                    "referral_balance":u["referral_balance"]})
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  REFERRAL
+# ═══════════════════════════════════════════════════════════════════════════════
+@app.route("/referral")
+@login_required
+def referral_page():
+    return render_template("referral.html", user=current_user())
+
+@app.route("/api/referral")
+@login_required
+def referral_info():
+    u = query("SELECT id,name,referral_code,referral_balance FROM users WHERE id=%s",
+              (session["user_id"],), one=True)
+    refs = query(
+        "SELECT r.*,u.name AS rname,u.created_at AS rjoined "
+        "FROM referrals r JOIN users u ON u.id=r.referred_id "
+        "WHERE r.referrer_id=%s ORDER BY r.created_at DESC",
+        (session["user_id"],)
+    )
+    total_earned = sum(r["bonus_paise"] for r in refs)
+    return jsonify({
+        "referral_code":    u["referral_code"],
+        "referral_balance": u["referral_balance"],
+        "total_referred":   len(refs),
+        "total_earned":     total_earned,
+        "referrals":        [dict(r) for r in refs],
+    })
 
 # ═══════════════════════════════════════════════════════════════════════════════
 #  PRODUCTS
@@ -360,8 +427,9 @@ def create_product():
         if f not in d: return jsonify({"error":f"Missing: {f}"}),400
     conn=get_db(); cur=conn.cursor()
     cur.execute(
-        "INSERT INTO products (name,description,category,emoji,original_price,ticket_price,total_slots) VALUES (%s,%s,%s,%s,%s,%s,%s) RETURNING id",
+        "INSERT INTO products (name,description,category,emoji,image_url,original_price,ticket_price,total_slots) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id",
         (d["name"],d.get("description",""),d["category"],d.get("emoji","📦"),
+         d.get("image_url",""),
          int(d["original_price"]*100),int(d["ticket_price"]*100),d["total_slots"])
     )
     pid=cur.fetchone()["id"]; conn.commit(); conn.close()
@@ -371,45 +439,96 @@ def create_product():
 @login_required
 @admin_required
 def update_product(pid):
-    d=request.json or {}; allowed=["name","description","category","emoji","status"]
+    d=request.json or {}
     sets,vals=[],[]
-    for k in allowed:
+    text_fields=["name","description","category","emoji","status","image_url"]
+    for k in text_fields:
         if k in d: sets.append(f"{k}=%s"); vals.append(d[k])
+    if "original_price" in d:
+        sets.append("original_price=%s"); vals.append(int(float(d["original_price"])*100))
+    if "ticket_price" in d:
+        sets.append("ticket_price=%s"); vals.append(int(float(d["ticket_price"])*100))
+    if "total_slots" in d:
+        sets.append("total_slots=%s"); vals.append(int(d["total_slots"]))
     if not sets: return jsonify({"error":"Nothing to update"}),400
     vals.append(pid)
     query(f"UPDATE products SET {', '.join(sets)} WHERE id=%s",vals,commit=True)
     return jsonify({"message":"Updated"})
 
+@app.route("/api/admin/products/<int:pid>", methods=["DELETE"])
+@login_required
+@admin_required
+def delete_product(pid):
+    # Block delete if confirmed/paid tickets exist
+    paid = query("SELECT COUNT(*) AS c FROM tickets WHERE product_id=%s AND payment_status='paid'",(pid,),one=True)
+    if paid["c"] > 0:
+        return jsonify({"error":f"Cannot delete: {paid['c']} confirmed ticket(s) exist. Close the draw instead."}),400
+    # Remove pending/rejected tickets
+    query("DELETE FROM tickets WHERE product_id=%s AND payment_status IN ('pending','utr_submitted','rejected')",(pid,),commit=True)
+    query("DELETE FROM products WHERE id=%s",(pid,),commit=True)
+    return jsonify({"message":"Draw deleted"})
+
 # ═══════════════════════════════════════════════════════════════════════════════
-#  PAYMENTS — UPI / PhonePe
+#  PAYMENTS
 # ═══════════════════════════════════════════════════════════════════════════════
 @app.route("/api/orders/create", methods=["POST"])
 @login_required
 def create_order():
     d=request.json or {}
     product_id=d.get("product_id"); quantity=max(1,min(10,int(d.get("quantity",1))))
+    use_referral=d.get("use_referral_balance",False)
     prod=query("SELECT * FROM products WHERE id=%s AND status='active'",(product_id,),one=True)
     if not prod: return jsonify({"error":"Product not available"}),404
     slots_left=prod["total_slots"]-prod["filled_slots"]
     if quantity>slots_left: return jsonify({"error":f"Only {slots_left} slot(s) left"}),400
+
     amount_paise=prod["ticket_price"]*quantity
+    referral_discount=0
+
+    if use_referral:
+        u=query("SELECT referral_balance FROM users WHERE id=%s",(session["user_id"],),one=True)
+        avail=u["referral_balance"] if u else 0
+        referral_discount=min(avail, amount_paise)
+        amount_paise=max(0, amount_paise-referral_discount)
+
     order_ref="LC"+secrets.token_hex(4).upper()
     conn=get_db(); cur=conn.cursor()
     cur.execute(
-        "INSERT INTO tickets (product_id,user_id,quantity,amount_paid,order_ref,payment_status) VALUES (%s,%s,%s,%s,%s,'pending') RETURNING id",
-        (product_id,session["user_id"],quantity,amount_paise,order_ref)
+        "INSERT INTO tickets (product_id,user_id,quantity,amount_paid,referral_discount,order_ref,payment_status) VALUES (%s,%s,%s,%s,%s,%s,%s) RETURNING id",
+        (product_id,session["user_id"],quantity,amount_paise,referral_discount,order_ref,
+         "paid" if amount_paise==0 else "pending")
     )
-    tid=cur.fetchone()["id"]; conn.commit(); conn.close()
+    tid=cur.fetchone()["id"]
+    if referral_discount>0:
+        cur.execute("UPDATE users SET referral_balance=referral_balance-%s WHERE id=%s",
+                    (referral_discount,session["user_id"]))
+    conn.commit(); conn.close()
+
+    # If fully covered by balance, auto-confirm
+    if amount_paise == 0:
+        conn2=get_db(); cur2=conn2.cursor()
+        cur2.execute("UPDATE tickets SET confirmed_at=NOW() WHERE id=%s",(tid,))
+        cur2.execute("UPDATE products SET filled_slots=filled_slots+%s WHERE id=%s RETURNING filled_slots,total_slots,id",
+                     (quantity,product_id))
+        uprod=cur2.fetchone(); conn2.commit(); conn2.close()
+        draw_result=None
+        if uprod["filled_slots"]>=uprod["total_slots"]:
+            draw_result=run_draw(uprod["id"])
+        return jsonify({"ticket_id":tid,"order_ref":order_ref,"amount_paise":0,"amount_inr":0,
+                        "free_via_referral":True,"draw_result":draw_result,
+                        "product_name":prod["name"]})
+
     return jsonify({
-        "ticket_id":   tid,
-        "order_ref":   order_ref,
-        "amount_paise":amount_paise,
-        "amount_inr":  amount_paise/100,
-        "upi_id":      UPI_ID,
-        "upi_name":    UPI_NAME,
-        "upi_link":    upi_link(amount_paise, order_ref),
-        "upi_qr_url":  UPI_QR_URL,
-        "product_name":prod["name"],
+        "ticket_id":       tid,
+        "order_ref":       order_ref,
+        "amount_paise":    amount_paise,
+        "amount_inr":      amount_paise/100,
+        "referral_discount": referral_discount/100,
+        "upi_id":          UPI_ID,
+        "upi_name":        UPI_NAME,
+        "upi_link":        upi_link(amount_paise, order_ref),
+        "upi_qr_url":      UPI_QR_URL,
+        "product_name":    prod["name"],
     })
 
 @app.route("/api/orders/submit-utr", methods=["POST"])
@@ -461,13 +580,9 @@ def reject_payment(tid):
 @login_required
 @admin_required
 def mark_shipped(draw_id):
-    """Admin marks product as shipped to winner with tracking info."""
     d=request.json or {}
-    tracking=d.get("tracking",""); address=d.get("address","")
-    query(
-        "UPDATE draws SET delivery_status='shipped',tracking_info=%s,delivery_address=%s WHERE id=%s",
-        (tracking,address,draw_id),commit=True
-    )
+    query("UPDATE draws SET delivery_status='shipped',tracking_info=%s,delivery_address=%s WHERE id=%s",
+          (d.get("tracking",""),d.get("address",""),draw_id),commit=True)
     return jsonify({"message":"Marked as shipped."})
 
 @app.route("/api/admin/mark-delivered/<int:draw_id>", methods=["POST"])
@@ -519,7 +634,7 @@ def draw_history():
         )
         return jsonify([dict(r) for r in rows])
     except Exception:
-        return jsonify([])   # return empty list, not 500 — page still loads
+        return jsonify([])
 
 @app.route("/api/draws/<int:did>/verify")
 def verify_draw(did):
@@ -543,8 +658,9 @@ def admin_stats():
         "active_draws":     query("SELECT COUNT(*) AS c FROM products WHERE status='active'",one=True)["c"],
         "completed_draws":  query("SELECT COUNT(*) AS c FROM draws",one=True)["c"],
         "pending_payments": query("SELECT COUNT(*) AS c FROM tickets WHERE payment_status='utr_submitted'",one=True)["c"],
-        "total_revenue":    query("SELECT COALESCE(SUM(amount_paid),0) AS c FROM tickets WHERE payment_status IN ('paid','utr_submitted')",one=True)["c"],
+        "total_revenue":    query("SELECT COALESCE(SUM(amount_paid),0) AS c FROM tickets WHERE payment_status='paid'",one=True)["c"],
         "prizes_to_ship":   query("SELECT COUNT(*) AS c FROM draws WHERE delivery_status='pending'",one=True)["c"],
+        "total_referrals":  query("SELECT COUNT(*) AS c FROM referrals",one=True)["c"],
     })
 
 @app.route("/api/admin/pending-payments")
@@ -562,7 +678,6 @@ def pending_payments():
 @login_required
 @admin_required
 def pending_shipments():
-    """Draws where product hasn't been shipped yet."""
     rows=query(
         "SELECT d.*,p.name AS pname,p.emoji,p.original_price,"
         "u.name AS wname,u.email AS wemail,u.phone AS wphone,u.address AS waddress "
@@ -591,6 +706,20 @@ def admin_all_tickets():
 def manual_draw(pid):
     return jsonify(run_draw(pid))
 
+@app.route("/api/admin/referrals")
+@login_required
+@admin_required
+def admin_referrals():
+    rows=query(
+        "SELECT r.*,ur.name AS rname,ur.email AS remail,ur.referral_code,"
+        "ud.name AS dname,ud.email AS demail "
+        "FROM referrals r "
+        "JOIN users ur ON ur.id=r.referrer_id "
+        "JOIN users ud ON ud.id=r.referred_id "
+        "ORDER BY r.created_at DESC LIMIT 200"
+    )
+    return jsonify([dict(r) for r in rows])
+
 # ═══════════════════════════════════════════════════════════════════════════════
 #  PAGES
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -611,7 +740,8 @@ def my_tickets_page():
 
 @app.route("/health")
 def health():
-    return jsonify({"status":"ok","db":_db_ok,"upi_configured":bool(UPI_ID and UPI_ID!="yourupi@ybl")}),200
+    return jsonify({"status":"ok","db":_db_ok,
+                    "upi_configured":bool(UPI_ID and UPI_ID!="yourupi@ybl")}),200
 
 if __name__=="__main__":
     init_db()
