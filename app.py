@@ -1,5 +1,5 @@
 """
-LuckyCart v5 — Lucky Draw E-Commerce Platform
+PrizeDrop v5 — group-buy campaign E-Commerce Platform
 Flask + PostgreSQL | Railway-ready
 
 New in v5:
@@ -21,12 +21,12 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", secrets.token_hex(32))
 
 logging.basicConfig(level=logging.INFO)
-log = logging.getLogger("luckycart")
+log = logging.getLogger("prizedrop")
 
 DB_URL      = os.environ.get("DATABASE_URL", "")
-ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@luckycart.in")
+ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@prizedrop.in")
 UPI_ID      = os.environ.get("UPI_ID",   "yourupi@ybl")
-UPI_NAME    = os.environ.get("UPI_NAME", "LuckyCart")
+UPI_NAME    = os.environ.get("UPI_NAME", "PrizeDrop")
 UPI_QR_URL  = os.environ.get("UPI_QR_URL", "")
 REFERRAL_BONUS_PAISE = int(os.environ.get("REFERRAL_BONUS", "5000"))  # ₹50 default
 
@@ -235,7 +235,7 @@ def current_user():
 def upi_link(amount_paise, ref):
     amt = amount_paise / 100
     return (f"upi://pay?pa={UPI_ID}&pn={UPI_NAME.replace(' ','%20')}"
-            f"&am={amt:.2f}&cu=INR&tn=LuckyCart%20{ref}")
+            f"&am={amt:.2f}&cu=INR&tn=PrizeDrop%20Drop%20{ref}")
 
 # ── draw engine ───────────────────────────────────────────────────────────────
 def run_draw(product_id):
@@ -461,7 +461,7 @@ def update_product(pid):
 def delete_product(pid):
     paid = query("SELECT COUNT(*) AS c FROM tickets WHERE product_id=%s AND payment_status='paid'",(pid,),one=True)
     if paid["c"] > 0:
-        return jsonify({"error":f"Cannot delete: {paid['c']} confirmed ticket(s) exist. Close the draw instead."}),400
+        return jsonify({"error":f"Cannot delete: {paid['c']} confirmed ticket(s) exist. Close the drop instead."}),400
     query("DELETE FROM tickets WHERE product_id=%s AND payment_status IN ('pending','utr_submitted','rejected')",(pid,),commit=True)
     query("DELETE FROM products WHERE id=%s",(pid,),commit=True)
     return jsonify({"message":"Draw deleted"})
