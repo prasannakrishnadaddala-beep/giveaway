@@ -134,7 +134,9 @@ def init_db():
         _db_ok = True
         log.info("Database ready.")
     except Exception as e:
-        log.error("DB init failed: %s", e); raise
+        log.error("DB init failed: %s", e)
+        # Never raise — let the app boot so gunicorn can bind and pass healthcheck.
+        # DB will be retried on first real request.
 
 try:
     init_db()
@@ -143,8 +145,15 @@ except Exception:
 
 @app.before_request
 def ensure_db():
+    """Retry DB init on every request until it succeeds. Never raises."""
     if not _db_ok:
-        init_db()
+        try:
+            init_db()
+        except Exception as e:
+            log.warning("DB not ready yet: %s", e)
+            # Only block non-health routes
+            if request.path not in ("/health", "/"):
+                return jsonify({"error": "Service starting, please retry in a moment"}), 503
 
 # ── auth decorators ───────────────────────────────────────────────────────────
 def login_required(f):
@@ -476,7 +485,9 @@ def my_tickets_page():
 
 @app.route("/health")
 def health():
-    return jsonify({"status":"ok","db":_db_ok,"upi":UPI_ID})
+    # ALWAYS return 200 — Railway needs this to confirm the process is alive.
+    # DB status is informational only.
+    return jsonify({"status": "ok", "db": _db_ok, "upi": UPI_ID}), 200
 
 if __name__=="__main__":
     init_db()
