@@ -5,28 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LuckyCart — Win What You Buy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ink:#05050a; --ink2:#0d0d18; --ink3:#141424; --ink4:#1c1c32;
-  --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.12);
-  --tx:#f2f2fa; --tx2:#a0a0c0; --tx3:#606080;
-  --amber:#f0b429; --amber2:#d4920a; --amber3:rgba(240,180,41,.12); --amber4:rgba(240,180,41,.06);
-  --violet:#8b7cf8; --violet2:#6b5ce7;
-  --green:#22c55e; --red:#ef4444; --blue:#3b82f6;
+  --ink:#060911; --ink2:#09101f; --ink3:#0e1628; --ink4:#141e35;
+  --line:rgba(99,102,241,.1); --line2:rgba(99,102,241,.2);
+  --tx:#eef0ff; --tx2:#8892b0; --tx3:#4a5475;
+  --amber:#f59e0b; --amber2:#d97706; --amber3:rgba(245,158,11,.12); --amber4:rgba(245,158,11,.06);
+  --violet:#6366f1; --violet2:#4f46e5;
+  --green:#10b981; --red:#f43f5e; --blue:#22d3ee;
   --phonepe:#5f259f;
   --r:18px; --r2:24px;
+  --grad:linear-gradient(135deg,#4f46e5,#22d3ee);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{font-family:'Instrument Sans',sans-serif;background:var(--ink);color:var(--tx);min-height:100vh;overflow-x:hidden;}
-.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 900px 600px at 20% 10%,rgba(139,124,248,.06),transparent 70%),radial-gradient(ellipse 700px 500px at 80% 80%,rgba(240,180,41,.05),transparent 70%);}
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 900px 600px at 20% 10%,rgba(99,102,241,.08),transparent 70%),radial-gradient(ellipse 700px 500px at 80% 80%,rgba(34,211,238,.05),transparent 70%);}
 .noise{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
 
 /* NAV */
 nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(5,5,10,.75);backdrop-filter:blur(28px) saturate(1.5);border-bottom:1px solid var(--line);}
 .logo{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px;text-decoration:none;}
-.lmark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--amber2),var(--amber));display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 4px 16px rgba(240,180,41,.35);}
+.lmark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--violet2),var(--blue));display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 4px 16px rgba(99,102,241,.4);}
 .ltxt{background:linear-gradient(120deg,var(--tx) 40%,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .nc{display:flex;gap:2px;}
 .nl{color:var(--tx2);text-decoration:none;font-size:14px;font-weight:500;padding:8px 16px;border-radius:10px;transition:all .2s;}
@@ -43,7 +44,7 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
 
 /* HERO */
 .hero{position:relative;z-index:1;padding:96px 48px 72px;text-align:center;overflow:hidden;}
-.heyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--amber4);border:1px solid rgba(240,180,41,.2);color:var(--amber);border-radius:50px;padding:7px 18px;font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:28px;animation:rise .7s ease both;}
+.heyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);color:var(--blue);border-radius:50px;padding:7px 18px;font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:28px;animation:rise .7s ease both;}
 .heyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite;}
 .htitle{font-family:'Clash Display',sans-serif;font-size:clamp(44px,7vw,88px);font-weight:700;line-height:.95;letter-spacing:-2px;animation:rise .7s .08s ease both;}
 .htitle em{font-style:normal;background:linear-gradient(120deg,var(--amber),#ff9500 50%,var(--amber));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 4s linear infinite;}
@@ -247,6 +248,7 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
   <a href="/" class="logo"><div class="lmark">🎰</div><span class="ltxt">LuckyCart</span></a>
   <div class="nc">
     <a href="#draws" class="nl">Live Draws</a>
+    <a href="/referral" class="nl">🔗 Referrals</a>
     <a href="#winners" class="nl">Winners</a>
     <a href="#how" class="nl">How It Works</a>
   </div>

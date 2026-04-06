@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Referrals — LuckyCart</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060911;--bg2:#09101f;--bg3:#0e1628;--bg4:#141e35;
+  --line:rgba(99,102,241,.12);--line2:rgba(99,102,241,.22);--line3:rgba(99,102,241,.06);
+  --tx:#eef0ff;--tx2:#8892b0;--tx3:#4a5475;
+  --ind:#6366f1;--ind2:#4f46e5;--ind3:rgba(99,102,241,.15);
+  --cyan:#22d3ee;--pink:#d946ef;
+  --gold:#f59e0b;--gold2:#d97706;--gold3:rgba(245,158,11,.12);
+  --green:#10b981;--red:#f43f5e;--green3:rgba(16,185,129,.12);
+  --grad:linear-gradient(135deg,var(--ind2),var(--cyan));
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 800px 600px at 10% 0%,rgba(99,102,241,.08),transparent 70%),
+             radial-gradient(ellipse 600px 500px at 90% 90%,rgba(34,211,238,.06),transparent 70%);}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(6,9,17,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);padding:0 32px;height:62px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-size:17px;font-weight:700;display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--tx);}
+.lbadge{width:32px;height:32px;border-radius:9px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 4px 14px rgba(99,102,241,.4);}
+.btn-sm{padding:7px 14px;border-radius:8px;border:1px solid var(--line2);background:var(--bg3);color:var(--tx2);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;cursor:pointer;text-decoration:none;transition:all .2s;display:inline-block;}
+.btn-sm:hover{border-color:var(--ind);color:var(--tx);}
+
+main{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:48px 24px;}
+
+/* HERO CARD */
+.hero-card{background:var(--bg3);border:1px solid var(--line2);border-radius:24px;padding:36px;margin-bottom:24px;position:relative;overflow:hidden;}
+.hero-card::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.15),transparent 70%);}
+.hero-eyebrow{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--cyan);margin-bottom:12px;}
+.hero-title{font-size:32px;font-weight:700;line-height:1.2;margin-bottom:12px;}
+.hero-title span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{font-size:14px;color:var(--tx2);line-height:1.7;margin-bottom:28px;max-width:480px;}
+
+/* CODE BOX */
+.code-box{background:var(--bg4);border:1px solid var(--line2);border-radius:16px;padding:20px 24px;margin-bottom:20px;}
+.code-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--tx3);margin-bottom:10px;}
+.code-row{display:flex;align-items:center;gap:12px;}
+.code-val{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600;color:var(--cyan);flex:1;letter-spacing:3px;}
+.btn-copy{padding:10px 18px;border-radius:10px;border:none;background:var(--grad);color:#fff;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-copy:hover{opacity:.9;transform:translateY(-1px);}
+.link-row{margin-top:12px;display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--line);border-radius:10px;padding:10px 14px;}
+.link-text{font-size:12px;color:var(--tx3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-copy-link{padding:6px 12px;border-radius:7px;border:1px solid var(--line2);background:var(--bg4);color:var(--tx2);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-copy-link:hover{border-color:var(--ind);color:var(--ind);}
+
+/* SHARE BUTTONS */
+.share-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
+.share-btn{padding:10px 18px;border-radius:10px;border:none;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;}
+.share-wa{background:#25d366;color:#fff;}
+.share-tg{background:#2aabee;color:#fff;}
+.share-tw{background:#1d9bf0;color:#fff;}
+.share-btn:hover{opacity:.85;transform:translateY(-1px);}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+.stat{background:var(--bg3);border:1px solid var(--line);border-radius:16px;padding:20px;text-align:center;}
+.stat-v{font-size:28px;font-weight:700;margin-bottom:4px;}
+.stat-v.green{color:var(--green);}
+.stat-v.cyan{color:var(--cyan);}
+.stat-v.gold{color:var(--gold);}
+.stat-l{font-size:11px;color:var(--tx3);font-weight:500;text-transform:uppercase;letter-spacing:.6px;}
+
+/* HOW IT WORKS */
+.how-card{background:var(--bg3);border:1px solid var(--line);border-radius:20px;padding:24px;margin-bottom:24px;}
+.how-title{font-size:16px;font-weight:700;margin-bottom:18px;}
+.how-step{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;}
+.how-step:last-child{margin-bottom:0;}
+.how-num{width:32px;height:32px;border-radius:9px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
+.how-text{font-size:13px;color:var(--tx2);line-height:1.6;padding-top:6px;}
+.how-text strong{color:var(--tx);}
+
+/* BALANCE */
+.balance-card{background:linear-gradient(135deg,var(--ind2),var(--cyan));border-radius:20px;padding:24px;margin-bottom:24px;position:relative;overflow:hidden;}
+.balance-card::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08);}
+.bal-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.7);margin-bottom:8px;}
+.bal-val{font-size:40px;font-weight:700;color:#fff;margin-bottom:4px;}
+.bal-sub{font-size:13px;color:rgba(255,255,255,.7);}
+
+/* REFERRAL LIST */
+.ref-card{background:var(--bg3);border:1px solid var(--line);border-radius:20px;padding:24px;margin-bottom:24px;}
+.ref-list-title{font-size:16px;font-weight:700;margin-bottom:18px;}
+.ref-item{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line3);}
+.ref-item:last-child{border-bottom:none;}
+.ref-av{width:40px;height:40px;border-radius:12px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;}
+.ref-info{flex:1;}
+.ref-name{font-size:14px;font-weight:600;margin-bottom:2px;}
+.ref-date{font-size:11px;color:var(--tx3);}
+.ref-bonus{font-size:15px;font-weight:700;color:var(--green);}
+.empty{text-align:center;padding:36px;color:var(--tx3);font-size:14px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--bg3);border:1px solid var(--line2);border-radius:14px;padding:12px 18px;font-size:14px;font-weight:500;opacity:0;transform:translateY(10px);transition:all .3s;z-index:999;}
+.toast.show{opacity:1;transform:translateY(0);}
+
+@media(max-width:600px){
+  nav{padding:0 16px;}
+  main{padding:24px 16px;}
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .code-val{font-size:20px;}
+  .hero-title{font-size:24px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo"><div class="lbadge">🎰</div>LuckyCart</a>
+  <div style="display:flex;gap:8px">
+    <a href="/my-tickets" class="btn-sm">🎟️ My Tickets</a>
+    <a href="/" class="btn-sm">← Home</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero-card">
+    <div class="hero-eyebrow">🔗 Referral Program</div>
+    <h1 class="hero-title">Earn <span>₹50</span> for every friend you invite</h1>
+    <p class="hero-sub">Share your unique referral code. When a friend signs up and joins a draw, you instantly get ₹50 added to your referral balance — use it to buy tickets for free!</p>
+  </div>
+
+  <!-- BALANCE -->
+  <div class="balance-card" id="balanceCard" style="display:none">
+    <div class="bal-label">Your Referral Balance</div>
+    <div class="bal-val" id="balVal">₹0</div>
+    <div class="bal-sub">Use this balance at checkout to reduce your ticket cost</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat"><div class="stat-v cyan" id="statCount">—</div><div class="stat-l">Friends Referred</div></div>
+    <div class="stat"><div class="stat-v green" id="statEarned">—</div><div class="stat-l">Total Earned</div></div>
+    <div class="stat"><div class="stat-v gold" id="statBalance">—</div><div class="stat-l">Available Balance</div></div>
+  </div>
+
+  <!-- CODE BOX -->
+  <div class="code-box">
+    <div class="code-label">Your Referral Code</div>
+    <div class="code-row">
+      <div class="code-val" id="refCode">Loading…</div>
+      <button class="btn-copy" onclick="copyCode()">📋 Copy Code</button>
+    </div>
+    <div class="link-row">
+      <span class="link-text" id="refLink">Loading…</span>
+      <button class="btn-copy-link" onclick="copyLink()">Copy Link</button>
+    </div>
+  </div>
+
+  <!-- SHARE BUTTONS -->
+  <div class="share-row">
+    <button class="share-btn share-wa" onclick="shareWA()">📱 WhatsApp</button>
+    <button class="share-btn share-tg" onclick="shareTG()">✈️ Telegram</button>
+    <button class="share-btn share-tw" onclick="shareTW()">🐦 Twitter / X</button>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-card">
+    <div class="how-title">💡 How It Works</div>
+    <div class="how-step">
+      <div class="how-num">1</div>
+      <div class="how-text"><strong>Share your code</strong> — Send your unique referral link to friends via WhatsApp, Telegram, or any platform.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">2</div>
+      <div class="how-text"><strong>Friend signs up</strong> — They register on LuckyCart and enter your referral code during signup.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">3</div>
+      <div class="how-text"><strong>You earn ₹50</strong> — Instantly credited to your referral balance. No waiting, no conditions.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">4</div>
+      <div class="how-text"><strong>Use your balance</strong> — At checkout, apply your referral balance to reduce your ticket price. Stack referrals for free tickets!</div>
+    </div>
+  </div>
+
+  <!-- REFERRAL HISTORY -->
+  <div class="ref-card">
+    <div class="ref-list-title">👥 Your Referrals</div>
+    <div id="refList"><div class="empty">Loading your referrals…</div></div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const g = id => document.getElementById(id);
+let myCode = '', myLink = '';
+
+function showToast(msg) {
+  const t = g('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function copyCode() {
+  navigator.clipboard.writeText(myCode);
+  showToast('✅ Referral code copied!');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(myLink);
+  showToast('✅ Referral link copied!');
+}
+
+const shareText = () => `🎰 Win your dream gadgets for just a fraction of the price!\n\nJoin LuckyCart — buy tickets cheap, win the actual product! Use my referral code: ${myCode}\n\n${myLink}`;
+
+function shareWA() { window.open(`https://wa.me/?text=${encodeURIComponent(shareText())}`, '_blank'); }
+function shareTG() { window.open(`https://t.me/share/url?url=${encodeURIComponent(myLink)}&text=${encodeURIComponent('🎰 Join LuckyCart with my code '+myCode+' — win gadgets for cheap!')}`, '_blank'); }
+function shareTW() { window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('Just discovered @LuckyCart — buy tickets cheap and WIN the actual product! 🎰 Join with my code: '+myCode+'\n'+myLink)}`, '_blank'); }
+
+async function load() {
+  // Check auth
+  const me = await (await fetch('/api/auth/me')).json();
+  if (!me.logged_in) {
+    document.querySelector('main').innerHTML = `<div style="text-align:center;padding:80px 20px">
+      <div style="font-size:48px;margin-bottom:16px">🔒</div>
+      <div style="font-size:20px;font-weight:700;margin-bottom:8px">Login to view your referrals</div>
+      <p style="color:var(--tx3);margin-bottom:24px">You need to be signed in to access the referral program.</p>
+      <a href="/" style="padding:12px 28px;border-radius:12px;background:var(--grad);color:#fff;font-weight:600;text-decoration:none">← Go Home & Login</a>
+    </div>`;
+    return;
+  }
+
+  const d = await (await fetch('/api/referral')).json();
+  if (d.error) return;
+
+  myCode = d.referral_code || '';
+  myLink = `${location.origin}/?ref=${myCode}`;
+
+  g('refCode').textContent = myCode;
+  g('refLink').textContent = myLink;
+
+  // Stats
+  g('statCount').textContent = d.total_referred;
+  g('statEarned').textContent = '₹' + (d.total_earned/100).toLocaleString('en-IN');
+  g('statBalance').textContent = '₹' + (d.referral_balance/100).toLocaleString('en-IN');
+
+  // Balance card
+  if (d.referral_balance > 0) {
+    g('balVal').textContent = '₹' + (d.referral_balance/100).toLocaleString('en-IN');
+    g('balanceCard').style.display = 'block';
+  }
+
+  // Referral list
+  const el = g('refList');
+  if (!d.referrals.length) {
+    el.innerHTML = `<div class="empty">
+      <div style="font-size:36px;margin-bottom:12px">👀</div>
+      <div>No referrals yet. Share your code and start earning!</div>
+    </div>`;
+    return;
+  }
+  el.innerHTML = d.referrals.map(r => `
+    <div class="ref-item">
+      <div class="ref-av">${(r.rname||'?').charAt(0).toUpperCase()}</div>
+      <div class="ref-info">
+        <div class="ref-name">${r.rname || 'A friend'}</div>
+        <div class="ref-date">Joined ${new Date(r.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</div>
+      </div>
+      <div class="ref-bonus">+₹${(r.bonus_paise/100).toLocaleString('en-IN')}</div>
+    </div>`).join('');
+}
+
+// Handle ?ref= in URL for pre-filling (on home page, JS picks this up)
+load();
+</script>
+</body>
+</html>
