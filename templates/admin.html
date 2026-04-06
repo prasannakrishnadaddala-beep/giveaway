@@ -98,6 +98,18 @@ td{padding:10px 13px;border-bottom:1px solid var(--line3);vertical-align:middle;
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:rgba(99,102,241,.03);}
 
+/* IMAGE UPLOAD BOX */
+.img-upload-box{width:100%;height:130px;background:var(--bg4);border:2px dashed var(--line2);border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s;overflow:hidden;}
+.img-upload-box:hover{border-color:var(--ind);background:var(--ind3);}
+.img-upload-placeholder{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--tx3);font-size:12px;}
+.img-upload-placeholder svg{color:var(--tx3);}
+
+/* BULK SELECT */
+.bulk-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:10px 14px;background:var(--bg4);border:1px solid var(--line);border-radius:12px;flex-wrap:wrap;}
+.bulk-count{font-size:13px;color:var(--tx3);flex:1;}
+.bulk-count strong{color:var(--tx);}
+input[type=checkbox].row-check{width:16px;height:16px;accent-color:var(--ind);cursor:pointer;}
+
 /* IMAGE PREVIEW */
 .img-prev{width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid var(--line);background:var(--bg4);}
 .img-em{width:44px;height:44px;border-radius:8px;background:var(--bg4);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:22px;}
@@ -211,12 +223,19 @@ main,nav{position:relative;z-index:1;}
     </div>
   </div>
 
-  <!-- ── LIVE DRAWS ── -->
   <div id="tabDraws" style="display:none">
     <div class="card">
       <div class="card-hdr">
         <div class="card-title">🔥 Active Draws</div>
-        <button class="btn-sm" onclick="loadDraws()">↻ Refresh</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-sm" onclick="selectAllDraws()">☑ Select All</button>
+          <button class="btn-sm" onclick="clearSelection()">☐ Clear</button>
+          <button class="btn-sm" onclick="loadDraws()">↻ Refresh</button>
+        </div>
+      </div>
+      <div class="bulk-bar" id="bulkBar" style="display:none">
+        <span class="bulk-count"><strong id="selCount">0</strong> draws selected</span>
+        <button class="btn-danger" onclick="bulkDelete()">🗑️ Delete Selected</button>
       </div>
       <div id="drawList" style="overflow-x:auto">Loading…</div>
     </div>
@@ -238,7 +257,21 @@ main,nav{position:relative;z-index:1;}
         <div class="fld"><label>Ticket Price (₹)</label><input type="number" id="pTick" placeholder="799"></div>
         <div class="fld"><label>Total Slots</label><input type="number" id="pSlots" placeholder="60"></div>
       </div>
-      <div class="fld" style="margin-bottom:12px"><label>Image URL (optional — paste Imgur/Cloudinary link)</label><input type="url" id="pImg" placeholder="https://i.imgur.com/xxxx.jpg"></div>
+      <div class="fld" style="margin-bottom:12px">
+        <label>Product Image</label>
+        <div class="img-upload-box" id="pImgBox" onclick="g('pImgFile').click()">
+          <div class="img-upload-placeholder" id="pImgPlaceholder">
+            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/></svg>
+            <span>Click to upload image</span>
+            <span style="font-size:10px;opacity:.6">JPG, PNG, WEBP · Max 2MB</span>
+          </div>
+          <img id="pImgPreview" style="display:none;width:100%;height:100%;object-fit:contain;border-radius:10px;">
+        </div>
+        <input type="file" id="pImgFile" accept="image/*" style="display:none" onchange="handleImgUpload(this,'pImgPreview','pImgPlaceholder','pImgData')">
+        <input type="hidden" id="pImgData">
+        <div style="margin-top:6px;font-size:11px;color:var(--tx3)">Or paste a URL instead:</div>
+        <input type="url" id="pImg" placeholder="https://i.imgur.com/xxxx.jpg" style="margin-top:6px;width:100%;padding:8px 12px;background:var(--bg4);border:1px solid var(--line);border-radius:8px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:12px;outline:none;">
+      </div>
       <div class="fld" style="margin-bottom:16px"><label>Description</label><textarea id="pDesc" placeholder="Short product description…"></textarea></div>
       <button class="btn-pr" onclick="createProduct()">Create Draw</button>
       <div class="msg" id="cpMsg"></div>
@@ -290,7 +323,20 @@ main,nav{position:relative;z-index:1;}
         <div class="fld"><label>Ticket Price (₹)</label><input type="number" id="eTick"></div>
         <div class="fld"><label>Total Slots</label><input type="number" id="eSlots"></div>
       </div>
-      <div class="fld" style="margin-bottom:12px"><label>Image URL</label><input type="url" id="eImg" placeholder="https://i.imgur.com/xxxx.jpg"></div>
+      <div class="fld" style="margin-bottom:12px">
+        <label>Product Image</label>
+        <div class="img-upload-box" id="eImgBox" onclick="g('eImgFile').click()">
+          <div class="img-upload-placeholder" id="eImgPlaceholder">
+            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/></svg>
+            <span>Click to replace image</span>
+          </div>
+          <img id="eImgPreview" style="display:none;width:100%;height:100%;object-fit:contain;border-radius:10px;">
+        </div>
+        <input type="file" id="eImgFile" accept="image/*" style="display:none" onchange="handleImgUpload(this,'eImgPreview','eImgPlaceholder','eImgData')">
+        <input type="hidden" id="eImgData">
+        <div style="margin-top:6px;font-size:11px;color:var(--tx3)">Or paste a URL:</div>
+        <input type="url" id="eImg" placeholder="https://i.imgur.com/xxxx.jpg" style="margin-top:6px;width:100%;padding:8px 12px;background:var(--bg4);border:1px solid var(--line);border-radius:8px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:12px;outline:none;">
+      </div>
       <div class="fld" style="margin-bottom:16px"><label>Description</label><textarea id="eDesc"></textarea></div>
       <div class="fld" style="margin-bottom:16px"><label>Status</label>
         <select id="eStatus"><option value="active">Active</option><option value="paused">Paused</option><option value="cancelled">Cancelled</option></select>
@@ -428,19 +474,54 @@ async function markShipped(drawId) {
 }
 
 /* ── LIVE DRAWS ── */
+let selectedDrawIds = new Set();
+
+function updateBulkBar() {
+  const n = selectedDrawIds.size;
+  g('selCount').textContent = n;
+  g('bulkBar').style.display = n > 0 ? 'flex' : 'none';
+}
+
+function selectAllDraws() {
+  document.querySelectorAll('.row-check').forEach(cb => {
+    cb.checked = true;
+    selectedDrawIds.add(parseInt(cb.dataset.id));
+  });
+  updateBulkBar();
+}
+
+function clearSelection() {
+  selectedDrawIds.clear();
+  document.querySelectorAll('.row-check').forEach(cb => cb.checked = false);
+  updateBulkBar();
+}
+
+async function bulkDelete() {
+  const ids = [...selectedDrawIds];
+  if (!ids.length) return;
+  if (!confirm(`Delete ${ids.length} selected draw(s)?\n\nDraws with confirmed paid tickets will be skipped.`)) return;
+  const r = await post('/api/admin/products/bulk-delete', {ids});
+  alert(r.message || r.error);
+  selectedDrawIds.clear();
+  loadDraws(); loadStats();
+}
+
 async function loadDraws() {
+  selectedDrawIds.clear(); updateBulkBar();
   const d = await (await fetch('/api/products')).json();
   const el = g('drawList');
   if (!d.length) { el.innerHTML='<p class="empty">No active draws.</p>'; return; }
   el.innerHTML = `<table><thead><tr>
+    <th style="width:32px"></th>
     <th>Product</th><th>Category</th><th>Ticket ₹</th><th>Slots</th><th>Fill</th><th>Actions</th>
   </tr></thead><tbody>
   ${d.map(p=>`<tr>
-    <td>
+    <td><input type="checkbox" class="row-check" data-id="${p.id}" onchange="toggleSelect(${p.id},this.checked)"></td>
+    <td style="display:flex;align-items:center;gap:10px;padding:10px 13px">
       ${p.image_url
         ? `<img src="${p.image_url}" class="img-prev" onerror="this.style.display='none'">`
         : `<div class="img-em">${p.emoji}</div>`}
-      <strong style="margin-left:10px">${p.name}</strong>
+      <strong>${p.name}</strong>
     </td>
     <td style="color:var(--tx3)">${p.category}</td>
     <td>₹${fmt(p.ticket_price_inr)}</td>
@@ -453,11 +534,16 @@ async function loadDraws() {
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         <button class="btn-gold" onclick="forceDraw(${p.id},'${p.name.replace(/'/g,"\\'")}')">🎰 Draw</button>
         <button class="btn-edit" onclick="openEdit(${p.id})">✏️ Edit</button>
-        <button class="btn-danger" onclick="deleteDraw(${p.id},'${p.name.replace(/'/g,"\\'")}')">🗑️ Delete</button>
+        <button class="btn-danger" onclick="deleteDraw(${p.id},'${p.name.replace(/'/g,"\\'")}')">🗑️</button>
       </div>
     </td>
   </tr>`).join('')}
   </tbody></table>`;
+}
+
+function toggleSelect(id, checked) {
+  if (checked) selectedDrawIds.add(id); else selectedDrawIds.delete(id);
+  updateBulkBar();
 }
 
 async function forceDraw(pid, name) {
@@ -496,9 +582,19 @@ async function openEdit(pid) {
   g('eOrig').value = p.original_price_inr;
   g('eTick').value = p.ticket_price_inr;
   g('eSlots').value = p.total_slots;
-  g('eImg').value = p.image_url||'';
+  g('eImg').value = p.image_url&&!p.image_url.startsWith('data:')?p.image_url:'';
   g('eDesc').value = p.description||'';
   g('eStatus').value = p.status||'active';
+  // Show existing image in preview
+  if (p.image_url) {
+    g('eImgPreview').src = p.image_url;
+    g('eImgPreview').style.display = 'block';
+    g('eImgPlaceholder').style.display = 'none';
+  } else {
+    g('eImgPreview').style.display = 'none';
+    g('eImgPlaceholder').style.display = 'flex';
+  }
+  g('eImgData').value = '';
   g('editMsg').style.display='none';
   g('editModal').classList.add('open');
 }
@@ -516,7 +612,7 @@ async function saveEdit() {
     original_price: parseFloat(g('eOrig').value),
     ticket_price:   parseFloat(g('eTick').value),
     total_slots:    parseInt(g('eSlots').value),
-    image_url:      g('eImg').value,
+    image_url:      g('eImgData').value || g('eImg').value || _editData.image_url || '',
     description:    g('eDesc').value,
     status:         g('eStatus').value,
   };
@@ -533,8 +629,31 @@ async function saveEdit() {
 // Close modal on background click
 g('editModal').addEventListener('click', e => { if(e.target===g('editModal')) closeEdit(); });
 
+/* ── IMAGE UPLOAD ── */
+function handleImgUpload(input, previewId, placeholderId, dataId) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Image too large. Max 2MB. Please compress or resize the image first.');
+    input.value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+    g(dataId).value = dataUrl;
+    const preview = g(previewId);
+    preview.src = dataUrl;
+    preview.style.display = 'block';
+    g(placeholderId).style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
 /* ── CREATE ── */
 async function createProduct() {
+  const uploadedImg = g('pImgData').value;
+  const urlImg = g('pImg').value.trim();
   const data = {
     name:          g('pName').value,
     category:      g('pCat').value,
@@ -542,7 +661,7 @@ async function createProduct() {
     original_price: parseFloat(g('pOrig').value),
     ticket_price:  parseFloat(g('pTick').value),
     total_slots:   parseInt(g('pSlots').value),
-    image_url:     g('pImg').value,
+    image_url:     uploadedImg || urlImg,
     description:   g('pDesc').value,
   };
   if (!data.name || isNaN(data.original_price) || isNaN(data.ticket_price) || isNaN(data.total_slots)) {
@@ -553,6 +672,8 @@ async function createProduct() {
   if (r.product_id) {
     msg.className='msg ok'; msg.textContent='✅ Draw created! ID: '+r.product_id;
     ['pName','pOrig','pTick','pSlots','pImg','pDesc','pEmoji'].forEach(id=>g(id).value='');
+    g('pImgData').value=''; g('pImgFile').value='';
+    g('pImgPreview').style.display='none'; g('pImgPlaceholder').style.display='flex';
     loadDraws();
   } else {
     msg.className='msg err'; msg.textContent='❌ '+(r.error||'Error');

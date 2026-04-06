@@ -424,8 +424,8 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
         <!-- UTR input -->
         <div class="utr-box">
           <div class="utr-label">✅ After paying, enter your UTR / Transaction ID</div>
-          <input class="utr-input" type="text" id="utrInput" placeholder="12-digit UTR or Transaction ID" maxlength="30">
-          <div class="utr-hint">Find it in your UPI app → Payment History → Transaction ID (UTR). Usually 12 digits.</div>
+          <input class="utr-input" type="text" id="utrInput" placeholder="12-digit UTR number" maxlength="12" inputmode="numeric" pattern="[0-9]{12}" oninput="this.value=this.value.replace(/\D/g,'')">
+          <div class="utr-hint">Find it in your UPI app → Payment History → Transaction ID (UTR). Must be exactly 12 digits.</div>
         </div>
 
         <button class="bamber" id="step2Btn" onclick="submitUTR()">Submit Payment Proof →</button>
@@ -617,7 +617,7 @@ function openUPI(e, app){
 /* ── BUY: STEP 3 — submit UTR ──────────────────────────────────────── */
 async function submitUTR(){
   const utr=g('utrInput').value.trim();
-  if(!utr||utr.length<6){toast('❌','Please enter your UTR / transaction ID','terr');return;}
+  if(!utr||!/^\d{12}$/.test(utr)){toast('❌','Please enter your exact 12-digit UTR number (digits only)','terr');return;}
 
   const btn=g('step2Btn');
   btn.innerHTML='<span class="spin"></span> Submitting…'; btn.disabled=true;
