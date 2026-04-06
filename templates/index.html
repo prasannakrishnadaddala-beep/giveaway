@@ -6,6 +6,7 @@
 <title>LuckyCart — Win What You Buy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root {
   --ink:#060911; --ink2:#09101f; --ink3:#0e1628; --ink4:#141e35;
@@ -384,30 +385,8 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
         <!-- QR Box -->
         <div class="qr-box">
           <div class="qr-img-wrap" id="qrWrap">
-            <!-- PhonePe-style QR placeholder — replace with your actual QR image -->
-            <div class="qr-placeholder">
-              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="5" y="5" width="35" height="35" rx="3" stroke="#5f259f" stroke-width="4"/>
-                <rect x="15" y="15" width="15" height="15" fill="#5f259f" rx="1"/>
-                <rect x="60" y="5" width="35" height="35" rx="3" stroke="#5f259f" stroke-width="4"/>
-                <rect x="70" y="15" width="15" height="15" fill="#5f259f" rx="1"/>
-                <rect x="5" y="60" width="35" height="35" rx="3" stroke="#5f259f" stroke-width="4"/>
-                <rect x="15" y="70" width="15" height="15" fill="#5f259f" rx="1"/>
-                <rect x="60" y="60" width="10" height="10" fill="#5f259f" rx="1"/>
-                <rect x="75" y="60" width="10" height="10" fill="#5f259f" rx="1"/>
-                <rect x="60" y="75" width="10" height="10" fill="#5f259f" rx="1"/>
-                <rect x="75" y="75" width="10" height="10" fill="#5f259f" rx="1"/>
-                <rect x="45" y="5" width="8" height="8" fill="#5f259f" rx="1"/>
-                <rect x="45" y="20" width="8" height="8" fill="#5f259f" rx="1"/>
-                <rect x="45" y="35" width="8" height="8" fill="#5f259f" rx="1"/>
-                <rect x="5" y="45" width="8" height="8" fill="#5f259f" rx="1"/>
-                <rect x="20" y="45" width="8" height="8" fill="#5f259f" rx="1"/>
-                <rect x="35" y="45" width="8" height="8" fill="#5f259f" rx="1"/>
-                <rect x="50" y="50" width="8" height="8" fill="#5f259f" rx="1"/>
-                <rect x="65" y="50" width="8" height="8" fill="#5f259f" rx="1"/>
-                <rect x="80" y="50" width="12" height="8" fill="#5f259f" rx="1"/>
-              </svg>
-              <div style="font-size:10px;color:#5f259f;font-weight:700;margin-top:4px">Scan with any UPI app</div>
+            <div id="qrCanvas" style="width:150px;height:150px;display:flex;align-items:center;justify-content:center;">
+              <div style="font-size:10px;color:#5f259f;font-weight:700;text-align:center;">Generating QR…</div>
             </div>
           </div>
           <div class="qr-upi-id" id="qrUpiId">{{ upi_id }}</div>
@@ -605,9 +584,20 @@ async function proceedToPay(){
     g('ptLink').href = r.upi_link;
     g('bhLink').href = r.upi_link;
 
-    // If custom QR image URL provided, show it
+    // Generate real QR code from UPI link
+    const qrContainer = g('qrCanvas');
+    qrContainer.innerHTML = '';
+    new QRCode(qrContainer, {
+      text: r.upi_link,
+      width: 150,
+      height: 150,
+      colorDark: '#5f259f',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    // Override with custom image if admin has set one
     if(r.upi_qr_url){
-      g('qrWrap').innerHTML=`<img src="${r.upi_qr_url}" alt="UPI QR Code">`;
+      g('qrWrap').innerHTML=`<img src="${r.upi_qr_url}" alt="UPI QR Code" style="width:100%;height:100%;object-fit:cover;">`;
     }
 
     g('utrInput').value='';
