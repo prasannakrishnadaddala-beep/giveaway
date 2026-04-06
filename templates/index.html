@@ -3,309 +3,355 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PrizeDrop — Group Buy. Save Big.</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='40' height='40' rx='10' fill='url(%23g)'/%3E%3Ctext x='20' y='27' font-size='22' text-anchor='middle' fill='white'%3E%F0%9F%8E%81%3C/text%3E%3C/svg%3E">
+<title>PrizeDrop — Shop Smart. Drop Bigger.</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23dc2626'/%3E%3Cstop offset='100%25' stop-color='%23991b1b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='40' height='40' rx='10' fill='url(%23g)'/%3E%3Ctext x='20' y='28' font-size='22' text-anchor='middle' fill='white'%3E%F0%9F%8E%81%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root {
-  --ink:#060911; --ink2:#09101f; --ink3:#0e1628; --ink4:#141e35;
-  --line:rgba(99,102,241,.1); --line2:rgba(99,102,241,.2);
-  --tx:#eef0ff; --tx2:#8892b0; --tx3:#4a5475;
-  --amber:#f59e0b; --amber2:#d97706; --amber3:rgba(245,158,11,.12); --amber4:rgba(245,158,11,.06);
-  --violet:#6366f1; --violet2:#4f46e5;
-  --green:#10b981; --red:#f43f5e; --blue:#22d3ee;
-  --phonepe:#5f259f;
-  --r:18px; --r2:24px;
-  --grad:linear-gradient(135deg,#4f46e5,#22d3ee);
+  /* Black/Red theme */
+  --bg:#0a0a0a; --bg2:#111111; --bg3:#161616; --bg4:#1c1c1c;
+  --line:rgba(255,255,255,.06); --line2:rgba(255,255,255,.1);
+  --tx:#f5f5f5; --tx2:#a3a3a3; --tx3:#525252;
+  /* Brand reds */
+  --red:#dc2626; --red2:#b91c1c; --red3:rgba(220,38,38,.12); --red4:rgba(220,38,38,.06);
+  --redg:linear-gradient(135deg,#dc2626,#991b1b);
+  /* Price Drop blue-teal */
+  --pd:#0ea5e9; --pd2:#0284c7; --pd3:rgba(14,165,233,.12);
+  /* Prize Drop red */
+  --prz:#dc2626; --prz2:#b91c1c; --prz3:rgba(220,38,38,.12);
+  /* Utility */
+  --green:#22c55e; --amber:#f59e0b;
+  --r:16px; --r2:20px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{font-family:'Instrument Sans',sans-serif;background:var(--ink);color:var(--tx);min-height:100vh;overflow-x:hidden;}
-.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 900px 600px at 20% 10%,rgba(99,102,241,.08),transparent 70%),radial-gradient(ellipse 700px 500px at 80% 80%,rgba(34,211,238,.05),transparent 70%);}
-.noise{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;}
 
-/* NAV */
-nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(5,5,10,.75);backdrop-filter:blur(28px) saturate(1.5);border-bottom:1px solid var(--line);}
-.logo{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px;text-decoration:none;}
-.lmark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--violet2),var(--blue));display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 4px 16px rgba(99,102,241,.4);}
-.ltxt{background:linear-gradient(120deg,var(--tx) 40%,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+/* ── AMBIENT ── */
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 700px 500px at 80% 10%,rgba(220,38,38,.04),transparent 70%),
+             radial-gradient(ellipse 500px 400px at 10% 90%,rgba(14,165,233,.03),transparent 70%);}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(10,10,10,.92);backdrop-filter:blur(24px) saturate(1.8);border-bottom:1px solid var(--line);}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--tx);}
+.lmark{width:34px;height:34px;border-radius:10px;background:var(--redg);display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 4px 16px rgba(220,38,38,.35);}
+.ltxt{color:var(--tx);}
+.ltxt span{color:var(--red);}
 .nc{display:flex;gap:2px;}
-.nl{color:var(--tx2);text-decoration:none;font-size:14px;font-weight:500;padding:8px 16px;border-radius:10px;transition:all .2s;}
+.nl{color:var(--tx2);text-decoration:none;font-size:13.5px;font-weight:500;padding:7px 14px;border-radius:8px;transition:all .2s;}
 .nl:hover{color:var(--tx);background:var(--line);}
 .nr{display:flex;align-items:center;gap:10px;}
-.nb{padding:9px 20px;border-radius:12px;font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none;}
+.nb{padding:8px 18px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none;}
 .ng{background:transparent;color:var(--tx2);border:1px solid var(--line2);}
-.ng:hover{color:var(--tx);background:var(--line);}
-.np{background:var(--amber);color:#000;box-shadow:0 4px 20px rgba(240,180,41,.3);}
-.np:hover{background:var(--amber2);transform:translateY(-1px);}
-.cpill{display:flex;align-items:center;gap:8px;background:var(--ink3);border:1px solid var(--line2);border-radius:50px;padding:8px 16px 8px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--tx2);}
-.cpill:hover{border-color:var(--amber);color:var(--tx);}
-.cc{background:var(--amber);color:#000;border-radius:50%;width:20px;height:20px;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.ng:hover{color:var(--tx);border-color:var(--red);background:var(--red3);}
+.np{background:var(--redg);color:#fff;box-shadow:0 4px 20px rgba(220,38,38,.3);}
+.np:hover{box-shadow:0 6px 28px rgba(220,38,38,.45);transform:translateY(-1px);}
+.cpill{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--line2);border-radius:50px;padding:7px 15px 7px 12px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--tx2);}
+.cpill:hover{border-color:var(--red);color:var(--tx);}
+.cc{background:var(--red);color:#fff;border-radius:50%;width:20px;height:20px;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
 
-/* HERO */
-.hero{position:relative;z-index:1;padding:96px 48px 72px;text-align:center;overflow:hidden;}
-.heyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);color:var(--blue);border-radius:50px;padding:7px 18px;font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:28px;animation:rise .7s ease both;}
-.heyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite;}
-.htitle{font-family:'Clash Display',sans-serif;font-size:clamp(44px,7vw,88px);font-weight:700;line-height:.95;letter-spacing:-2px;animation:rise .7s .08s ease both;}
-.htitle em{font-style:normal;background:linear-gradient(120deg,var(--amber),#ff9500 50%,var(--amber));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 4s linear infinite;}
-.hsub{margin:24px auto 0;max-width:480px;color:var(--tx2);font-size:17px;line-height:1.65;animation:rise .7s .16s ease both;}
-.hsteps{display:flex;align-items:center;justify-content:center;gap:0;margin:44px auto 0;max-width:720px;animation:rise .7s .24s ease both;background:var(--ink3);border:1px solid var(--line);border-radius:20px;overflow:hidden;}
-.hstep{flex:1;padding:20px 16px;text-align:center;border-right:1px solid var(--line);}
-.hstep:last-child{border-right:none;}
-.hn{font-family:'Clash Display',sans-serif;font-size:11px;font-weight:700;color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
-.ht{font-size:13px;font-weight:500;color:var(--tx2);line-height:1.4;}
-.hi{font-size:22px;margin-bottom:6px;display:block;}
+/* ── TRUST TICKER ── */
+.trust-strip{background:var(--red);overflow:hidden;height:36px;display:flex;align-items:center;}
+.trust-track{display:flex;gap:48px;animation:marquee 30s linear infinite;white-space:nowrap;padding:0 24px;}
+.trust-track span{font-size:12px;font-weight:600;color:#fff;letter-spacing:.3px;display:flex;align-items:center;gap:8px;}
+.trust-track span::before{content:'●';font-size:6px;opacity:.7;}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-/* TICKER */
-/* WINNERS WALL */
-.winners-section{position:relative;z-index:1;padding:0 48px 80px;}
-.winners-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px;}
-.winners-title{font-size:28px;font-weight:800;font-family:'Clash Display',sans-serif;}
-.winners-title span{background:linear-gradient(135deg,var(--amber),#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.live-dot-wrap{display:flex;align-items:center;gap:8px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);border-radius:50px;padding:6px 14px;}
-.ldot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse2 1.5s ease infinite;}
-@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-.live-dot-wrap span{font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.8px;}
+/* ── HERO ── */
+.hero{position:relative;z-index:1;padding:80px 48px 60px;text-align:center;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 800px 400px at 50% 0%,rgba(220,38,38,.07),transparent 70%);pointer-events:none;}
+.hero-eye{display:inline-flex;align-items:center;gap:8px;background:var(--red3);border:1px solid rgba(220,38,38,.25);color:var(--red);border-radius:50px;padding:6px 16px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:24px;}
+.hero-eye .dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.5s ease infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.htitle{font-size:clamp(42px,6.5vw,80px);font-weight:900;line-height:1;letter-spacing:-2.5px;margin-bottom:20px;animation:fadeup .6s ease both;}
+.htitle .accent{color:var(--red);}
+.htitle .muted{color:var(--tx2);font-weight:300;}
+.hsub{max-width:500px;margin:0 auto 40px;color:var(--tx2);font-size:16px;line-height:1.7;font-weight:400;}
+.hero-cta{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:56px;}
+.btn-primary{padding:14px 28px;border-radius:12px;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;background:var(--redg);color:#fff;box-shadow:0 4px 24px rgba(220,38,38,.35);transition:all .25s;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(220,38,38,.5);}
+.btn-ghost{padding:14px 28px;border-radius:12px;border:1px solid var(--line2);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;background:transparent;color:var(--tx2);transition:all .25s;}
+.btn-ghost:hover{border-color:var(--red);color:var(--tx);}
 
-.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
-.wcard{background:linear-gradient(145deg,var(--ink2),var(--ink3));border:1px solid var(--line);border-radius:24px;padding:22px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
-.wcard:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4);}
-.wcard::before{content:'';position:absolute;top:0;right:0;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(240,180,41,.08),transparent 70%);}
+/* ── STATS ROW ── */
+.stats-row{display:flex;align-items:center;justify-content:center;gap:0;max-width:680px;margin:0 auto;background:var(--bg3);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+.stat-cell{flex:1;padding:20px;text-align:center;border-right:1px solid var(--line);}
+.stat-cell:last-child{border-right:none;}
+.stat-val{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--tx);margin-bottom:4px;}
+.stat-val .red{color:var(--red);}
+.stat-lbl{font-size:11px;color:var(--tx3);font-weight:500;text-transform:uppercase;letter-spacing:.6px;}
 
-.wcard-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;}
-.wav{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;flex-shrink:0;font-family:'Clash Display',sans-serif;}
-.wname-wrap{flex:1;}
-.wname{font-size:15px;font-weight:700;margin-bottom:3px;}
-.wcity{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:4px;}
-.verified{display:inline-flex;align-items:center;gap:4px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.2);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;color:#818cf8;margin-left:6px;}
+/* ── DUAL MODEL SECTION ── */
+.dual-section{position:relative;z-index:1;padding:72px 48px;background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.dual-header{text-align:center;margin-bottom:48px;}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+.sec-title{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:700;letter-spacing:-.5px;margin-bottom:12px;}
+.sec-sub{font-size:15px;color:var(--tx2);max-width:460px;margin:0 auto;line-height:1.65;}
+.model-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:0 auto;}
 
-.wstars{display:flex;gap:2px;margin-bottom:12px;}
-.wstar{font-size:14px;}
+/* Price Drop card */
+.model-card{border-radius:20px;padding:36px;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s;}
+.model-card:hover{transform:translateY(-4px);}
+.mc-pd{background:linear-gradient(145deg,#0c1a2e,#0f2240);border:1px solid rgba(14,165,233,.2);}
+.mc-pd:hover{box-shadow:0 20px 60px rgba(14,165,233,.12);}
+.mc-prz{background:linear-gradient(145deg,#1a0c0c,#240f0f);border:1px solid rgba(220,38,38,.2);}
+.mc-prz:hover{box-shadow:0 20px 60px rgba(220,38,38,.12);}
+.mc-tag{display:inline-flex;align-items:center;gap:6px;border-radius:50px;padding:5px 12px;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:20px;}
+.mc-tag-pd{background:rgba(14,165,233,.15);border:1px solid rgba(14,165,233,.3);color:var(--pd);}
+.mc-tag-prz{background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.3);color:var(--red);}
+.mc-icon{font-size:44px;margin-bottom:16px;display:block;}
+.mc-title{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;margin-bottom:10px;}
+.mc-pd .mc-title{color:#7dd3fc;}
+.mc-prz .mc-title{color:#fca5a5;}
+.mc-desc{font-size:14px;color:var(--tx2);line-height:1.7;margin-bottom:24px;}
+.mc-features{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.mc-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--tx2);}
+.mc-feat-dot-pd{width:6px;height:6px;border-radius:50%;background:var(--pd);flex-shrink:0;}
+.mc-feat-dot-prz{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;}
+.mc-cta-pd{padding:12px 20px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--pd),var(--pd2));color:#fff;transition:all .2s;width:100%;}
+.mc-cta-pd:hover{box-shadow:0 6px 24px rgba(14,165,233,.35);transform:translateY(-1px);}
+.mc-cta-prz{padding:12px 20px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:var(--redg);color:#fff;transition:all .2s;width:100%;}
+.mc-cta-prz:hover{box-shadow:0 6px 24px rgba(220,38,38,.4);transform:translateY(-1px);}
+.mc-shine{position:absolute;top:-60px;right:-60px;width:180px;height:180px;border-radius:50%;opacity:.06;}
+.mc-pd .mc-shine{background:var(--pd);}
+.mc-prz .mc-shine{background:var(--red);}
+.vs-badge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--bg4);border:2px solid var(--line2);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--tx3);z-index:2;}
 
-.wreview{font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:16px;font-style:italic;}
-.wreview::before{content:'"';font-size:20px;color:var(--amber);font-family:'Clash Display',sans-serif;line-height:0;vertical-align:-4px;margin-right:2px;}
-.wreview::after{content:'"';font-size:20px;color:var(--amber);font-family:'Clash Display',sans-serif;line-height:0;vertical-align:-4px;margin-left:2px;}
+/* ── PRODUCT TABS ── */
+.tabs-section{position:relative;z-index:1;padding:72px 48px 100px;}
+.tabs-header{margin-bottom:40px;}
+.mode-tabs{display:flex;gap:6px;background:var(--bg3);border:1px solid var(--line);border-radius:14px;padding:5px;margin-bottom:32px;width:fit-content;}
+.mtab{padding:10px 24px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:8px;}
+.mtab-pd{background:transparent;color:var(--tx3);}
+.mtab-pd.act{background:linear-gradient(135deg,var(--pd),var(--pd2));color:#fff;box-shadow:0 4px 20px rgba(14,165,233,.3);}
+.mtab-prz{background:transparent;color:var(--tx3);}
+.mtab-prz.act{background:var(--redg);color:#fff;box-shadow:0 4px 20px rgba(220,38,38,.3);}
+.sub-tabs{display:flex;gap:8px;flex-wrap:wrap;}
+.stab{padding:7px 16px;border-radius:50px;background:var(--bg3);border:1px solid var(--line);color:var(--tx2);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .2s;}
+.stab:hover{border-color:var(--line2);color:var(--tx);}
+.stab.on-pd{background:var(--pd3);border-color:rgba(14,165,233,.35);color:var(--pd);}
+.stab.on-prz{background:var(--red3);border-color:rgba(220,38,38,.35);color:var(--red);}
 
-.wprize-box{background:linear-gradient(135deg,rgba(240,180,41,.08),rgba(251,146,60,.05));border:1px solid rgba(240,180,41,.2);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:14px;}
-.wprize-emoji{font-size:36px;filter:drop-shadow(0 4px 12px rgba(240,180,41,.3));}
-.wprize-info{flex:1;}
-.wprize-name{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:3px;}
-.wprize-paid{font-size:11px;color:var(--tx3);}
-.wprize-paid strong{color:var(--green);}
-.wsavings{background:linear-gradient(135deg,var(--violet2),var(--violet));color:#fff;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;white-space:nowrap;}
-
-.wdate{font-size:11px;color:var(--tx3);margin-top:12px;text-align:right;}
-
-.wcard-shimmer{background:linear-gradient(145deg,var(--ink2),var(--ink3));border:1px solid var(--line);border-radius:24px;padding:22px;animation:shimmer 1.5s ease infinite;}
-@keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
-.sh-line{height:12px;background:var(--line2);border-radius:6px;margin-bottom:10px;}
-
-@media(max-width:768px){.winners-section{padding:0 20px 60px;}.wgrid{grid-template-columns:1fr;}}
-
-/* SECTION */
-.sec{position:relative;z-index:1;padding:0 48px 100px;}
-.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}
-.st{font-family:'Clash Display',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.5px;}
-.cdb{display:flex;align-items:center;gap:10px;background:var(--ink3);border:1px solid var(--line2);border-radius:50px;padding:10px 20px;font-size:13px;font-weight:500;color:var(--tx2);}
-.cdv{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;color:var(--amber);letter-spacing:1px;}
-.ldot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
-.filts{display:flex;gap:8px;margin-bottom:36px;flex-wrap:wrap;}
-.filt{padding:9px 20px;border-radius:50px;background:var(--ink3);border:1px solid var(--line);color:var(--tx2);font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;}
-.filt:hover{border-color:var(--line2);color:var(--tx);}
-.filt.on{background:var(--amber3);border-color:rgba(240,180,41,.35);color:var(--amber);}
-
-/* GRID */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;}
-.pcard{background:var(--ink3);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .3s,box-shadow .3s;cursor:pointer;animation:rise .5s ease both;}
-.pcard:hover{transform:translateY(-6px) scale(1.01);border-color:rgba(240,180,41,.25);box-shadow:0 24px 64px rgba(0,0,0,.5),0 0 60px rgba(240,180,41,.08);}
-.pcimg{width:100%;height:220px;background:linear-gradient(135deg,var(--ink4),var(--ink2));display:flex;align-items:center;justify-content:center;font-size:80px;position:relative;}
-.pcig{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 80%,rgba(240,180,41,.08),transparent);}
-.pcio{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--ink3));}
-.pcem{position:relative;z-index:1;filter:drop-shadow(0 8px 24px rgba(0,0,0,.5));}
-.bhot{position:absolute;top:14px;left:14px;z-index:3;background:linear-gradient(135deg,var(--amber2),var(--amber));color:#000;font-size:10px;font-weight:800;border-radius:8px;padding:4px 10px;letter-spacing:.5px;text-transform:uppercase;box-shadow:0 4px 16px rgba(240,180,41,.4);}
-.bnew{position:absolute;top:14px;right:14px;z-index:3;background:var(--ink4);border:1px solid var(--line2);color:var(--violet);font-size:10px;font-weight:700;border-radius:8px;padding:4px 10px;text-transform:uppercase;}
-.pcb{padding:22px;}
-.pccat{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--violet);margin-bottom:8px;}
-.pcname{font-family:'Clash Display',sans-serif;font-size:19px;font-weight:700;letter-spacing:-.3px;line-height:1.25;margin-bottom:6px;}
-.pcdesc{font-size:12px;color:var(--tx3);margin-bottom:18px;line-height:1.55;}
-.pcpr{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-.prm{font-family:'Clash Display',sans-serif;font-size:26px;font-weight:700;color:var(--amber);}
-.pro{font-size:13px;color:var(--tx3);text-decoration:line-through;}
-.prs{margin-left:auto;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green);border-radius:50px;padding:3px 11px;font-size:11px;font-weight:700;}
-.sli{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--tx3);margin-bottom:8px;}
+/* ── PRODUCT GRID ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;}
+.pcard{background:var(--bg3);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;transition:transform .3s cubic-bezier(.34,1.36,.64,1),border-color .3s,box-shadow .3s;cursor:pointer;}
+.pcard:hover{transform:translateY(-5px);border-color:rgba(220,38,38,.3);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px rgba(220,38,38,.06);}
+.pcard.pd-card:hover{border-color:rgba(14,165,233,.3);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px rgba(14,165,233,.06);}
+.pcimg{width:100%;height:200px;background:linear-gradient(135deg,var(--bg4),var(--bg2));display:flex;align-items:center;justify-content:center;font-size:72px;position:relative;}
+.pcio{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--bg3));}
+.pcem{position:relative;z-index:1;filter:drop-shadow(0 6px 16px rgba(0,0,0,.4));}
+.bhot{position:absolute;top:12px;left:12px;z-index:3;background:var(--redg);color:#fff;font-size:9.5px;font-weight:800;border-radius:6px;padding:3px 9px;letter-spacing:.5px;text-transform:uppercase;box-shadow:0 4px 12px rgba(220,38,38,.4);}
+.btype-pd{position:absolute;top:12px;right:12px;z-index:3;background:rgba(14,165,233,.15);border:1px solid rgba(14,165,233,.35);color:var(--pd);font-size:9.5px;font-weight:700;border-radius:6px;padding:3px 9px;text-transform:uppercase;}
+.btype-prz{position:absolute;top:12px;right:12px;z-index:3;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.3);color:var(--red);font-size:9.5px;font-weight:700;border-radius:6px;padding:3px 9px;text-transform:uppercase;}
+.pcb{padding:20px;}
+.pccat{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);margin-bottom:6px;}
+.pcname{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;letter-spacing:-.2px;line-height:1.3;margin-bottom:5px;}
+.pcdesc{font-size:12px;color:var(--tx3);margin-bottom:16px;line-height:1.5;}
+.pcpr{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.prm{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--tx);}
+.prm.pd-price{color:var(--pd);}
+.prm.prz-price{color:var(--red);}
+.pro{font-size:12.5px;color:var(--tx3);text-decoration:line-through;}
+.prs{margin-left:auto;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green);border-radius:50px;padding:2px 10px;font-size:10.5px;font-weight:700;}
+.sli{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--tx3);margin-bottom:6px;}
 .slc{font-weight:600;color:var(--tx2);}
-.slbar{height:5px;background:var(--ink4);border-radius:50px;overflow:hidden;margin-bottom:18px;}
-.slfill{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--violet2),var(--amber));transition:width .6s ease;}
-.slfill.hot{background:linear-gradient(90deg,#ef4444,var(--amber));}
-.bentd{width:100%;padding:14px;border-radius:14px;border:none;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--violet2),var(--violet));color:#fff;transition:all .25s;box-shadow:0 4px 20px rgba(107,92,231,.25);}
-.bentd:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(107,92,231,.4);}
+.slbar{height:4px;background:var(--bg4);border-radius:50px;overflow:hidden;margin-bottom:16px;}
+.slfill-pd{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--pd2),var(--pd));transition:width .6s ease;}
+.slfill-prz{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--red2),var(--red));transition:width .6s ease;}
+.slfill.hot{background:linear-gradient(90deg,#b91c1c,#ef4444);}
+.bentd-pd{width:100%;padding:12px;border-radius:12px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--pd),var(--pd2));color:#fff;transition:all .25s;}
+.bentd-pd:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(14,165,233,.3);}
+.bentd-prz{width:100%;padding:12px;border-radius:12px;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:var(--redg);color:#fff;transition:all .25s;}
+.bentd-prz:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(220,38,38,.35);}
 
-/* MODALS */
-.ov{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+/* ── HOW IT WORKS ── */
+.how-section{position:relative;z-index:1;padding:80px 48px;background:var(--bg2);border-top:1px solid var(--line);}
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:48px;}
+.how-step{background:var(--bg3);padding:32px 28px;position:relative;}
+.how-step::after{content:attr(data-n);position:absolute;top:20px;right:20px;font-size:11px;font-weight:700;color:var(--red);letter-spacing:.5px;}
+.how-icon{font-size:32px;margin-bottom:16px;}
+.how-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
+.how-desc{font-size:13px;color:var(--tx3);line-height:1.6;}
+.legal-note{margin-top:32px;display:flex;align-items:flex-start;gap:14px;background:var(--red4);border:1px solid rgba(220,38,38,.12);border-radius:14px;padding:18px 22px;font-size:13px;color:var(--tx2);line-height:1.7;}
+
+/* ── REVIEWS ── */
+.reviews-section{position:relative;z-index:1;padding:80px 48px;border-top:1px solid var(--line);}
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-top:48px;}
+.rcard{background:var(--bg3);border:1px solid var(--line);border-radius:18px;padding:24px;transition:border-color .2s,box-shadow .2s;}
+.rcard:hover{border-color:var(--line2);box-shadow:0 12px 40px rgba(0,0,0,.3);}
+.rcard-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;}
+.rav{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;font-family:'Space Grotesk',sans-serif;}
+.rname{font-size:14.5px;font-weight:700;margin-bottom:3px;}
+.rcity{font-size:12px;color:var(--tx3);}
+.rverified{display:inline-flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;color:var(--green);margin-left:8px;}
+.rstars{color:#f59e0b;font-size:13px;margin-bottom:12px;letter-spacing:1px;}
+.rreview{font-size:13.5px;color:var(--tx2);line-height:1.75;margin-bottom:16px;font-style:italic;}
+.rreview::before{content:'"';font-size:24px;color:var(--red);opacity:.5;font-family:'Georgia',serif;line-height:0;vertical-align:-6px;margin-right:3px;}
+.rprize{background:var(--bg4);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;}
+.rprize-emoji{font-size:28px;}
+.rprize-name{font-size:12.5px;font-weight:600;margin-bottom:2px;}
+.rprize-paid{font-size:11px;color:var(--tx3);}
+.rprize-paid strong{color:var(--green);}
+.rsave{margin-left:auto;background:var(--red3);border:1px solid rgba(220,38,38,.2);color:var(--red);border-radius:6px;padding:3px 9px;font-size:10.5px;font-weight:700;white-space:nowrap;}
+.rdate{font-size:11px;color:var(--tx3);margin-top:12px;text-align:right;}
+
+/* ── FOOTER ── */
+footer{background:var(--bg2);border-top:1px solid var(--line);padding:48px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;}
+.ft-brand{font-family:'Space Grotesk',sans-serif;}
+.ft-logo{font-size:18px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.ft-logo span{color:var(--red);}
+.ft-desc{font-size:13px;color:var(--tx3);line-height:1.7;margin-bottom:16px;}
+.ft-legal{font-size:11px;color:var(--tx3);line-height:1.6;background:var(--bg3);border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+.ft-col-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tx3);margin-bottom:14px;}
+.ft-link{display:block;font-size:13px;color:var(--tx3);text-decoration:none;margin-bottom:8px;transition:color .2s;}
+.ft-link:hover{color:var(--red);}
+.ft-bottom{background:var(--bg2);border-top:1px solid var(--line);padding:18px 48px;display:flex;align-items:center;justify-content:space-between;}
+.ft-copy{font-size:12px;color:var(--tx3);}
+
+/* ── MODALS ── */
+.ov{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
 .ov.open{opacity:1;pointer-events:all;}
-.sh2{background:var(--ink3);border:1px solid var(--line2);border-radius:28px;width:100%;max-width:480px;transform:translateY(24px) scale(.97);transition:transform .35s cubic-bezier(.34,1.2,.64,1);overflow:hidden;}
+.sh2{background:var(--bg3);border:1px solid var(--line2);border-radius:24px;width:100%;max-width:480px;transform:translateY(20px) scale(.97);transition:transform .35s cubic-bezier(.34,1.2,.64,1);overflow:hidden;}
 .ov.open .sh2{transform:translateY(0) scale(1);}
-.shh{padding:26px 26px 0;display:flex;align-items:center;justify-content:space-between;}
-.sht{font-family:'Clash Display',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.3px;}
-.shc{width:34px;height:34px;border-radius:10px;background:var(--ink4);border:1px solid var(--line);color:var(--tx2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.shh{padding:24px 24px 0;display:flex;align-items:center;justify-content:space-between;}
+.sht{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;}
+.shc{width:32px;height:32px;border-radius:8px;background:var(--bg4);border:1px solid var(--line);color:var(--tx2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
 .shc:hover{color:var(--tx);}
-.shb{padding:22px 26px 28px;}
-
-/* AUTH */
-.atabs{display:flex;gap:4px;background:var(--ink4);border-radius:14px;padding:4px;margin-bottom:22px;}
-.atab{flex:1;padding:9px;border-radius:11px;border:none;background:transparent;color:var(--tx2);font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;}
-.atab.on{background:var(--ink3);color:var(--tx);box-shadow:0 2px 8px rgba(0,0,0,.3);}
-.fld{margin-bottom:14px;}
-.fld label{display:block;font-size:12px;font-weight:600;color:var(--tx3);margin-bottom:6px;}
-.fld input{width:100%;padding:12px 15px;background:var(--ink4);border:1px solid var(--line);border-radius:12px;color:var(--tx);font-family:'Instrument Sans',sans-serif;font-size:14px;transition:border-color .2s;outline:none;}
-.fld input:focus{border-color:rgba(139,124,248,.5);box-shadow:0 0 0 3px rgba(139,124,248,.1);}
+.shb{padding:20px 24px 26px;}
+.atabs{display:flex;gap:4px;background:var(--bg4);border-radius:12px;padding:4px;margin-bottom:20px;}
+.atab{flex:1;padding:9px;border-radius:9px;border:none;background:transparent;color:var(--tx2);font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;cursor:pointer;transition:all .2s;}
+.atab.on{background:var(--bg3);color:var(--tx);}
+.fld{margin-bottom:13px;}
+.fld label{display:block;font-size:12px;font-weight:600;color:var(--tx3);margin-bottom:5px;}
+.fld input{width:100%;padding:11px 14px;background:var(--bg4);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:'Inter',sans-serif;font-size:14px;transition:border-color .2s;outline:none;}
+.fld input:focus{border-color:rgba(220,38,38,.5);box-shadow:0 0 0 3px rgba(220,38,38,.08);}
 .fld input::placeholder{color:var(--tx3);}
-.bfl{width:100%;padding:14px;border-radius:14px;border:none;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--violet2),var(--violet));color:#fff;transition:all .25s;box-shadow:0 4px 20px rgba(107,92,231,.3);}
-.bfl:hover{box-shadow:0 8px 32px rgba(107,92,231,.45);transform:translateY(-1px);}
-.bamber{width:100%;padding:16px;border-radius:14px;border:none;font-family:'Instrument Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--amber2),var(--amber));color:#000;transition:all .25s;box-shadow:0 4px 24px rgba(240,180,41,.3);}
-.bamber:hover{box-shadow:0 8px 36px rgba(240,180,41,.45);transform:translateY(-1px);}
-.errm{color:var(--red);font-size:13px;margin-top:12px;display:none;}
+.bfl{width:100%;padding:13px;border-radius:12px;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;background:var(--redg);color:#fff;transition:all .25s;box-shadow:0 4px 20px rgba(220,38,38,.25);}
+.bfl:hover{box-shadow:0 8px 32px rgba(220,38,38,.4);transform:translateY(-1px);}
+.bamber{width:100%;padding:14px;border-radius:12px;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;background:var(--redg);color:#fff;transition:all .25s;box-shadow:0 4px 24px rgba(220,38,38,.25);}
+.bamber:hover{box-shadow:0 8px 36px rgba(220,38,38,.4);transform:translateY(-1px);}
+.errm{color:#f87171;font-size:13px;margin-top:12px;display:none;}
 
-/* BUY MODAL — STEP 1: QUANTITY */
-.bpr{display:flex;align-items:center;gap:14px;background:var(--ink4);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:20px;}
-.qrow{display:flex;align-items:center;margin-bottom:20px;}
+/* BUY MODAL */
+.bpr{display:flex;align-items:center;gap:14px;background:var(--bg4);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:18px;}
+.qrow{display:flex;align-items:center;margin-bottom:18px;}
 .qlbl{flex:1;font-size:14px;font-weight:500;}
 .qsub{font-size:12px;color:var(--tx3);font-weight:400;}
 .qctrl{display:flex;align-items:center;gap:12px;}
-.qbtn{width:36px;height:36px;border-radius:10px;background:var(--ink4);border:1px solid var(--line2);color:var(--tx);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
-.qbtn:hover{border-color:var(--amber);color:var(--amber);}
-.qnum{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;min-width:36px;text-align:center;}
-.sumbox{background:var(--ink4);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:18px;}
-.sumr{display:flex;justify-content:space-between;font-size:13px;color:var(--tx3);margin-bottom:10px;}
-.sumr.tot{margin-bottom:0;border-top:1px solid var(--line);padding-top:12px;color:var(--tx);font-size:15px;font-weight:600;}
-.samb{color:var(--amber);font-weight:700;}
-.winnote{display:flex;gap:10px;align-items:flex-start;background:var(--amber4);border:1px solid rgba(240,180,41,.15);border-radius:14px;padding:14px;margin-bottom:20px;font-size:13px;color:var(--tx2);line-height:1.6;}
+.qbtn{width:34px;height:34px;border-radius:8px;background:var(--bg4);border:1px solid var(--line2);color:var(--tx);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.qbtn:hover{border-color:var(--red);color:var(--red);}
+.qnum{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;min-width:32px;text-align:center;}
+.sumbox{background:var(--bg4);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px;}
+.sumr{display:flex;justify-content:space-between;font-size:13px;color:var(--tx3);margin-bottom:9px;}
+.sumr.tot{margin-bottom:0;border-top:1px solid var(--line);padding-top:11px;color:var(--tx);font-size:15px;font-weight:600;}
+.samb{color:var(--red);font-weight:700;}
+.winnote{display:flex;gap:10px;align-items:flex-start;background:var(--red4);border:1px solid rgba(220,38,38,.12);border-radius:12px;padding:13px;margin-bottom:18px;font-size:13px;color:var(--tx2);line-height:1.6;}
 
-/* UPI PAYMENT STEP */
+/* UPI */
 .upi-step{display:none;}
 .upi-step.show{display:block;}
-.upi-header{text-align:center;margin-bottom:20px;}
-.upi-amount{font-family:'Clash Display',sans-serif;font-size:36px;font-weight:700;color:var(--amber);margin-bottom:4px;}
+.upi-header{text-align:center;margin-bottom:18px;}
+.upi-amount{font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700;color:var(--red);margin-bottom:4px;}
 .upi-ref{font-size:12px;color:var(--tx3);}
-
-/* PhonePe QR box */
-.qr-box{background:var(--ink4);border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:16px;text-align:center;}
-.qr-img-wrap{width:160px;height:160px;background:#fff;border-radius:14px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.qr-img-wrap img{width:100%;height:100%;object-fit:cover;}
-.qr-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:100%;color:#333;}
-.qr-placeholder svg{width:80px;height:80px;}
-.qr-upi-id{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700;color:var(--tx);margin-bottom:4px;}
+.qr-box{background:var(--bg4);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px;text-align:center;}
+.qr-img-wrap{width:155px;height:155px;background:#fff;border-radius:12px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.qr-upi-id{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:var(--tx);margin-bottom:3px;}
 .qr-upi-name{font-size:12px;color:var(--tx3);}
-
-/* UPI app buttons */
-.upi-apps{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
-.upi-app{padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--ink4);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;color:var(--tx);transition:all .2s;}
-.upi-app:hover{border-color:var(--line2);background:var(--ink3);}
-.upi-app-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-.upi-pp{background:#5f259f;}
-.upi-gp{background:#fff;}
-.upi-pt{background:#002970;}
-.upi-bh{background:#00b9f1;}
-
-/* UTR input */
-.utr-box{background:var(--ink4);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px;}
-.utr-label{font-size:12px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.utr-input{width:100%;padding:12px 15px;background:var(--ink3);border:1px solid var(--line);border-radius:12px;color:var(--tx);font-family:'Instrument Sans',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;outline:none;transition:border-color .2s;}
-.utr-input:focus{border-color:rgba(240,180,41,.5);box-shadow:0 0 0 3px rgba(240,180,41,.08);}
+.upi-apps{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.upi-app{padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--bg4);display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;color:var(--tx);transition:all .2s;}
+.upi-app:hover{border-color:var(--line2);}
+.upi-app-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.upi-pp{background:#5f259f;} .upi-gp{background:#fff;} .upi-pt{background:#002970;} .upi-bh{background:#00b9f1;}
+.utr-box{background:var(--bg4);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px;}
+.utr-label{font-size:12px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px;}
+.utr-input{width:100%;padding:11px 14px;background:var(--bg3);border:1px solid var(--line);border-radius:10px;color:var(--tx);font-family:'Inter',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;outline:none;transition:border-color .2s;}
+.utr-input:focus{border-color:rgba(220,38,38,.5);box-shadow:0 0 0 3px rgba(220,38,38,.08);}
 .utr-input::placeholder{font-size:13px;font-weight:400;letter-spacing:0;color:var(--tx3);}
-.utr-hint{font-size:11px;color:var(--tx3);margin-top:8px;line-height:1.5;}
-
-/* Status badge */
-.pending-note{background:rgba(240,180,41,.06);border:1px solid rgba(240,180,41,.2);border-radius:14px;padding:14px;font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;}
+.utr-hint{font-size:11px;color:var(--tx3);margin-top:6px;line-height:1.5;}
 
 /* WINNER */
-.winbody{text-align:center;padding:44px 32px;}
-.wburst{font-size:72px;margin-bottom:16px;animation:burst .7s cubic-bezier(.34,1.56,.64,1) both;display:block;}
-.wtitle{font-family:'Clash Display',sans-serif;font-size:32px;font-weight:700;letter-spacing:-.5px;margin-bottom:10px;}
-.wsub{color:var(--tx2);font-size:15px;line-height:1.65;margin-bottom:24px;}
-.wref{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:16px;padding:18px;color:var(--green);font-weight:600;font-size:15px;margin-bottom:24px;}
+.winbody{text-align:center;padding:40px 28px;}
+.wburst{font-size:64px;margin-bottom:14px;animation:burst .7s cubic-bezier(.34,1.56,.64,1) both;display:block;}
+.wtitle{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;margin-bottom:8px;}
+.wsub{color:var(--tx2);font-size:15px;line-height:1.65;margin-bottom:20px;}
+.wref{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:14px;padding:16px;color:var(--green);font-weight:600;font-size:14px;margin-bottom:20px;}
 .cwrap{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
-.cdot{position:absolute;width:8px;height:8px;border-radius:2px;animation:fall 3s ease both;}
 
 /* CART */
 .cdraw{position:fixed;inset:0;z-index:300;display:flex;justify-content:flex-end;pointer-events:none;}
-.cdbg{position:absolute;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);opacity:0;transition:opacity .3s;pointer-events:none;}
+.cdbg{position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);opacity:0;transition:opacity .3s;pointer-events:none;}
 .cdraw.open .cdbg{opacity:1;pointer-events:all;}
-.cdpanel{position:relative;width:400px;height:100%;background:var(--ink3);border-left:1px solid var(--line);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);pointer-events:all;}
+.cdpanel{position:relative;width:380px;height:100%;background:var(--bg3);border-left:1px solid var(--line);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);pointer-events:all;}
 .cdraw.open .cdpanel{transform:translateX(0);}
-.cdhead{padding:26px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
-.cdtitle{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;}
-.cditems{flex:1;overflow-y:auto;padding:16px 24px;}
-.cdi{display:flex;align-items:center;gap:14px;background:var(--ink4);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;}
+.cdhead{padding:24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.cdtitle{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;}
+.cditems{flex:1;overflow-y:auto;padding:14px 20px;}
+.cdi{display:flex;align-items:center;gap:12px;background:var(--bg4);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:8px;}
 .cdii{flex:1;}
-.cdin{font-size:14px;font-weight:600;margin-bottom:3px;}
-.cdis{font-size:12px;color:var(--tx3);}
-.cdip{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;color:var(--amber);}
-.cdirm{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:17px;padding:4px;transition:color .2s;}
-.cdirm:hover{color:var(--red);}
-.cdfoot{padding:18px 24px;border-top:1px solid var(--line);}
-.cdtrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-.cdtl{font-size:14px;color:var(--tx2);}
-.cdtv{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:700;color:var(--amber);}
-.cdempty{text-align:center;padding:64px 20px;color:var(--tx3);}
+.cdin{font-size:13.5px;font-weight:600;margin-bottom:2px;}
+.cdis{font-size:11.5px;color:var(--tx3);}
+.cdip{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--red);}
+.cdirm{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:16px;padding:4px;transition:color .2s;}
+.cdirm:hover{color:#f87171;}
+.cdfoot{padding:16px 20px;border-top:1px solid var(--line);}
+.cdtrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.cdtl{font-size:13px;color:var(--tx2);}
+.cdtv{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--red);}
+.cdempty{text-align:center;padding:60px 20px;color:var(--tx3);}
 
 /* TOAST */
-.twrap{position:fixed;bottom:28px;right:28px;z-index:999;display:flex;flex-direction:column;gap:10px;pointer-events:none;}
-.tst{background:var(--ink3);border:1px solid var(--line2);border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500;max-width:340px;box-shadow:0 8px 40px rgba(0,0,0,.5);animation:tin .3s cubic-bezier(.34,1.2,.64,1) both;pointer-events:all;}
+.twrap{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+.tst{background:var(--bg3);border:1px solid var(--line2);border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;max-width:320px;box-shadow:0 8px 40px rgba(0,0,0,.5);animation:tin .3s cubic-bezier(.34,1.2,.64,1) both;pointer-events:all;}
 .tok{border-color:rgba(34,197,94,.25);}
-.tgd{border-color:rgba(240,180,41,.3);background:rgba(240,180,41,.05);}
+.tgd{border-color:rgba(220,38,38,.3);background:rgba(220,38,38,.04);}
 .terr{border-color:rgba(239,68,68,.3);}
-.spin{width:18px;height:18px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:inline-block;vertical-align:middle;}
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:inline-block;vertical-align:middle;}
 
-@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-/* ─── end css ─── */
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+/* COUNTDOWN */
+.cdb{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--line2);border-radius:50px;padding:8px 18px;font-size:13px;font-weight:500;color:var(--tx2);}
+.cdv{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--red);}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite;}
+
+/* KEYFRAMES */
+@keyframes fadeup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes burst{0%{transform:scale(0) rotate(-20deg)}70%{transform:scale(1.15) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
 @keyframes sp{to{transform:rotate(360deg)}}
-@keyframes fall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-@keyframes tin{from{opacity:0;transform:translateX(20px) scale(.95)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes tin{from{opacity:0;transform:translateX(16px) scale(.95)}to{opacity:1;transform:translateX(0) scale(1)}}
 
-@media(max-width:768px){
+/* RESPONSIVE */
+@media(max-width:900px){
   nav{padding:0 20px;} .nc{display:none;}
-  .hero{padding:64px 20px 48px;} .hsteps{flex-direction:column;}
-  .hstep{border-right:none;border-bottom:1px solid var(--line);}
-  .hstep:last-child{border-bottom:none;}
-  .sec{padding:0 20px 64px;} .tlbl{left:20px;}
+  .hero{padding:60px 20px 48px;}
+  .dual-section{padding:48px 20px;} .model-grid{grid-template-columns:1fr;} .vs-badge{display:none;}
+  .tabs-section{padding:48px 20px 64px;}
+  .how-section{padding:56px 20px;} .how-grid{grid-template-columns:1fr 1fr;}
+  .reviews-section{padding:56px 20px;}
+  footer{grid-template-columns:1fr;padding:32px 20px;gap:28px;}
+  .ft-bottom{padding:14px 20px;flex-direction:column;gap:6px;text-align:center;}
   .cdpanel{width:100%;}
+  .stats-row{flex-direction:column;} .stat-cell{border-right:none;border-bottom:1px solid var(--line);}
+  .stat-cell:last-child{border-bottom:none;}
 }
-
-/* ── Legal Trust Bar ──────────────────────────────────────────────────────── */
-.trust-bar{display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap;padding:14px 32px;background:rgba(99,102,241,.05);border-top:1px solid rgba(99,102,241,.1);border-bottom:1px solid rgba(99,102,241,.1);margin-bottom:0;}
-.tb-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--tx3);font-weight:500;letter-spacing:.2px;}
-.tb-dot{width:6px;height:6px;border-radius:50%;background:var(--gr);flex-shrink:0;}
-/* ── How It Works Section ────────────────────────────────────────────────── */
-.how-sec{padding:80px 48px;position:relative;z-index:1;}
-.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;margin-top:40px;}
-.how-card{background:var(--s);border:1px solid var(--bd);border-radius:18px;padding:28px 24px;text-align:center;}
-.how-num{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ac);margin-bottom:12px;}
-.how-icon{font-size:32px;margin-bottom:12px;}
-.how-title{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px;}
-.how-desc{font-size:13px;color:var(--tx3);line-height:1.6;}
-/* ── Legal badge ─────────────────────────────────────────────────────────── */
-.legal-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(46,204,113,.08);border:1px solid rgba(46,204,113,.2);border-radius:50px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--gr);letter-spacing:.4px;text-transform:uppercase;margin-bottom:20px;}
-@media(max-width:768px){.how-sec{padding:60px 20px;}.trust-bar{gap:16px;}}
+@media(max-width:600px){.how-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-
 <div class="ambient"></div>
-<div class="noise"></div>
 
+<!-- NAV -->
 <nav>
-  <a href="/" class="logo"><div class="lmark">🎁</div><span class="ltxt">PrizeDrop</span></a>
+  <a href="/" class="logo">
+    <div class="lmark">🎁</div>
+    <span class="ltxt">Prize<span>Drop</span></span>
+  </a>
   <div class="nc">
-    <a href="#drops" class="nl">Live Drops</a>
-    <a href="/referral" class="nl">🔗 Referrals</a>
-    <a href="#winners" class="nl">Winners</a>
-    <a href="#how" class="nl">How It Works</a>
+    <a href="#price-drops" class="nl">Price Drops</a>
+    <a href="#prize-drops" class="nl">Prize Drops</a>
+    <a href="/referral" class="nl">Referrals</a>
+    <a href="#how-it-works" class="nl">How It Works</a>
   </div>
   <div class="nr" id="navR">
     <button class="nb ng" onclick="openAuth('login')">Login</button>
@@ -314,225 +360,322 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
   </div>
 </nav>
 
-
-<div class="trust-bar">
-  <div class="tb-item"><div class="tb-dot"></div>100% Legal Group-Buy Model</div>
-  <div class="tb-item"><div class="tb-dot"></div>SHA-256 Verifiable Selection</div>
-  <div class="tb-item"><div class="tb-dot"></div>UPI Payments — Fully Transparent</div>
-  <div class="tb-item"><div class="tb-dot"></div>No Hidden Charges</div>
-  <div class="tb-item"><div class="tb-dot"></div>Instant Refund if Not Selected</div>
+<!-- TRUST TICKER -->
+<div class="trust-strip">
+  <div class="trust-track" id="trustTrack">
+    <span>100% Legal Group-Buy Model</span>
+    <span>SHA-256 Verifiable Selection</span>
+    <span>UPI Payments — Fully Transparent</span>
+    <span>No Hidden Charges</span>
+    <span>Instant Refund if Not Selected</span>
+    <span>Consumer Protection Act Compliant</span>
+    <span>Delivered to Your Door</span>
+    <span>100% Legal Group-Buy Model</span>
+    <span>SHA-256 Verifiable Selection</span>
+    <span>UPI Payments — Fully Transparent</span>
+    <span>No Hidden Charges</span>
+    <span>Instant Refund if Not Selected</span>
+    <span>Consumer Protection Act Compliant</span>
+    <span>Delivered to Your Door</span>
+  </div>
 </div>
 
 <!-- HERO -->
-<section class="hero" id="how">
-  <div class="legal-badge">✅ 100% Legal · Consumer Protection Act Compliant</div>
-  <div class="heyebrow">India's Premier Group-Buy Platform</div>
-  <h1 class="htitle">Group Buy.<br><em>Save Big.</em><br>Get It <em>Free.</em></h1>
-  <p class="hsub">Shop at exclusive discounted prices. When all spots fill, one verified buyer receives the product — fully paid for by the collective purchase pool.</p>
-  <div class="hsteps">
-    <div class="hstep"><span class="hi">🛍️</span><div class="hn">Step 01</div><div class="ht">Browse live drops</div></div>
-    <div class="hstep"><span class="hi">📱</span><div class="hn">Step 02</div><div class="ht">Pay ticket fee via UPI</div></div>
-    <div class="hstep"><span class="hi">⚡</span><div class="hn">Step 03</div><div class="ht">Drop completes when spots fill</div></div>
-    <div class="hstep"><span class="hi">🏆</span><div class="hn">Step 04</div><div class="ht">Winner gets the product!</div></div>
+<section class="hero">
+  <div class="hero-eye"><div class="dot"></div>India's #1 Deal Platform</div>
+  <h1 class="htitle">
+    Shop Smart.<br>
+    <span class="accent">Drop</span> <span class="muted">Bigger.</span>
+  </h1>
+  <p class="hsub">Two ways to save massively. Buy directly at unbeatable prices — or join a group drop and potentially get it <strong style="color:var(--tx)">completely free.</strong></p>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="document.getElementById('price-drops').scrollIntoView({behavior:'smooth'})">🛒 Shop Price Drops</button>
+    <button class="btn-ghost" onclick="document.getElementById('prize-drops').scrollIntoView({behavior:'smooth'})">🎁 Explore Prize Drops</button>
   </div>
-</section>
-
-<!-- WINNERS TICKER -->
-
-<section class="how-sec">
-  <div class="sh">
-    <h2 class="st">⚡ How PrizeDrop Works</h2>
-    <p style="color:var(--tx3);font-size:15px;max-width:520px">A transparent, SHA-256 verifiable group-purchase model — fully legal under Indian consumer law.</p>
-  </div>
-  <div class="how-grid">
-    <div class="how-card">
-      <div class="how-num">Step 01</div>
-      <div class="how-icon">🛍️</div>
-      <div class="how-title">Browse Live Drops</div>
-      <div class="how-desc">Explore premium products listed at discounted group-buy entry prices.</div>
+  <div class="stats-row">
+    <div class="stat-cell">
+      <div class="stat-val"><span class="red">₹2.4Cr+</span></div>
+      <div class="stat-lbl">Total Savings</div>
     </div>
-    <div class="how-card">
-      <div class="how-num">Step 02</div>
-      <div class="how-icon">💸</div>
-      <div class="how-title">Pay via UPI</div>
-      <div class="how-desc">Secure UPI payment. Your spot is reserved instantly. No hidden fees.</div>
+    <div class="stat-cell">
+      <div class="stat-val">14,800+</div>
+      <div class="stat-lbl">Happy Buyers</div>
     </div>
-    <div class="how-card">
-      <div class="how-num">Step 03</div>
-      <div class="how-icon">👥</div>
-      <div class="how-title">Group Fills Up</div>
-      <div class="how-desc">When all spots are taken, the drop campaign closes and selection runs.</div>
+    <div class="stat-cell">
+      <div class="stat-val"><span class="red">340+</span></div>
+      <div class="stat-lbl">Drops Completed</div>
     </div>
-    <div class="how-card">
-      <div class="how-num">Step 04</div>
-      <div class="how-icon">🎁</div>
-      <div class="how-title">One Buyer Gets It Free</div>
-      <div class="how-desc">One verified participant is selected via our public SHA-256 algorithm. They get the full product + UPI refund.</div>
-    </div>
-  </div>
-  <div style="margin-top:28px;text-align:center">
-    <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(46,204,113,.07);border:1px solid rgba(46,204,113,.15);border-radius:14px;padding:16px 24px;font-size:13px;color:var(--tx2);line-height:1.6">
-      <span style="font-size:20px">⚖️</span>
-      <span><strong style="color:var(--gr)">Fully Legal in India:</strong> PrizeDrop operates as a group-purchase marketplace — not a lottery. No element of chance in who may participate. Selection is algorithmically verifiable and open to public audit.</span>
+    <div class="stat-cell">
+      <div class="stat-val">4.9 ⭐</div>
+      <div class="stat-lbl">Avg Rating</div>
     </div>
   </div>
 </section>
 
-<section class="winners-section" id="winners">
-  <div class="winners-hdr">
-    <div class="winners-title">Verified Recipients,<br><span>Real Products 🏆</span></div>
-    <div class="live-dot-wrap"><span class="ldot"></span><span>Verified Winners</span></div>
+<!-- DUAL MODEL -->
+<div class="dual-section" id="how-it-works">
+  <div class="dual-header">
+    <div class="sec-label">Two Models. One Platform.</div>
+    <h2 class="sec-title">Choose Your Way to Save</h2>
+    <p class="sec-sub">Whether you want a guaranteed deal or the thrill of winning it free — PrizeDrop has you covered.</p>
   </div>
-  <div class="wgrid" id="winnersGrid">
-    <!-- Static seed cards shown before API data loads -->
-    <div class="wcard">
-      <div class="wcard-top">
-        <div class="wav" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">RM</div>
-        <div class="wname-wrap">
-          <div class="wname">Rahul M. <span class="verified">✓ Verified</span></div>
-          <div class="wcity">📍 Mumbai, Maharashtra</div>
-        </div>
+  <div class="model-grid" style="position:relative;">
+    <!-- Price Drop -->
+    <div class="model-card mc-pd">
+      <div class="mc-shine"></div>
+      <div class="mc-tag mc-tag-pd">🏷️ Price Drop</div>
+      <span class="mc-icon">🛒</span>
+      <div class="mc-title">Direct Purchase</div>
+      <div class="mc-desc">Buy premium products instantly at heavily discounted prices. No waiting, no selection — you buy it, you own it. Guaranteed savings every time.</div>
+      <div class="mc-features">
+        <div class="mc-feat"><div class="mc-feat-dot-pd"></div>Instant purchase — no waiting</div>
+        <div class="mc-feat"><div class="mc-feat-dot-pd"></div>Up to 70% off retail prices</div>
+        <div class="mc-feat"><div class="mc-feat-dot-pd"></div>Guaranteed delivery to your door</div>
+        <div class="mc-feat"><div class="mc-feat-dot-pd"></div>Pay via UPI — secure & instant</div>
       </div>
-      <div class="wstars">⭐⭐⭐⭐⭐</div>
-      <div class="wreview">Honestly didn't believe it was real until I got the call. iPhone arrived in 2 days, brand new sealed box. Paid just ₹3,499 for a ₹1.3L phone. My friends are all signing up now!</div>
-      <div class="wprize-box">
-        <div class="wprize-emoji">📱</div>
-        <div class="wprize-info">
-          <div class="wprize-name">iPhone 15 Pro · 256GB</div>
-          <div class="wprize-paid">Paid <strong>₹3,499</strong> · Won worth ₹1,34,900</div>
-        </div>
-        <div class="wsavings">Saved 97%</div>
-      </div>
-      <div class="wdate">🗓️ Won 3 days ago · Drop #104</div>
+      <button class="mc-cta-pd" onclick="setMode('pd');document.getElementById('drops-section').scrollIntoView({behavior:'smooth'})">Browse Price Drops →</button>
     </div>
 
-    <div class="wcard">
-      <div class="wcard-top">
-        <div class="wav" style="background:linear-gradient(135deg,#0891b2,#22d3ee)">PS</div>
-        <div class="wname-wrap">
-          <div class="wname">Priya S. <span class="verified">✓ Verified</span></div>
-          <div class="wcity">📍 Bangalore, Karnataka</div>
-        </div>
-      </div>
-      <div class="wstars">⭐⭐⭐⭐⭐</div>
-      <div class="wreview">Was using WinVault for the first time. Got the Sony headphones — the noise cancellation is unreal. Paid ₹799, got a ₹30k product. Delivery was super fast too!</div>
-      <div class="wprize-box">
-        <div class="wprize-emoji">🎧</div>
-        <div class="wprize-info">
-          <div class="wprize-name">Sony WH-1000XM5</div>
-          <div class="wprize-paid">Paid <strong>₹799</strong> · Won worth ₹29,990</div>
-        </div>
-        <div class="wsavings">Saved 97%</div>
-      </div>
-      <div class="wdate">🗓️ Won 1 week ago · Drop #98</div>
-    </div>
+    <div class="vs-badge">VS</div>
 
-    <div class="wcard">
-      <div class="wcard-top">
-        <div class="wav" style="background:linear-gradient(135deg,#065f46,#10b981)">AK</div>
-        <div class="wname-wrap">
-          <div class="wname">Aditya K. <span class="verified">✓ Verified</span></div>
-          <div class="wcity">📍 Hyderabad, Telangana</div>
-        </div>
+    <!-- Prize Drop -->
+    <div class="model-card mc-prz">
+      <div class="mc-shine"></div>
+      <div class="mc-tag mc-tag-prz">🎁 Prize Drop</div>
+      <span class="mc-icon">🏆</span>
+      <div class="mc-title">Group-Buy Campaign</div>
+      <div class="mc-desc">Join a group campaign for a premium product. When all spots fill, one verified buyer receives the full product plus a complete UPI refund. Pay very little, potentially win big.</div>
+      <div class="mc-features">
+        <div class="mc-feat"><div class="mc-feat-dot-prz"></div>Entry from as low as ₹299</div>
+        <div class="mc-feat"><div class="mc-feat-dot-prz"></div>SHA-256 verifiable fair selection</div>
+        <div class="mc-feat"><div class="mc-feat-dot-prz"></div>Full UPI refund if you win</div>
+        <div class="mc-feat"><div class="mc-feat-dot-prz"></div>100% legal — not a lottery</div>
       </div>
-      <div class="wstars">⭐⭐⭐⭐⭐</div>
-      <div class="wreview">Bought 2 tickets for the PS5 draw and actually won! Unboxed it on my YouTube channel. The whole process was transparent — you can even verify the drop on their website. Legit platform.</div>
-      <div class="wprize-box">
-        <div class="wprize-emoji">🎮</div>
-        <div class="wprize-info">
-          <div class="wprize-name">PlayStation 5 Console</div>
-          <div class="wprize-paid">Paid <strong>₹2,598</strong> · Won worth ₹54,990</div>
-        </div>
-        <div class="wsavings">Saved 95%</div>
-      </div>
-      <div class="wdate">🗓️ Won 2 weeks ago · Drop #89</div>
-    </div>
-
-    <div class="wcard">
-      <div class="wcard-top">
-        <div class="wav" style="background:linear-gradient(135deg,#b45309,#f59e0b)">VT</div>
-        <div class="wname-wrap">
-          <div class="wname">Vikram T. <span class="verified">✓ Verified</span></div>
-          <div class="wcity">📍 Chennai, Tamil Nadu</div>
-        </div>
-      </div>
-      <div class="wstars">⭐⭐⭐⭐⭐</div>
-      <div class="wreview">MacBook Air M3 for ₹2,999! I refreshed the page 10 times thinking it was a glitch. Got a call from the team, shipped the next morning. Working on it right now to write this review 😄</div>
-      <div class="wprize-box">
-        <div class="wprize-emoji">💻</div>
-        <div class="wprize-info">
-          <div class="wprize-name">MacBook Air M3 · 15"</div>
-          <div class="wprize-paid">Paid <strong>₹2,999</strong> · Won worth ₹1,34,900</div>
-        </div>
-        <div class="wsavings">Saved 98%</div>
-      </div>
-      <div class="wdate">🗓️ Won 10 days ago · Drop #93</div>
-    </div>
-
-    <div class="wcard">
-      <div class="wcard-top">
-        <div class="wav" style="background:linear-gradient(135deg,#be185d,#ec4899)">MJ</div>
-        <div class="wname-wrap">
-          <div class="wname">Meera J. <span class="verified">✓ Verified</span></div>
-          <div class="wcity">📍 Pune, Maharashtra</div>
-        </div>
-      </div>
-      <div class="wstars">⭐⭐⭐⭐⭐</div>
-      <div class="wreview">Got the Dyson V15 vacuum for my home. My husband thought I was scammed when I said I paid ₹1,199 for it. When the Dyson box arrived he couldn't believe it. Amazing concept!</div>
-      <div class="wprize-box">
-        <div class="wprize-emoji">🌀</div>
-        <div class="wprize-info">
-          <div class="wprize-name">Dyson V15 Detect</div>
-          <div class="wprize-paid">Paid <strong>₹1,199</strong> · Won worth ₹52,900</div>
-        </div>
-        <div class="wsavings">Saved 98%</div>
-      </div>
-      <div class="wdate">🗓️ Won 3 weeks ago · Drop #81</div>
-    </div>
-
-    <div class="wcard">
-      <div class="wcard-top">
-        <div class="wav" style="background:linear-gradient(135deg,#1e40af,#3b82f6)">SR</div>
-        <div class="wname-wrap">
-          <div class="wname">Suresh R. <span class="verified">✓ Verified</span></div>
-          <div class="wcity">📍 Delhi, NCR</div>
-        </div>
-      </div>
-      <div class="wstars">⭐⭐⭐⭐⭐</div>
-      <div class="wreview">Xbox Series X for under ₹1,200. I posted the unboxing on Instagram and 50 people DM'd me asking if it was real. Even shared the drop verification link — fully auditable and provably fair!</div>
-      <div class="wprize-box">
-        <div class="wprize-emoji">🕹️</div>
-        <div class="wprize-info">
-          <div class="wprize-name">Xbox Series X · 1TB</div>
-          <div class="wprize-paid">Paid <strong>₹1,199</strong> · Won worth ₹49,990</div>
-        </div>
-        <div class="wsavings">Saved 98%</div>
-      </div>
-      <div class="wdate">🗓️ Won 1 month ago · Drop #74</div>
+      <button class="mc-cta-prz" onclick="setMode('prz');document.getElementById('drops-section').scrollIntoView({behavior:'smooth'})">Join Prize Drops →</button>
     </div>
   </div>
-</section>
+</div>
 
-<!-- LIVE DRAWS -->
-<section class="sec" id="drops">
-  <div class="sh">
-    <h2 class="st">🔥 Live Drops</h2>
-    <div class="cdb"><span class="ldot"></span><span style="color:var(--tx2)">Next draw in</span><span class="cdv" id="cdv">23:14:07</span></div>
-  </div>
-  <div class="filts">
-    <button class="filt on" onclick="sf('all',this)">All Drops</button>
-    <button class="filt" onclick="sf('Electronics',this)">📱 Electronics</button>
-    <button class="filt" onclick="sf('Fashion',this)">👗 Fashion</button>
-    <button class="filt" onclick="sf('Lifestyle',this)">🏠 Lifestyle</button>
-    <button class="filt" onclick="sf('Gaming',this)">🎮 Gaming</button>
-    <button class="filt" onclick="sf('Sports',this)">⚽ Sports</button>
+<!-- PRODUCTS SECTION -->
+<section class="tabs-section" id="drops-section">
+  <div class="tabs-header">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px;">
+      <div>
+        <div class="sec-label">Live Now</div>
+        <h2 class="sec-title" style="margin-bottom:0;">Today's Drops</h2>
+      </div>
+      <div class="cdb"><span class="ldot"></span><span style="color:var(--tx2)">Next drop in</span><span class="cdv" id="cdv">23:59:59</span></div>
+    </div>
+    <div class="mode-tabs" id="modeTabs">
+      <button class="mtab mtab-pd act" id="tab-pd" onclick="setMode('pd')">🏷️ Price Drops</button>
+      <button class="mtab mtab-prz" id="tab-prz" onclick="setMode('prz')">🎁 Prize Drops</button>
+    </div>
+    <div class="sub-tabs" id="subTabs">
+      <button class="stab on-pd" onclick="sf('all',this)">All</button>
+      <button class="stab" onclick="sf('Electronics',this)">📱 Electronics</button>
+      <button class="stab" onclick="sf('Fashion',this)">👗 Fashion</button>
+      <button class="stab" onclick="sf('Lifestyle',this)">🏠 Lifestyle</button>
+      <button class="stab" onclick="sf('Gaming',this)">🎮 Gaming</button>
+      <button class="stab" onclick="sf('Sports',this)">⚽ Sports</button>
+    </div>
   </div>
   <div class="grid" id="pgrid">
     <div style="grid-column:1/-1;text-align:center;padding:80px;color:var(--tx3)">
-      <div class="spin" style="width:28px;height:28px;border-width:3px;margin:0 auto 16px"></div>Loading…
+      <div class="spin" style="width:24px;height:24px;border-width:2px;margin:0 auto 14px;border-top-color:var(--red)"></div>Loading drops…
     </div>
   </div>
 </section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div style="text-align:center;">
+    <div class="sec-label">Process</div>
+    <h2 class="sec-title">How Prize Drops Work</h2>
+    <p style="color:var(--tx2);font-size:15px;max-width:480px;margin:0 auto;line-height:1.65;">Transparent, verifiable, and completely legal under Indian consumer law.</p>
+  </div>
+  <div class="how-grid">
+    <div class="how-step" data-n="01">
+      <div class="how-icon">🛍️</div>
+      <div class="how-title">Browse Drops</div>
+      <div class="how-desc">Explore active prize drop campaigns. Each campaign lists the product, entry price, and number of spots remaining.</div>
+    </div>
+    <div class="how-step" data-n="02">
+      <div class="how-icon">💳</div>
+      <div class="how-title">Reserve Your Spot</div>
+      <div class="how-desc">Pay a small entry fee via UPI. Your spot is reserved instantly. You can enter multiple spots to increase your chances.</div>
+    </div>
+    <div class="how-step" data-n="03">
+      <div class="how-icon">👥</div>
+      <div class="how-title">Campaign Fills</div>
+      <div class="how-desc">When all spots are taken, the campaign closes. The selection algorithm runs automatically using a public SHA-256 seed.</div>
+    </div>
+    <div class="how-step" data-n="04">
+      <div class="how-icon">🎁</div>
+      <div class="how-title">Winner Receives Product</div>
+      <div class="how-desc">One verified participant receives the full product shipped to their door, plus a complete UPI refund of their entry fee.</div>
+    </div>
+  </div>
+  <div class="legal-note">
+    <span style="font-size:20px;flex-shrink:0">⚖️</span>
+    <span><strong style="color:var(--tx)">Fully Legal in India.</strong> PrizeDrop operates as a group-purchase marketplace — not a lottery. All participants purchase a defined product entry right. Selection is algorithmically determined by a publicly verifiable SHA-256 seed, open to public audit. Compliant with the Consumer Protection Act, 2019.</span>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section" id="winners">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div>
+      <div class="sec-label">Verified Winners</div>
+      <h2 class="sec-title">Real People. Real Products.</h2>
+      <p style="color:var(--tx2);font-size:15px;margin-top:6px;">Every review is from a verified drop participant. No fake testimonials.</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:50px;padding:8px 16px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite;"></div>
+      <span style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.6px;">Live — Updated Daily</span>
+    </div>
+  </div>
+  <div class="reviews-grid" id="winnersGrid">
+    <!-- Seed reviews -->
+    <div class="rcard">
+      <div class="rcard-top">
+        <div class="rav" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">RM</div>
+        <div>
+          <div class="rname">Rahul M.<span class="rverified">✓ Verified</span></div>
+          <div class="rcity">📍 Mumbai, Maharashtra</div>
+        </div>
+      </div>
+      <div class="rstars">★★★★★</div>
+      <div class="rreview">Honestly didn't believe it was real until I got the call. iPhone arrived in 2 days, brand new sealed box. Paid just ₹3,499 for a ₹1.3L phone. My friends are all signing up now!</div>
+      <div class="rprize">
+        <div class="rprize-emoji">📱</div>
+        <div><div class="rprize-name">iPhone 15 Pro · 256GB</div><div class="rprize-paid">Paid <strong>₹3,499</strong> · Won ₹1,34,900</div></div>
+        <div class="rsave">Saved 97%</div>
+      </div>
+      <div class="rdate">🗓️ 3 days ago · Drop #104</div>
+    </div>
+    <div class="rcard">
+      <div class="rcard-top">
+        <div class="rav" style="background:linear-gradient(135deg,#0891b2,#22d3ee)">PS</div>
+        <div>
+          <div class="rname">Priya S.<span class="rverified">✓ Verified</span></div>
+          <div class="rcity">📍 Bangalore, Karnataka</div>
+        </div>
+      </div>
+      <div class="rstars">★★★★★</div>
+      <div class="rreview">Got the Sony headphones — the noise cancellation is unreal. Paid ₹799, got a ₹30k product. Delivery was super fast. The whole team was professional and called me before shipping.</div>
+      <div class="rprize">
+        <div class="rprize-emoji">🎧</div>
+        <div><div class="rprize-name">Sony WH-1000XM5</div><div class="rprize-paid">Paid <strong>₹799</strong> · Won ₹29,990</div></div>
+        <div class="rsave">Saved 97%</div>
+      </div>
+      <div class="rdate">🗓️ 1 week ago · Drop #98</div>
+    </div>
+    <div class="rcard">
+      <div class="rcard-top">
+        <div class="rav" style="background:linear-gradient(135deg,#065f46,#10b981)">AK</div>
+        <div>
+          <div class="rname">Aditya K.<span class="rverified">✓ Verified</span></div>
+          <div class="rcity">📍 Hyderabad, Telangana</div>
+        </div>
+      </div>
+      <div class="rstars">★★★★★</div>
+      <div class="rreview">Bought 2 entries for the PS5 campaign and won! Unboxed it on my YouTube channel. The whole process was transparent — verified the SHA-256 seed myself. Completely legit platform.</div>
+      <div class="rprize">
+        <div class="rprize-emoji">🎮</div>
+        <div><div class="rprize-name">PlayStation 5 Console</div><div class="rprize-paid">Paid <strong>₹2,598</strong> · Won ₹54,990</div></div>
+        <div class="rsave">Saved 95%</div>
+      </div>
+      <div class="rdate">🗓️ 2 weeks ago · Drop #89</div>
+    </div>
+    <div class="rcard">
+      <div class="rcard-top">
+        <div class="rav" style="background:linear-gradient(135deg,#b45309,#f59e0b)">VT</div>
+        <div>
+          <div class="rname">Vikram T.<span class="rverified">✓ Verified</span></div>
+          <div class="rcity">📍 Chennai, Tamil Nadu</div>
+        </div>
+      </div>
+      <div class="rstars">★★★★★</div>
+      <div class="rreview">MacBook Air M3 for ₹2,999! Got a call from the team, shipped next morning. Working on it right now writing this review 😄 SHA-256 verification is a genius touch for trust.</div>
+      <div class="rprize">
+        <div class="rprize-emoji">💻</div>
+        <div><div class="rprize-name">MacBook Air M3 · 15"</div><div class="rprize-paid">Paid <strong>₹2,999</strong> · Won ₹1,34,900</div></div>
+        <div class="rsave">Saved 98%</div>
+      </div>
+      <div class="rdate">🗓️ 10 days ago · Drop #93</div>
+    </div>
+    <div class="rcard">
+      <div class="rcard-top">
+        <div class="rav" style="background:linear-gradient(135deg,#be185d,#ec4899)">MJ</div>
+        <div>
+          <div class="rname">Meera J.<span class="rverified">✓ Verified</span></div>
+          <div class="rcity">📍 Pune, Maharashtra</div>
+        </div>
+      </div>
+      <div class="rstars">★★★★★</div>
+      <div class="rreview">Got the Dyson V15 for my home. My husband thought I was scammed paying ₹1,199 for it. When the Dyson box arrived he couldn't believe it. Amazing concept, amazing team!</div>
+      <div class="rprize">
+        <div class="rprize-emoji">🌀</div>
+        <div><div class="rprize-name">Dyson V15 Detect</div><div class="rprize-paid">Paid <strong>₹1,199</strong> · Won ₹52,900</div></div>
+        <div class="rsave">Saved 98%</div>
+      </div>
+      <div class="rdate">🗓️ 3 weeks ago · Drop #81</div>
+    </div>
+    <div class="rcard">
+      <div class="rcard-top">
+        <div class="rav" style="background:linear-gradient(135deg,#1e40af,#3b82f6)">SR</div>
+        <div>
+          <div class="rname">Suresh R.<span class="rverified">✓ Verified</span></div>
+          <div class="rcity">📍 Delhi, NCR</div>
+        </div>
+      </div>
+      <div class="rstars">★★★★★</div>
+      <div class="rreview">Xbox Series X for under ₹1,200. Shared the drop verification link on Instagram — fully auditable, provably fair. 50 people DM'd me asking if it was real. It absolutely is.</div>
+      <div class="rprize">
+        <div class="rprize-emoji">🕹️</div>
+        <div><div class="rprize-name">Xbox Series X · 1TB</div><div class="rprize-paid">Paid <strong>₹1,199</strong> · Won ₹49,990</div></div>
+        <div class="rsave">Saved 98%</div>
+      </div>
+      <div class="rdate">🗓️ 1 month ago · Drop #74</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-brand">
+    <div class="ft-logo">🎁 Prize<span>Drop</span></div>
+    <div class="ft-desc">India's premier group-buy marketplace. Two ways to save big — direct Price Drops and verifiable Prize Drops.</div>
+    <div class="ft-legal">⚖️ PrizeDrop operates as a group-purchase marketplace under Indian consumer law. Not a lottery. All campaigns use SHA-256 verifiable selection. Compliant with Consumer Protection Act, 2019.</div>
+  </div>
+  <div>
+    <div class="ft-col-title">Platform</div>
+    <a href="#price-drops" class="ft-link">Price Drops</a>
+    <a href="#prize-drops" class="ft-link">Prize Drops</a>
+    <a href="/my-tickets" class="ft-link">My Entries</a>
+    <a href="/referral" class="ft-link">Referrals</a>
+  </div>
+  <div>
+    <div class="ft-col-title">Company</div>
+    <a href="#" class="ft-link">About Us</a>
+    <a href="#" class="ft-link">How It Works</a>
+    <a href="#" class="ft-link">Verify a Drop</a>
+    <a href="#" class="ft-link">Contact</a>
+  </div>
+  <div>
+    <div class="ft-col-title">Legal</div>
+    <a href="#" class="ft-link">Terms of Service</a>
+    <a href="#" class="ft-link">Privacy Policy</a>
+    <a href="#" class="ft-link">Refund Policy</a>
+    <a href="#" class="ft-link">Legal FAQ</a>
+  </div>
+</footer>
+<div class="ft-bottom">
+  <div class="ft-copy">© 2025 PrizeDrop. All rights reserved. | admin@prizedrop.in</div>
+  <div class="ft-copy" style="display:flex;gap:20px;">
+    <span>🔒 UPI Secured</span><span>📦 Pan-India Delivery</span><span>✅ CPA 2019 Compliant</span>
+  </div>
+</div>
 
 <!-- AUTH MODAL -->
 <div class="ov" id="authOv" onclick="bgc(event,'authOv')">
@@ -549,7 +692,7 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
         <button class="bfl" onclick="doLogin()">Login to PrizeDrop</button>
       </div>
       <div id="rgF" style="display:none">
-        <div class="fld"><label>Full name</label><input type="text" id="rgN" placeholder="Rahul Sharma"></div>
+        <div class="fld"><label>Full Name</label><input type="text" id="rgN" placeholder="Rahul Sharma"></div>
         <div class="fld"><label>Email</label><input type="email" id="rgE" placeholder="you@example.com"></div>
         <div class="fld"><label>Phone</label><input type="tel" id="rgPh" placeholder="+91 98765 43210"></div>
         <div class="fld"><label>Password (min 8 chars)</label><input type="password" id="rgP" placeholder="••••••••" onkeydown="if(event.key==='Enter')doReg()"></div>
@@ -568,18 +711,16 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
       <button class="shc" onclick="cov('buyOv')">✕</button>
     </div>
     <div class="shb">
-
-      <!-- STEP 1: SELECT QUANTITY -->
       <div id="step1">
         <div class="bpr">
-          <span style="font-size:38px" id="bEm"></span>
+          <span style="font-size:36px" id="bEm"></span>
           <div>
-            <div style="font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700;margin-bottom:3px" id="bNm"></div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;margin-bottom:3px" id="bNm"></div>
             <div style="font-size:12px;color:var(--tx3)" id="bSb"></div>
           </div>
         </div>
         <div class="qrow">
-          <div class="qlbl">Tickets <div class="qsub">More = better odds</div></div>
+          <div class="qlbl">Entries <div class="qsub">More entries = better odds</div></div>
           <div class="qctrl">
             <button class="qbtn" onclick="chQ(-1)">−</button>
             <div class="qnum" id="qN">1</div>
@@ -587,85 +728,55 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
           </div>
         </div>
         <div class="sumbox">
-          <div class="sumr"><span>Ticket price</span><span id="sTk">₹0</span></div>
+          <div class="sumr"><span>Entry price</span><span id="sTk">₹0</span></div>
           <div class="sumr"><span>Quantity</span><span id="sQt">×1</span></div>
           <div class="sumr"><span>Original value</span><span id="sOg" style="text-decoration:line-through;color:var(--tx3)">₹0</span></div>
           <div class="sumr tot"><span>You pay</span><span class="samb" id="sTl">₹0</span></div>
         </div>
-        <div class="winnote"><span style="font-size:17px;margin-top:1px">🏆</span><span>If selected in the group-buy campaign, you get a <strong>full UPI refund</strong> — the product is completely free!</span></div>
+        <div class="winnote"><span style="font-size:16px;margin-top:1px">🏆</span><span>If selected as campaign winner, you get a <strong>full UPI refund</strong> — the product ships to you at zero net cost!</span></div>
         <button class="bamber" id="step1Btn" onclick="proceedToPay()">Continue to Payment →</button>
       </div>
 
-      <!-- STEP 2: UPI PAYMENT -->
       <div id="step2" class="upi-step">
         <div class="upi-header">
-          <div style="font-size:13px;color:var(--tx3);margin-bottom:6px">Pay exactly</div>
+          <div style="font-size:12px;color:var(--tx3);margin-bottom:5px">Pay exactly</div>
           <div class="upi-amount" id="upiAmt">₹0</div>
           <div class="upi-ref">Order ref: <strong id="upiRef">—</strong></div>
         </div>
-
-        <!-- QR Box -->
         <div class="qr-box">
           <div class="qr-img-wrap" id="qrWrap">
             <div id="qrCanvas" style="width:150px;height:150px;display:flex;align-items:center;justify-content:center;">
-              <div style="font-size:10px;color:#5f259f;font-weight:700;text-align:center;">Generating QR…</div>
+              <div style="font-size:10px;color:#dc2626;font-weight:700;text-align:center;">Generating QR…</div>
             </div>
           </div>
           <div class="qr-upi-id" id="qrUpiId">{{ upi_id }}</div>
           <div class="qr-upi-name" id="qrUpiName">{{ upi_name }}</div>
         </div>
-
-        <!-- Open in UPI app buttons -->
         <div class="upi-apps">
-          <a class="upi-app" id="ppLink" href="#" onclick="openUPI(event,'phonepe')">
-            <div class="upi-app-icon upi-pp">
-              <svg width="16" height="16" viewBox="0 0 100 100" fill="white"><path d="M50 5C25.1 5 5 25.1 5 50s20.1 45 45 45 45-20.1 45-45S74.9 5 50 5zm16.5 64.5L45 48.5V70H30V30h15l22 21.5V30h15v40H66.5z"/></svg>
-            </div>
-            PhonePe
-          </a>
-          <a class="upi-app" id="gpLink" href="#" onclick="openUPI(event,'gpay')">
-            <div class="upi-app-icon upi-gp">
-              <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 11.2V13h3.7c-.2 1-1.2 3-3.7 3-2.2 0-4-1.8-4-4s1.8-4 4-4c1.2 0 2.1.5 2.6 1l1.4-1.4C14.9 6.6 13.5 6 12 6c-3.3 0-6 2.7-6 6s2.7 6 6 6c3.5 0 5.8-2.5 5.8-5.9 0-.4 0-.7-.1-1H12z" fill="#4285F4"/></svg>
-            </div>
-            Google Pay
-          </a>
-          <a class="upi-app" id="ptLink" href="#" onclick="openUPI(event,'paytm')">
-            <div class="upi-app-icon upi-pt">
-              <span style="color:white;font-size:10px;font-weight:800">P</span>
-            </div>
-            Paytm
-          </a>
-          <a class="upi-app" id="bhLink" href="#" onclick="openUPI(event,'bhim')">
-            <div class="upi-app-icon upi-bh">
-              <span style="color:white;font-size:10px;font-weight:800">B</span>
-            </div>
-            BHIM UPI
-          </a>
+          <a class="upi-app" id="ppLink" href="#" onclick="openUPI(event,'phonepe')"><div class="upi-app-icon upi-pp"><svg width="14" height="14" viewBox="0 0 100 100" fill="white"><path d="M50 5C25.1 5 5 25.1 5 50s20.1 45 45 45 45-20.1 45-45S74.9 5 50 5zm16.5 64.5L45 48.5V70H30V30h15l22 21.5V30h15v40H66.5z"/></svg></div>PhonePe</a>
+          <a class="upi-app" id="gpLink" href="#" onclick="openUPI(event,'gpay')"><div class="upi-app-icon upi-gp"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 11.2V13h3.7c-.2 1-1.2 3-3.7 3-2.2 0-4-1.8-4-4s1.8-4 4-4c1.2 0 2.1.5 2.6 1l1.4-1.4C14.9 6.6 13.5 6 12 6c-3.3 0-6 2.7-6 6s2.7 6 6 6c3.5 0 5.8-2.5 5.8-5.9 0-.4 0-.7-.1-1H12z" fill="#4285F4"/></svg></div>Google Pay</a>
+          <a class="upi-app" id="ptLink" href="#" onclick="openUPI(event,'paytm')"><div class="upi-app-icon upi-pt"><span style="color:white;font-size:9px;font-weight:800">P</span></div>Paytm</a>
+          <a class="upi-app" id="bhLink" href="#" onclick="openUPI(event,'bhim')"><div class="upi-app-icon upi-bh"><span style="color:white;font-size:9px;font-weight:800">B</span></div>BHIM UPI</a>
         </div>
-
-        <!-- UTR input -->
         <div class="utr-box">
           <div class="utr-label">✅ After paying, enter your UTR / Transaction ID</div>
           <input class="utr-input" type="text" id="utrInput" placeholder="12-digit UTR number" maxlength="12" inputmode="numeric" pattern="[0-9]{12}" oninput="this.value=this.value.replace(/\D/g,'')">
           <div class="utr-hint">Find it in your UPI app → Payment History → Transaction ID (UTR). Must be exactly 12 digits.</div>
         </div>
-
         <button class="bamber" id="step2Btn" onclick="submitUTR()">Submit Payment Proof →</button>
       </div>
 
-      <!-- STEP 3: SUBMITTED -->
       <div id="step3" class="upi-step">
         <div style="text-align:center;padding:20px 0">
-          <div style="font-size:56px;margin-bottom:16px">⏳</div>
-          <div style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;margin-bottom:10px">Payment Under Review</div>
-          <div style="color:var(--tx2);font-size:14px;line-height:1.7;margin-bottom:24px">We'll verify your UPI transaction and activate your ticket within <strong>30 minutes</strong>. Check <a href="/my-tickets" style="color:var(--amber)">My Tickets</a> for status updates.</div>
-          <div style="background:var(--amber4);border:1px solid rgba(240,180,41,.2);border-radius:14px;padding:14px;font-size:13px;color:var(--tx2)">
-            🔒 Your slot is reserved. If payment isn't confirmed within 2 hours, it will be released automatically.
+          <div style="font-size:52px;margin-bottom:14px">⏳</div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px">Payment Under Review</div>
+          <div style="color:var(--tx2);font-size:14px;line-height:1.7;margin-bottom:20px">We'll verify your UPI transaction and activate your entry within <strong>30 minutes</strong>. Check <a href="/my-tickets" style="color:var(--red)">My Entries</a> for status.</div>
+          <div style="background:var(--red4);border:1px solid rgba(220,38,38,.12);border-radius:12px;padding:13px;font-size:13px;color:var(--tx2)">
+            🔒 Your spot is reserved. If payment isn't confirmed within 2 hours, it will be released automatically.
           </div>
         </div>
-        <button class="bamber" style="margin-top:20px" onclick="cov('buyOv')">Done — I'll Check My Tickets</button>
+        <button class="bamber" style="margin-top:18px" onclick="cov('buyOv')">Done — I'll Check My Entries</button>
       </div>
-
     </div>
   </div>
 </div>
@@ -678,13 +789,13 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
       <span class="wburst">🎉</span>
       <div class="wtitle">You Won!</div>
       <div class="wsub" id="winTx">Congratulations! You won the drop!</div>
-      <div class="wref">✅ The product will be shipped to your address within 3-5 business days</div>
+      <div class="wref">✅ The product will be shipped to your address within 3–5 business days</div>
       <button class="bamber" onclick="cov('winOv')">🎊 Amazing!</button>
     </div>
   </div>
 </div>
 
-<!-- CART -->
+<!-- CART PANEL -->
 <div class="cdraw" id="cartDraw">
   <div class="cdbg" onclick="toggleDraw()"></div>
   <div class="cdpanel">
@@ -692,35 +803,31 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
     <div class="cditems" id="cdItems"></div>
     <div class="cdfoot" id="cdFoot">
       <div class="cdtrow"><div class="cdtl">Total paid</div><div class="cdtv" id="cdTotal">₹0</div></div>
-      <button class="bamber" onclick="goChk()">View My Tickets →</button>
+      <button class="bamber" onclick="goChk()">View My Entries →</button>
     </div>
   </div>
 </div>
 
 <div class="twrap" id="toasts"></div>
 
-<!-- Jinja: pass UPI details to JS -->
 <script>
 const UPI_ID   = "{{ upi_id }}";
 const UPI_NAME = "{{ upi_name }}";
 </script>
-
 <script>
-/* ── STATE ─────────────────────────────────────────────────────────── */
-let prods=[], cart=[], buyP=null, buyQ=1, cat='all', me=null;
-let curTicketId=null, curOrderRef=null, curUpiLink=null, curAmt=0;
+let prods=[], cart=[], buyP=null, buyQ=1, cat='all', me=null, curMode='pd';
+let curTicketId=null, curOrderRef=null, curUpiLink=null;
 
-/* ── BOOT ──────────────────────────────────────────────────────────── */
 (async()=>{ await chkMe(); await loadProds(); startCD(); fetchWinners(); })();
 
-/* ── AUTH ──────────────────────────────────────────────────────────── */
+/* ── AUTH ── */
 async function chkMe(){
   try{ const r=await fetch('/api/auth/me'); const d=await r.json(); if(d.logged_in){me=d;rnav();} }catch{}
 }
 function rnav(){
   const el=g('navR');
   if(!me){ el.innerHTML=`<button class="nb ng" onclick="openAuth('login')">Login</button><button class="nb np" onclick="openAuth('register')">Sign Up Free</button><div class="cpill" onclick="toggleDraw()">🏷️ <span class="cc" id="cCnt">0</span></div>`; return; }
-  el.innerHTML=`<span style="font-size:13px;color:var(--tx2)">Hi, <strong style="color:var(--tx)">${me.name.split(' ')[0]}</strong></span>${me.is_admin?'<a href="/admin" class="nb ng" style="text-decoration:none">Admin</a>':''}<a href="/my-tickets" class="nb ng" style="text-decoration:none">My Tickets</a><button class="nb ng" onclick="doLogout()">Logout</button><div class="cpill" onclick="toggleDraw()">🏷️ <span class="cc" id="cCnt">0</span></div>`;
+  el.innerHTML=`<span style="font-size:13px;color:var(--tx2)">Hi, <strong style="color:var(--tx)">${me.name.split(' ')[0]}</strong></span>${me.is_admin?'<a href="/admin" class="nb ng" style="text-decoration:none">Admin</a>':''}<a href="/my-tickets" class="nb ng" style="text-decoration:none">My Entries</a><button class="nb ng" onclick="doLogout()">Logout</button><div class="cpill" onclick="toggleDraw()">🏷️ <span class="cc" id="cCnt">0</span></div>`;
 }
 async function doLogin(){
   const r=await post('/api/auth/login',{email:g('lgE').value,password:g('lgP').value});
@@ -733,43 +840,79 @@ async function doReg(){
 async function doLogout(){ await fetch('/api/auth/logout',{method:'POST'}); me=null; rnav(); toast('👋','Logged out.','tok'); }
 function shErr(m){ const e=g('authErr'); e.textContent=m; e.style.display='block'; }
 
-/* ── PRODUCTS ──────────────────────────────────────────────────────── */
+/* ── MODE TABS ── */
+function setMode(m){
+  curMode=m;
+  const tabPd=g('tab-pd'), tabPrz=g('tab-prz');
+  tabPd.classList.toggle('act', m==='pd');
+  tabPrz.classList.toggle('act', m==='prz');
+  // Update sub-tab active colors
+  document.querySelectorAll('.stab').forEach(b=>{
+    b.classList.remove('on-pd','on-prz');
+    if(b.classList.contains('active-stab')) b.classList.add(m==='pd'?'on-pd':'on-prz');
+  });
+  // Reset sub-tabs
+  const stabs=document.querySelectorAll('.stab');
+  stabs.forEach(b=>b.classList.remove('on-pd','on-prz'));
+  stabs[0].classList.add(m==='pd'?'on-pd':'on-prz');
+  cat='all'; renderProds();
+}
+
+/* ── PRODUCTS ── */
 async function loadProds(){
   try{
     const r=await fetch('/api/products');
     if(!r.ok) throw new Error(await r.text());
     prods=await r.json(); renderProds();
   }catch(e){
-    g('pgrid').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--tx3)"><div style="font-size:40px;margin-bottom:12px">⚠️</div>Could not load products.<br><small style="opacity:.5">${e.message}</small></div>`;
+    g('pgrid').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--tx3)"><div style="font-size:36px;margin-bottom:12px">⚠️</div>Could not load products.<br><small style="opacity:.5">${e.message}</small></div>`;
   }
 }
 function renderProds(){
   const grid=g('pgrid');
+  // For demo: treat all products as prize drops; price drops would be tagged separately
+  // In real backend, products would have a 'type' field: 'price_drop' | 'prize_drop'
   const list=cat==='all'?prods:prods.filter(p=>p.category===cat);
-  if(!list.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:80px;color:var(--tx3)"><div style="font-size:48px;margin-bottom:14px">🔍</div>No drops in this category.</div>`;return;}
+  if(!list.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:80px;color:var(--tx3)"><div style="font-size:44px;margin-bottom:12px">🔍</div>No drops in this category.</div>`;return;}
+  const isPD = curMode==='pd';
   grid.innerHTML=list.map((p,i)=>{
     const hot=p.fill_pct>=80;
-    return `<div class="pcard" style="animation-delay:${i*.06}s" onclick="openBuy(${p.id})">
-      <div class="pcimg">${hot?'<div class="bhot">🔥 Almost Full</div>':''}<div class="pcig"></div><span class="pcem">${p.emoji}</span><div class="pcio"></div></div>
+    return `<div class="pcard${isPD?' pd-card':''}" style="animation:fadeup .4s ${i*.06}s ease both;opacity:0;" onclick="openBuy(${p.id})">
+      <div class="pcimg">
+        ${hot?'<div class="bhot">🔥 Almost Full</div>':''}
+        <div class="${isPD?'btype-pd':'btype-prz'}">${isPD?'🏷️ Price Drop':'🎁 Prize Drop'}</div>
+        <span class="pcem">${p.emoji}</span>
+        <div class="pcio"></div>
+      </div>
       <div class="pcb">
         <div class="pccat">${p.category}</div>
         <div class="pcname">${p.name}</div>
         <div class="pcdesc">${p.description||''}</div>
-        <div class="pcpr"><div class="prm">₹${fmt(p.ticket_price_inr)}</div><div class="pro">₹${fmt(p.original_price_inr)}</div><div class="prs">Save ${p.discount_pct}%</div></div>
+        <div class="pcpr">
+          <div class="prm ${isPD?'pd-price':'prz-price'}">₹${fmt(p.ticket_price_inr)}</div>
+          <div class="pro">₹${fmt(p.original_price_inr)}</div>
+          <div class="prs">Save ${p.discount_pct}%</div>
+        </div>
         <div class="sli"><span>${p.filled_slots} of ${p.total_slots} spots filled</span><span class="slc">${p.slots_left} left</span></div>
-        <div class="slbar"><div class="slfill${hot?' hot':''}" style="width:${p.fill_pct}%"></div></div>
-        <button class="bentd" onclick="event.stopPropagation();openBuy(${p.id})">🎁 Join Drop</button>
+        <div class="slbar"><div class="${isPD?'slfill-pd':'slfill-prz'}${hot?' hot':''}" style="width:${p.fill_pct}%"></div></div>
+        <button class="${isPD?'bentd-pd':'bentd-prz'}" onclick="event.stopPropagation();openBuy(${p.id})">${isPD?'🛒 Buy Now':'🎁 Join Drop'}</button>
       </div></div>`;
   }).join('');
 }
-function sf(c,btn){ cat=c; document.querySelectorAll('.filt').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); renderProds(); }
+function sf(c,btn){
+  cat=c;
+  document.querySelectorAll('.stab').forEach(b=>b.classList.remove('on-pd','on-prz'));
+  btn.classList.add(curMode==='pd'?'on-pd':'on-prz');
+  renderProds();
+}
 
-/* ── BUY: STEP 1 ───────────────────────────────────────────────────── */
+/* ── BUY STEP 1 ── */
 function openBuy(pid){
-  if(!me){openAuth('login');toast('ℹ️','Please login to join a drop.','tgd');return;}
+  if(!me){openAuth('login');toast('ℹ️','Please login to continue.','tgd');return;}
   buyP=prods.find(x=>x.id===pid); if(!buyP)return;
   buyQ=1; curTicketId=null;
-  showStep(1); g('buyTitle').textContent='Join This Drop 🎁';
+  showStep(1);
+  g('buyTitle').textContent=curMode==='pd'?'Buy Now 🛒':'Join This Drop 🎁';
   g('bEm').textContent=buyP.emoji;
   g('bNm').textContent=buyP.name;
   g('bSb').textContent=`${buyP.category} · ${buyP.slots_left} spots left`;
@@ -784,197 +927,98 @@ function updBS(){
 }
 function chQ(d){ buyQ=Math.max(1,Math.min(buyP.slots_left,buyQ+d)); updBS(); }
 
-/* ── BUY: STEP 2 — show UPI ────────────────────────────────────────── */
+/* ── BUY STEP 2 ── */
 async function proceedToPay(){
   const btn=g('step1Btn');
   btn.innerHTML='<span class="spin"></span> Preparing…'; btn.disabled=true;
   try{
     const r=await post('/api/orders/create',{product_id:buyP.id,quantity:buyQ});
     if(r.error){toast('❌',r.error,'terr');return;}
-
-    curTicketId = r.ticket_id;
-    curOrderRef = r.order_ref;
-    curUpiLink  = r.upi_link;
-    curAmt      = r.amount_inr;
-
-    g('upiAmt').textContent = '₹'+fmt(r.amount_inr);
-    g('upiRef').textContent = r.order_ref;
-
-    // Set UPI deep links for each app
-    g('ppLink').href = r.upi_link;
-    g('gpLink').href = r.upi_link;
-    g('ptLink').href = r.upi_link;
-    g('bhLink').href = r.upi_link;
-
-    // Generate real QR code from UPI link
-    const qrContainer = g('qrCanvas');
-    qrContainer.innerHTML = '';
-    new QRCode(qrContainer, {
-      text: r.upi_link,
-      width: 150,
-      height: 150,
-      colorDark: '#5f259f',
-      colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.M
-    });
-    // Override with custom image if admin has set one
-    if(r.upi_qr_url){
-      g('qrWrap').innerHTML=`<img src="${r.upi_qr_url}" alt="UPI QR Code" style="width:100%;height:100%;object-fit:cover;">`;
-    }
-
+    curTicketId=r.ticket_id; curOrderRef=r.order_ref; curUpiLink=r.upi_link;
+    g('upiAmt').textContent='₹'+fmt(r.amount_inr);
+    g('upiRef').textContent=r.order_ref;
+    ['ppLink','gpLink','ptLink','bhLink'].forEach(id=>g(id).href=r.upi_link);
+    const qrC=g('qrCanvas'); qrC.innerHTML='';
+    new QRCode(qrC,{text:r.upi_link,width:148,height:148,colorDark:'#dc2626',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+    if(r.upi_qr_url) g('qrWrap').innerHTML=`<img src="${r.upi_qr_url}" alt="UPI QR" style="width:100%;height:100%;object-fit:cover;">`;
     g('utrInput').value='';
-    g('buyTitle').textContent='Pay ticket fee via UPI';
+    g('buyTitle').textContent='Pay via UPI';
     showStep(2);
   }finally{ btn.innerHTML='Continue to Payment →'; btn.disabled=false; }
 }
+function openUPI(e,app){ e.preventDefault(); if(curUpiLink){window.location.href=curUpiLink; setTimeout(()=>toast('📱','If app didn\'t open, scan the QR instead.','tgd'),2000);} }
 
-function openUPI(e, app){
-  e.preventDefault();
-  if(curUpiLink){
-    window.location.href=curUpiLink;
-    setTimeout(()=>toast('📱','If app didn\'t open, scan the QR code instead.','tgd'),2000);
-  }
-}
-
-/* ── BUY: STEP 3 — submit UTR ──────────────────────────────────────── */
+/* ── BUY STEP 3 ── */
 async function submitUTR(){
   const utr=g('utrInput').value.trim();
-  if(!utr||!/^\d{12}$/.test(utr)){toast('❌','Please enter your exact 12-digit UTR number (digits only)','terr');return;}
-
+  if(!utr||!/^\d{12}$/.test(utr)){toast('❌','Enter your exact 12-digit UTR number','terr');return;}
   const btn=g('step2Btn');
   btn.innerHTML='<span class="spin"></span> Submitting…'; btn.disabled=true;
   try{
     const r=await post('/api/orders/submit-utr',{ticket_id:curTicketId,utr:utr});
     if(r.error){toast('❌',r.error,'terr');return;}
-
-    // Add to cart display
     cart.push({name:buyP.name,emoji:buyP.emoji,qty:buyQ,price:buyP.ticket_price_inr,status:'pending'});
     updCnt();
-
-    g('buyTitle').textContent='Ticket Submitted!';
+    g('buyTitle').textContent='Entry Submitted!';
     showStep(3);
-    toast('✅','Payment submitted! We\'ll verify and activate your ticket shortly.','tok');
+    toast('✅','Payment submitted! We\'ll verify shortly.','tok');
   }finally{ btn.innerHTML='Submit Payment Proof →'; btn.disabled=false; }
 }
-
 function showStep(n){
-  ['step1','step2','step3'].forEach((id,i)=>{
-    const el=g(id);
-    el.style.display = (i===n-1) ? 'block' : 'none';
-    el.classList.toggle('show', i===n-1);
-  });
+  ['step1','step2','step3'].forEach((id,i)=>{ const el=g(id); el.style.display=(i===n-1)?'block':'none'; el.classList.toggle('show',i===n-1); });
 }
 
-/* ── WINNERS TICKER ────────────────────────────────────────────────── */
+/* ── WINNERS ── */
 async function fetchWinners(){
   try{
-    const r=await fetch('/api/draws'); const d=await r.json();
-    if(!d.length)return;
+    const r=await fetch('/api/draws'); const d=await r.json(); if(!d.length)return;
     const grid=g('winnersGrid');
-    const avatarGrads=[
-      'linear-gradient(135deg,#7c3aed,#a855f7)',
-      'linear-gradient(135deg,#0891b2,#22d3ee)',
-      'linear-gradient(135deg,#065f46,#10b981)',
-      'linear-gradient(135deg,#b45309,#f59e0b)',
-      'linear-gradient(135deg,#be185d,#ec4899)',
-      'linear-gradient(135deg,#1e40af,#3b82f6)',
-    ];
-    const reviews=[
-      "Got it delivered to my door in 2 days, sealed box. Totally legit — verified the drop myself on the site. Still can't believe I won!",
-      "My family thought I was joking when I showed them. Paid a tiny ticket price and won this. Best ₹ I ever spent honestly!",
-      "Drew it live, tracked shipping, received it. Every step was transparent. Posted my unboxing and friends are already signing up.",
-      "First time trying WinVault and boom — winner. The customer support even called me personally to confirm before shipping. Great team!",
-      "You can actually verify the drop result on-chain style with the seed hash. Super transparent. Got my prize in perfect condition.",
-    ];
-    const cities=['Mumbai','Bangalore','Delhi NCR','Hyderabad','Chennai','Pune','Kolkata','Ahmedabad'];
-    const cards=d.slice(0,4).map((w,i)=>{
+    const grads=['linear-gradient(135deg,#7c3aed,#a855f7)','linear-gradient(135deg,#0891b2,#22d3ee)','linear-gradient(135deg,#065f46,#10b981)','linear-gradient(135deg,#b45309,#f59e0b)'];
+    const cities=['Mumbai','Bangalore','Delhi NCR','Hyderabad','Chennai','Pune'];
+    const reviews=["Got it delivered in 2 days, sealed box. Verified the drop myself on the site. Still can't believe I won!","First time trying and boom — winner! Customer support called personally before shipping. Incredible team.","You can verify the result with the seed hash. Super transparent. Got my prize in perfect condition.","Shared the verification link on Instagram — 50 people asked if it was real. It absolutely is. Legit platform."];
+    const cards=d.slice(0,3).map((w,i)=>{
       const ini=w.wname.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase();
-      const grad=avatarGrads[i%avatarGrads.length];
-      const city=cities[i%cities.length];
-      const review=reviews[i%reviews.length];
-      const paidInr=(w.prize_value/100*0.025).toFixed(0); // rough ticket price estimate
-      const prizeInr=fmt(w.prize_value/100);
       const daysAgo=Math.max(1,Math.floor((Date.now()-new Date(w.drawn_at))/86400000));
-      const timeStr=daysAgo===1?'Yesterday':`${daysAgo} days ago`;
-      return `<div class="wcard">
-        <div class="wcard-top">
-          <div class="wav" style="background:${grad}">${ini}</div>
-          <div class="wname-wrap">
-            <div class="wname">${w.wname} <span class="verified">✓ Verified</span></div>
-            <div class="wcity">📍 ${city}</div>
-          </div>
-        </div>
-        <div class="wstars">⭐⭐⭐⭐⭐</div>
-        <div class="wreview">${review}</div>
-        <div class="wprize-box">
-          <div class="wprize-emoji">${w.emoji}</div>
-          <div class="wprize-info">
-            <div class="wprize-name">${w.pname}</div>
-            <div class="wprize-paid">Won worth <strong>₹${prizeInr}</strong></div>
-          </div>
-          <div class="wsavings">Winner 🏆</div>
-        </div>
-        <div class="wdate">🗓️ ${timeStr} · Drop #${w.id}</div>
-      </div>`;
+      return `<div class="rcard"><div class="rcard-top"><div class="rav" style="background:${grads[i%grads.length]}">${ini}</div><div><div class="rname">${w.wname}<span class="rverified">✓ Verified</span></div><div class="rcity">📍 ${cities[i%cities.length]}</div></div></div><div class="rstars">★★★★★</div><div class="rreview">${reviews[i%reviews.length]}</div><div class="rprize"><div class="rprize-emoji">${w.emoji}</div><div><div class="rprize-name">${w.pname}</div><div class="rprize-paid">Won <strong>₹${fmt(w.prize_value/100)}</strong></div></div><div class="rsave">Winner 🏆</div></div><div class="rdate">🗓️ ${daysAgo===1?'Yesterday':daysAgo+' days ago'} · Drop #${w.id}</div></div>`;
     }).join('');
-    // Prepend real winners before the seed cards
     grid.insertAdjacentHTML('afterbegin', cards);
   }catch(e){}
 }
 
-/* ── CART ──────────────────────────────────────────────────────────── */
+/* ── CART ── */
 function toggleDraw(){ g('cartDraw').classList.toggle('open'); rCart(); }
 function rCart(){
   const el=g('cdItems'),ft=g('cdFoot');
-  if(!cart.length){
-    el.innerHTML=`<div class="cdempty"><span style="font-size:56px;display:block;margin-bottom:14px">🏷️</span><div style="font-size:15px;font-weight:600;margin-bottom:6px">No entries yet</div><div style="font-size:13px">Browse Drops and enter!</div></div>`;
-    ft.style.display='none'; return;
-  }
+  if(!cart.length){ el.innerHTML=`<div class="cdempty"><span style="font-size:48px;display:block;margin-bottom:12px">🏷️</span><div style="font-size:14px;font-weight:600;margin-bottom:5px">No entries yet</div><div style="font-size:12.5px">Browse drops and join!</div></div>`; ft.style.display='none'; return; }
   ft.style.display='block';
-  el.innerHTML=cart.map((c,i)=>`<div class="cdi"><span style="font-size:32px;flex-shrink:0">${c.emoji}</span><div class="cdii"><div class="cdin">${c.name}</div><div class="cdis">${c.qty} ticket${c.qty>1?'s':''} · <span style="color:${c.status==='pending'?'var(--amber)':'var(--green)'}">${c.status==='pending'?'⏳ Awaiting verification':'✅ Active'}</span></div></div><div class="cdip">₹${fmt(c.price*c.qty)}</div></div>`).join('');
+  el.innerHTML=cart.map((c,i)=>`<div class="cdi"><span style="font-size:28px;flex-shrink:0">${c.emoji}</span><div class="cdii"><div class="cdin">${c.name}</div><div class="cdis">${c.qty} entr${c.qty>1?'ies':'y'} · <span style="color:${c.status==='pending'?'var(--amber)':'var(--green)'}">${c.status==='pending'?'⏳ Verifying':'✅ Active'}</span></div></div><div class="cdip">₹${fmt(c.price*c.qty)}</div></div>`).join('');
   g('cdTotal').textContent='₹'+fmt(cart.reduce((s,c)=>s+c.price*c.qty,0));
   updCnt();
 }
 function updCnt(){ const el=g('cCnt'); if(el) el.textContent=cart.reduce((s,c)=>s+c.qty,0); }
 function goChk(){ window.location.href='/my-tickets'; }
 
-/* ── COUNTDOWN ─────────────────────────────────────────────────────── */
+/* ── COUNTDOWN ── */
 function startCD(){
-  let t=23*3600+14*60+7;
+  let t=23*3600+59*60+59;
   setInterval(()=>{ t=(t-1+86400)%86400; const el=g('cdv'); if(el) el.textContent=`${pad(Math.floor(t/3600))}:${pad(Math.floor((t%3600)/60))}:${pad(t%60)}`; },1000);
 }
 function pad(n){return String(n).padStart(2,'0');}
 
-/* ── MODALS ────────────────────────────────────────────────────────── */
+/* ── MODALS ── */
 function openOv(id){ g(id).classList.add('open'); }
 function cov(id){ g(id).classList.remove('open'); }
 function bgc(e,id){ if(e.target===g(id)) cov(id); }
 function openAuth(tab){ g('authErr').style.display='none'; sw(tab); openOv('authOv'); }
-function sw(t){
-  g('lgF').style.display=t==='login'?'block':'none';
-  g('rgF').style.display=t==='register'?'block':'none';
-  g('tLg').classList.toggle('on',t==='login');
-  g('tRg').classList.toggle('on',t==='register');
-  g('authT').textContent=t==='login'?'Welcome back':'Create account';
-  g('authErr').style.display='none';
-}
+function sw(t){ g('lgF').style.display=t==='login'?'block':'none'; g('rgF').style.display=t==='register'?'block':'none'; g('tLg').classList.toggle('on',t==='login'); g('tRg').classList.toggle('on',t==='register'); g('authT').textContent=t==='login'?'Welcome back':'Create account'; g('authErr').style.display='none'; }
 
-/* ── TOAST ─────────────────────────────────────────────────────────── */
-function toast(icon,msg,cls='tok'){
-  const w=g('toasts'),el=document.createElement('div');
-  el.className=`tst ${cls}`;
-  el.innerHTML=`<span style="font-size:20px">${icon}</span><span>${msg}</span>`;
-  w.appendChild(el);
-  setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateX(20px)'; el.style.transition='all .3s'; setTimeout(()=>el.remove(),300); },4500);
-}
+/* ── TOAST ── */
+function toast(icon,msg,cls='tok'){ const w=g('toasts'),el=document.createElement('div'); el.className=`tst ${cls}`; el.innerHTML=`<span style="font-size:18px">${icon}</span><span>${msg}</span>`; w.appendChild(el); setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateX(14px)'; el.style.transition='all .3s'; setTimeout(()=>el.remove(),300); },4500); }
 
-/* ── UTILS ─────────────────────────────────────────────────────────── */
+/* ── UTILS ── */
 const g=id=>document.getElementById(id);
 const fmt=n=>Number(n).toLocaleString('en-IN');
-async function post(url,body){
-  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  return r.json();
-}
+async function post(url,body){ const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); return r.json(); }
 </script>
 </body>
 </html>
