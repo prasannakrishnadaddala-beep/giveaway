@@ -261,12 +261,12 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
 <section class="hero" id="how">
   <div class="heyebrow">Every purchase enters you to win it free</div>
   <h1 class="htitle">Buy at a<br><em>Discount.</em><br>Win it <em>Free.</em></h1>
-  <p class="hsub">Shop at exclusive discounted prices. When all slots fill, one lucky buyer gets a complete refund via UPI — the product is free.</p>
+  <p class="hsub">Shop at exclusive discounted prices. When all slots fill, one lucky buyer WINS the actual product shipped to their door.</p>
   <div class="hsteps">
     <div class="hstep"><span class="hi">🛍️</span><div class="hn">Step 01</div><div class="ht">Browse live draws</div></div>
-    <div class="hstep"><span class="hi">📱</span><div class="hn">Step 02</div><div class="ht">Pay via PhonePe / UPI</div></div>
+    <div class="hstep"><span class="hi">📱</span><div class="hn">Step 02</div><div class="ht">Pay ticket fee via UPI</div></div>
     <div class="hstep"><span class="hi">⚡</span><div class="hn">Step 03</div><div class="ht">Draw runs when slots fill</div></div>
-    <div class="hstep"><span class="hi">🏆</span><div class="hn">Step 04</div><div class="ht">Winner gets UPI refund!</div></div>
+    <div class="hstep"><span class="hi">🏆</span><div class="hn">Step 04</div><div class="ht">Winner gets the product!</div></div>
   </div>
 </section>
 
@@ -474,8 +474,8 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
     <div class="winbody">
       <span class="wburst">🎉</span>
       <div class="wtitle">You Won!</div>
-      <div class="wsub" id="winTx">You've been selected as the lucky winner!</div>
-      <div class="wref">✅ Full UPI refund of <strong id="winAmt">₹0</strong> will be sent within 24 hours</div>
+      <div class="wsub" id="winTx">Congratulations! You won the draw!</div>
+      <div class="wref">✅ The product will be shipped to your address within 3-5 business days</div>
       <button class="bamber" onclick="cov('winOv')">🎊 Amazing!</button>
     </div>
   </div>
@@ -609,7 +609,7 @@ async function proceedToPay(){
     }
 
     g('utrInput').value='';
-    g('buyTitle').textContent='Pay via PhonePe / UPI';
+    g('buyTitle').textContent='Pay ticket fee via UPI';
     showStep(2);
   }finally{ btn.innerHTML='Continue to Payment →'; btn.disabled=false; }
 }

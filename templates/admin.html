@@ -109,13 +109,13 @@ tr:hover td{background:rgba(255,255,255,.02);}
     <div class="stat"><div class="statv">—</div><div class="statl">Draws Done</div></div>
     <div class="stat alert" id="pendStat"><div class="statv">—</div><div class="statl">⏳ Payments Pending</div></div>
     <div class="stat"><div class="statv">—</div><div class="statl">Total Revenue</div></div>
-    <div class="stat"><div class="statv">—</div><div class="statl">Refunds Sent</div></div>
+    <div class="stat alert" id="shipStat"><div class="statv">—</div><div class="statl">🎁 Prizes to Ship</div></div>
   </div>
 
   <!-- TABS -->
   <div class="tabs">
     <button class="tab on" onclick="swTab('payments',this)">⏳ Payments <span class="badge-count" id="pendBadge">0</span></button>
-    <button class="tab" onclick="swTab('refunds',this)">🏆 Refunds</button>
+    <button class="tab" onclick="swTab('shipments',this)">📦 Ship Prizes</button>
     <button class="tab" onclick="swTab('draws',this)">🔥 Live Draws</button>
     <button class="tab" onclick="swTab('create',this)">➕ New Draw</button>
     <button class="tab" onclick="swTab('all',this)">📋 All Tickets</button>
@@ -133,12 +133,12 @@ tr:hover td{background:rgba(255,255,255,.02);}
     </div>
   </div>
 
-  <!-- ── PENDING REFUNDS ───────────────────────────────────────────── -->
-  <div id="tabRefunds" style="display:none">
+  <!-- ── PENDING SHIPMENTS ──────────────────────────────────────────── -->
+  <div id="tabShipments" style="display:none">
     <div class="card">
-      <div class="card-hdr"><h3>🏆 Winner Refunds to Send</h3><button class="bsm" onclick="loadRefunds()">↻ Refresh</button></div>
-      <p style="font-size:13px;color:var(--tx3);margin-bottom:18px">Send refund manually via PhonePe/UPI to winner's registered number, then enter the UTR and click Mark Sent.</p>
-      <div id="refundList"><div class="empty-q">Loading…</div></div>
+      <div class="card-hdr"><h3>📦 Prizes to Ship to Winners</h3><button class="bsm" onclick="loadShipments()">↻ Refresh</button></div>
+      <p style="font-size:13px;color:var(--tx3);margin-bottom:18px">These are draw winners waiting for their product. Enter the tracking number after shipping and mark as shipped.</p>
+      <div id="shipmentList"><div class="empty-q">Loading…</div></div>
     </div>
   </div>
 
@@ -184,7 +184,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
 
 <script>
 /* ── TABS ──────────────────────────────────────────────────────────── */
-const tabMap = {payments:'tabPayments',refunds:'tabRefunds',draws:'tabDraws',create:'tabCreate',all:'tabAll'};
+const tabMap = {payments:'tabPayments',shipments:'tabShipments',draws:'tabDraws',create:'tabCreate',all:'tabAll'};
 function swTab(name, btn){
   Object.values(tabMap).forEach(id=>{ const el=g(id); if(el) el.style.display='none'; });
   const el=g(tabMap[name]); if(el) el.style.display='block';
@@ -192,7 +192,7 @@ function swTab(name, btn){
   btn.classList.add('on');
   // load on first view
   if(name==='payments') loadPending();
-  if(name==='refunds')  loadRefunds();
+  if(name==='shipments') loadShipments();
   if(name==='draws')    loadDraws();
   if(name==='all')      loadAll();
 }
@@ -206,7 +206,7 @@ async function loadStats(){
   els[2].textContent=d.completed_draws;
   els[3].textContent=d.pending_payments;
   els[4].textContent='₹'+fmt(d.total_revenue/100);
-  els[5].textContent='₹'+fmt(d.total_refunds/100);
+  els[5].textContent=d.prizes_to_ship;
   g('pendBadge').textContent=d.pending_payments;
   if(d.pending_payments>0) g('pendStat').classList.add('alert');
 }
@@ -250,7 +250,7 @@ async function confirmPay(tid){
   const r=await post(`/api/admin/confirm-payment/${tid}`,{});
   if(r.error){alert('Error: '+r.error);return;}
   alert(r.draw_result
-    ? `🎰 DRAW TRIGGERED!\nWinner: ${r.draw_result.winner_name}\n📞 ${r.draw_result.winner_phone}\nRefund: ₹${fmt(r.draw_result.refund_amount/100)}`
+    ? `🎰 DRAW TRIGGERED!\n🏆 Winner: ${r.draw_result.winner_name}\n📞 ${r.draw_result.winner_phone}\n🎁 Prize: ₹${fmt(r.draw_result.prize_value/100)} product to ship!\n📍 Address: ${r.draw_result.winner_address||'Contact winner for address'}`
     : `✅ Confirmed! Slots: ${r.filled_slots}/${r.total_slots}`);
   loadPending(); loadStats();
 }
@@ -262,34 +262,35 @@ async function rejectPay(tid){
 }
 
 /* ── REFUNDS ───────────────────────────────────────────────────────── */
-async function loadRefunds(){
-  const d=await (await fetch('/api/draws')).json();
-  const el=g('refundList');
-  const pending=d.filter(x=>x.refund_status==='pending');
-  if(!pending.length){el.innerHTML=`<div class="empty-q">✅ No pending refunds!</div>`;return;}
-  el.innerHTML=pending.map(r=>`
+async function loadShipments(){
+  const d=await (await fetch('/api/admin/pending-shipments')).json();
+  const el=g('shipmentList');
+  if(!d.length){el.innerHTML=`<div class="empty-q">✅ All prizes shipped!</div>`;return;}
+  el.innerHTML=d.map(s=>`
     <div class="refund-item">
       <div class="refund-hdr">
-        <div class="refund-name">${r.emoji} ${r.pname} — Draw #${r.id}</div>
-        <div class="refund-amt">₹${fmt(r.refund_amount/100)}</div>
+        <div class="refund-name">${s.emoji} ${s.pname} — Draw #${s.id}</div>
+        <div class="refund-amt" style="color:var(--green)">${s.delivery_status==='shipped'?'📦 Shipped':'⏳ Pending'}</div>
       </div>
       <div class="refund-meta">
-        🏆 Winner: <strong>${r.wname}</strong><br>
-        📅 Draw on: ${new Date(r.drawn_at).toLocaleString('en-IN')}<br>
-        <span style="color:var(--amber)">Send ₹${fmt(r.refund_amount/100)} via PhonePe/UPI to winner's registered phone number, then enter the UTR below.</span>
+        🏆 Winner: <strong>${s.wname}</strong><br>
+        📞 ${s.wphone||'No phone'} · ✉️ ${s.wemail}<br>
+        📍 Address: <strong>${s.waddress||'<span style="color:var(--red)">NOT PROVIDED — contact winner</span>'}</strong><br>
+        📅 Won on: ${new Date(s.drawn_at).toLocaleString('en-IN')}<br>
+        🎁 Prize value: ₹${fmt(s.original_price/100)}
       </div>
+      ${s.delivery_status==='pending' ? `
       <div class="refund-input-row">
-        <input class="refund-input" id="rUtr${r.id}" placeholder="Your outgoing UTR / Transaction ID">
-        <button class="btn-gd" onclick="markRefunded(${r.id})">Mark Sent ✓</button>
-      </div>
+        <input class="refund-input" id="sTrack${s.id}" placeholder="Courier tracking number (e.g. BlueDart, Delhivery)">
+        <button class="btn-gd" onclick="markShipped(${s.id})">Mark Shipped 📦</button>
+      </div>` : `<div style="font-size:12px;color:var(--green);margin-top:8px">✅ Shipped · Tracking: ${s.tracking_info||'—'}</div>`}
     </div>`).join('');
 }
 
-async function markRefunded(drawId){
-  const utr=g('rUtr'+drawId).value.trim();
-  if(!utr){alert('Enter the UTR of the refund you sent.');return;}
-  const r=await post(`/api/admin/mark-refunded/${drawId}`,{upi_ref:utr});
-  alert(r.message); loadRefunds(); loadStats();
+async function markShipped(drawId){
+  const tracking=g('sTrack'+drawId).value.trim();
+  const r=await post(`/api/admin/mark-shipped/${drawId}`,{tracking:tracking});
+  alert(r.message||'Marked as shipped!'); loadShipments(); loadStats();
 }
 
 /* ── DRAWS ─────────────────────────────────────────────────────────── */
@@ -360,7 +361,7 @@ async function post(url,body){
 
 // Auto-refresh pending payments every 30 seconds
 loadStats(); loadPending();
-setInterval(()=>{ loadStats(); if(document.getElementById('tabPayments').style.display!=='none') loadPending(); }, 30000);
+setInterval(()=>{ loadStats(); if(document.getElementById('tabPayments').style.display!=='none') loadPending(); if(document.getElementById('tabShipments').style.display!=='none') loadShipments(); }, 30000);
 </script>
 </body>
 </html>

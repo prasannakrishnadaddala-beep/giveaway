@@ -101,7 +101,7 @@ function renderWins(){
       <div class="wc-title">You won ${w.product_name}!</div>
       <div class="wc-sub">Draw held on ${new Date(w.drawn_at).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</div>
       <div class="wc-ref">✅ Refund of ₹${fmt(w.refund_amount/100)} — ${w.refund_status==='processed'?'Processed':'Processing in 24h'}</div>
-      <a class="verify-link" href="/api/draws/${w.id}/verify" target="_blank">🔍 Verify this draw is fair →</a>
+      <a class="verify-link" href="/api/draws/${w.id}/verify" target="_blank">🔍 Verify this draw →</a>
     </div>`).join('');
 }
 function swTab(tab, btn){
