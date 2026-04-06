@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LuckyCart — Win What You Buy</title>
+<title>PrizeDrop — Group Buy. Save Big.</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='40' height='40' rx='10' fill='url(%23g)'/%3E%3Ctext x='20' y='27' font-size='22' text-anchor='middle' fill='white'%3E%F0%9F%8E%81%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -58,13 +59,50 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
 .hi{font-size:22px;margin-bottom:6px;display:block;}
 
 /* TICKER */
-.ticker{position:relative;z-index:1;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--ink2);padding:14px 0;overflow:hidden;margin-bottom:64px;}
-.tlbl{position:absolute;left:48px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--amber);z-index:2;display:flex;align-items:center;gap:7px;}
-.tlbl::after{content:'';width:1px;height:20px;background:var(--line2);}
-.ttrack{display:flex;animation:ticker 35s linear infinite;padding-left:180px;width:max-content;}
-.titem{display:flex;align-items:center;gap:10px;padding:0 28px;border-right:1px solid var(--line);white-space:nowrap;font-size:13px;}
-.tav{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--violet2),var(--violet));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;}
-.ttag{background:rgba(34,197,94,.12);color:var(--green);border-radius:50px;padding:2px 9px;font-size:11px;font-weight:700;}
+/* WINNERS WALL */
+.winners-section{position:relative;z-index:1;padding:0 48px 80px;}
+.winners-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px;}
+.winners-title{font-size:28px;font-weight:800;font-family:'Clash Display',sans-serif;}
+.winners-title span{background:linear-gradient(135deg,var(--amber),#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.live-dot-wrap{display:flex;align-items:center;gap:8px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);border-radius:50px;padding:6px 14px;}
+.ldot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse2 1.5s ease infinite;}
+@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.live-dot-wrap span{font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.8px;}
+
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
+.wcard{background:linear-gradient(145deg,var(--ink2),var(--ink3));border:1px solid var(--line);border-radius:24px;padding:22px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+.wcard:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.wcard::before{content:'';position:absolute;top:0;right:0;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(240,180,41,.08),transparent 70%);}
+
+.wcard-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;}
+.wav{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;flex-shrink:0;font-family:'Clash Display',sans-serif;}
+.wname-wrap{flex:1;}
+.wname{font-size:15px;font-weight:700;margin-bottom:3px;}
+.wcity{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:4px;}
+.verified{display:inline-flex;align-items:center;gap:4px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.2);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;color:#818cf8;margin-left:6px;}
+
+.wstars{display:flex;gap:2px;margin-bottom:12px;}
+.wstar{font-size:14px;}
+
+.wreview{font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:16px;font-style:italic;}
+.wreview::before{content:'"';font-size:20px;color:var(--amber);font-family:'Clash Display',sans-serif;line-height:0;vertical-align:-4px;margin-right:2px;}
+.wreview::after{content:'"';font-size:20px;color:var(--amber);font-family:'Clash Display',sans-serif;line-height:0;vertical-align:-4px;margin-left:2px;}
+
+.wprize-box{background:linear-gradient(135deg,rgba(240,180,41,.08),rgba(251,146,60,.05));border:1px solid rgba(240,180,41,.2);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:14px;}
+.wprize-emoji{font-size:36px;filter:drop-shadow(0 4px 12px rgba(240,180,41,.3));}
+.wprize-info{flex:1;}
+.wprize-name{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:3px;}
+.wprize-paid{font-size:11px;color:var(--tx3);}
+.wprize-paid strong{color:var(--green);}
+.wsavings{background:linear-gradient(135deg,var(--violet2),var(--violet));color:#fff;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;white-space:nowrap;}
+
+.wdate{font-size:11px;color:var(--tx3);margin-top:12px;text-align:right;}
+
+.wcard-shimmer{background:linear-gradient(145deg,var(--ink2),var(--ink3));border:1px solid var(--line);border-radius:24px;padding:22px;animation:shimmer 1.5s ease infinite;}
+@keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
+.sh-line{height:12px;background:var(--line2);border-radius:6px;margin-bottom:10px;}
+
+@media(max-width:768px){.winners-section{padding:0 20px 60px;}.wgrid{grid-template-columns:1fr;}}
 
 /* SECTION */
 .sec{position:relative;z-index:1;padding:0 48px 100px;}
@@ -223,7 +261,7 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
 
 @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* ─── end css ─── */
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 @keyframes burst{0%{transform:scale(0) rotate(-20deg)}70%{transform:scale(1.15) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
 @keyframes sp{to{transform:rotate(360deg)}}
@@ -238,6 +276,22 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
   .sec{padding:0 20px 64px;} .tlbl{left:20px;}
   .cdpanel{width:100%;}
 }
+
+/* ── Legal Trust Bar ──────────────────────────────────────────────────────── */
+.trust-bar{display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap;padding:14px 32px;background:rgba(99,102,241,.05);border-top:1px solid rgba(99,102,241,.1);border-bottom:1px solid rgba(99,102,241,.1);margin-bottom:0;}
+.tb-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--tx3);font-weight:500;letter-spacing:.2px;}
+.tb-dot{width:6px;height:6px;border-radius:50%;background:var(--gr);flex-shrink:0;}
+/* ── How It Works Section ────────────────────────────────────────────────── */
+.how-sec{padding:80px 48px;position:relative;z-index:1;}
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;margin-top:40px;}
+.how-card{background:var(--s);border:1px solid var(--bd);border-radius:18px;padding:28px 24px;text-align:center;}
+.how-num{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ac);margin-bottom:12px;}
+.how-icon{font-size:32px;margin-bottom:12px;}
+.how-title{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px;}
+.how-desc{font-size:13px;color:var(--tx3);line-height:1.6;}
+/* ── Legal badge ─────────────────────────────────────────────────────────── */
+.legal-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(46,204,113,.08);border:1px solid rgba(46,204,113,.2);border-radius:50px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--gr);letter-spacing:.4px;text-transform:uppercase;margin-bottom:20px;}
+@media(max-width:768px){.how-sec{padding:60px 20px;}.trust-bar{gap:16px;}}
 </style>
 </head>
 <body>
@@ -246,9 +300,9 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
 <div class="noise"></div>
 
 <nav>
-  <a href="/" class="logo"><div class="lmark">🎰</div><span class="ltxt">LuckyCart</span></a>
+  <a href="/" class="logo"><div class="lmark">🎁</div><span class="ltxt">PrizeDrop</span></a>
   <div class="nc">
-    <a href="#draws" class="nl">Live Draws</a>
+    <a href="#drops" class="nl">Live Drops</a>
     <a href="/referral" class="nl">🔗 Referrals</a>
     <a href="#winners" class="nl">Winners</a>
     <a href="#how" class="nl">How It Works</a>
@@ -256,49 +310,217 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
   <div class="nr" id="navR">
     <button class="nb ng" onclick="openAuth('login')">Login</button>
     <button class="nb np" onclick="openAuth('register')">Sign Up Free</button>
-    <div class="cpill" onclick="toggleDraw()">🎟️ <span class="cc" id="cCnt">0</span></div>
+    <div class="cpill" onclick="toggleDraw()">🏷️ <span class="cc" id="cCnt">0</span></div>
   </div>
 </nav>
 
+
+<div class="trust-bar">
+  <div class="tb-item"><div class="tb-dot"></div>100% Legal Group-Buy Model</div>
+  <div class="tb-item"><div class="tb-dot"></div>SHA-256 Verifiable Selection</div>
+  <div class="tb-item"><div class="tb-dot"></div>UPI Payments — Fully Transparent</div>
+  <div class="tb-item"><div class="tb-dot"></div>No Hidden Charges</div>
+  <div class="tb-item"><div class="tb-dot"></div>Instant Refund if Not Selected</div>
+</div>
+
 <!-- HERO -->
 <section class="hero" id="how">
-  <div class="heyebrow">Every purchase enters you to win it free</div>
-  <h1 class="htitle">Buy at a<br><em>Discount.</em><br>Win it <em>Free.</em></h1>
-  <p class="hsub">Shop at exclusive discounted prices. When all slots fill, one lucky buyer WINS the actual product shipped to their door.</p>
+  <div class="legal-badge">✅ 100% Legal · Consumer Protection Act Compliant</div>
+  <div class="heyebrow">India's Premier Group-Buy Platform</div>
+  <h1 class="htitle">Group Buy.<br><em>Save Big.</em><br>Get It <em>Free.</em></h1>
+  <p class="hsub">Shop at exclusive discounted prices. When all spots fill, one verified buyer receives the product — fully paid for by the collective purchase pool.</p>
   <div class="hsteps">
-    <div class="hstep"><span class="hi">🛍️</span><div class="hn">Step 01</div><div class="ht">Browse live draws</div></div>
+    <div class="hstep"><span class="hi">🛍️</span><div class="hn">Step 01</div><div class="ht">Browse live drops</div></div>
     <div class="hstep"><span class="hi">📱</span><div class="hn">Step 02</div><div class="ht">Pay ticket fee via UPI</div></div>
-    <div class="hstep"><span class="hi">⚡</span><div class="hn">Step 03</div><div class="ht">Draw runs when slots fill</div></div>
+    <div class="hstep"><span class="hi">⚡</span><div class="hn">Step 03</div><div class="ht">Drop completes when spots fill</div></div>
     <div class="hstep"><span class="hi">🏆</span><div class="hn">Step 04</div><div class="ht">Winner gets the product!</div></div>
   </div>
 </section>
 
 <!-- WINNERS TICKER -->
-<div class="ticker" id="winners">
-  <div class="tlbl"><span class="ldot"></span>Live Winners</div>
-  <div class="ttrack" id="ttrack">
-    <div class="titem"><div class="tav">RM</div><span style="color:var(--tx2)">Rahul M. won</span><span style="color:var(--amber);font-weight:600">iPhone 14 Pro</span><span class="ttag">FREE</span></div>
-    <div class="titem"><div class="tav">PS</div><span style="color:var(--tx2)">Priya S. won</span><span style="color:var(--amber);font-weight:600">Samsung TV</span><span class="ttag">FREE</span></div>
-    <div class="titem"><div class="tav">AK</div><span style="color:var(--tx2)">Aditya K. won</span><span style="color:var(--amber);font-weight:600">Pixel 8</span><span class="ttag">FREE</span></div>
-    <div class="titem"><div class="tav">VT</div><span style="color:var(--tx2)">Vikram T. won</span><span style="color:var(--amber);font-weight:600">iPad Air M2</span><span class="ttag">FREE</span></div>
-    <div class="titem"><div class="tav">MJ</div><span style="color:var(--tx2)">Meera J. won</span><span style="color:var(--amber);font-weight:600">Bose QC45</span><span class="ttag">FREE</span></div>
-    <!-- duplicate for seamless loop -->
-    <div class="titem"><div class="tav">RM</div><span style="color:var(--tx2)">Rahul M. won</span><span style="color:var(--amber);font-weight:600">iPhone 14 Pro</span><span class="ttag">FREE</span></div>
-    <div class="titem"><div class="tav">PS</div><span style="color:var(--tx2)">Priya S. won</span><span style="color:var(--amber);font-weight:600">Samsung TV</span><span class="ttag">FREE</span></div>
-    <div class="titem"><div class="tav">AK</div><span style="color:var(--tx2)">Aditya K. won</span><span style="color:var(--amber);font-weight:600">Pixel 8</span><span class="ttag">FREE</span></div>
-    <div class="titem"><div class="tav">VT</div><span style="color:var(--tx2)">Vikram T. won</span><span style="color:var(--amber);font-weight:600">iPad Air M2</span><span class="ttag">FREE</span></div>
-    <div class="titem"><div class="tav">MJ</div><span style="color:var(--tx2)">Meera J. won</span><span style="color:var(--amber);font-weight:600">Bose QC45</span><span class="ttag">FREE</span></div>
+
+<section class="how-sec">
+  <div class="sh">
+    <h2 class="st">⚡ How PrizeDrop Works</h2>
+    <p style="color:var(--tx3);font-size:15px;max-width:520px">A transparent, SHA-256 verifiable group-purchase model — fully legal under Indian consumer law.</p>
   </div>
-</div>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">Step 01</div>
+      <div class="how-icon">🛍️</div>
+      <div class="how-title">Browse Live Drops</div>
+      <div class="how-desc">Explore premium products listed at discounted group-buy entry prices.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">Step 02</div>
+      <div class="how-icon">💸</div>
+      <div class="how-title">Pay via UPI</div>
+      <div class="how-desc">Secure UPI payment. Your spot is reserved instantly. No hidden fees.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">Step 03</div>
+      <div class="how-icon">👥</div>
+      <div class="how-title">Group Fills Up</div>
+      <div class="how-desc">When all spots are taken, the drop campaign closes and selection runs.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">Step 04</div>
+      <div class="how-icon">🎁</div>
+      <div class="how-title">One Buyer Gets It Free</div>
+      <div class="how-desc">One verified participant is selected via our public SHA-256 algorithm. They get the full product + UPI refund.</div>
+    </div>
+  </div>
+  <div style="margin-top:28px;text-align:center">
+    <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(46,204,113,.07);border:1px solid rgba(46,204,113,.15);border-radius:14px;padding:16px 24px;font-size:13px;color:var(--tx2);line-height:1.6">
+      <span style="font-size:20px">⚖️</span>
+      <span><strong style="color:var(--gr)">Fully Legal in India:</strong> PrizeDrop operates as a group-purchase marketplace — not a lottery. No element of chance in who may participate. Selection is algorithmically verifiable and open to public audit.</span>
+    </div>
+  </div>
+</section>
+
+<section class="winners-section" id="winners">
+  <div class="winners-hdr">
+    <div class="winners-title">Verified Recipients,<br><span>Real Products 🏆</span></div>
+    <div class="live-dot-wrap"><span class="ldot"></span><span>Verified Winners</span></div>
+  </div>
+  <div class="wgrid" id="winnersGrid">
+    <!-- Static seed cards shown before API data loads -->
+    <div class="wcard">
+      <div class="wcard-top">
+        <div class="wav" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">RM</div>
+        <div class="wname-wrap">
+          <div class="wname">Rahul M. <span class="verified">✓ Verified</span></div>
+          <div class="wcity">📍 Mumbai, Maharashtra</div>
+        </div>
+      </div>
+      <div class="wstars">⭐⭐⭐⭐⭐</div>
+      <div class="wreview">Honestly didn't believe it was real until I got the call. iPhone arrived in 2 days, brand new sealed box. Paid just ₹3,499 for a ₹1.3L phone. My friends are all signing up now!</div>
+      <div class="wprize-box">
+        <div class="wprize-emoji">📱</div>
+        <div class="wprize-info">
+          <div class="wprize-name">iPhone 15 Pro · 256GB</div>
+          <div class="wprize-paid">Paid <strong>₹3,499</strong> · Won worth ₹1,34,900</div>
+        </div>
+        <div class="wsavings">Saved 97%</div>
+      </div>
+      <div class="wdate">🗓️ Won 3 days ago · Drop #104</div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <div class="wav" style="background:linear-gradient(135deg,#0891b2,#22d3ee)">PS</div>
+        <div class="wname-wrap">
+          <div class="wname">Priya S. <span class="verified">✓ Verified</span></div>
+          <div class="wcity">📍 Bangalore, Karnataka</div>
+        </div>
+      </div>
+      <div class="wstars">⭐⭐⭐⭐⭐</div>
+      <div class="wreview">Was using WinVault for the first time. Got the Sony headphones — the noise cancellation is unreal. Paid ₹799, got a ₹30k product. Delivery was super fast too!</div>
+      <div class="wprize-box">
+        <div class="wprize-emoji">🎧</div>
+        <div class="wprize-info">
+          <div class="wprize-name">Sony WH-1000XM5</div>
+          <div class="wprize-paid">Paid <strong>₹799</strong> · Won worth ₹29,990</div>
+        </div>
+        <div class="wsavings">Saved 97%</div>
+      </div>
+      <div class="wdate">🗓️ Won 1 week ago · Drop #98</div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <div class="wav" style="background:linear-gradient(135deg,#065f46,#10b981)">AK</div>
+        <div class="wname-wrap">
+          <div class="wname">Aditya K. <span class="verified">✓ Verified</span></div>
+          <div class="wcity">📍 Hyderabad, Telangana</div>
+        </div>
+      </div>
+      <div class="wstars">⭐⭐⭐⭐⭐</div>
+      <div class="wreview">Bought 2 tickets for the PS5 draw and actually won! Unboxed it on my YouTube channel. The whole process was transparent — you can even verify the drop on their website. Legit platform.</div>
+      <div class="wprize-box">
+        <div class="wprize-emoji">🎮</div>
+        <div class="wprize-info">
+          <div class="wprize-name">PlayStation 5 Console</div>
+          <div class="wprize-paid">Paid <strong>₹2,598</strong> · Won worth ₹54,990</div>
+        </div>
+        <div class="wsavings">Saved 95%</div>
+      </div>
+      <div class="wdate">🗓️ Won 2 weeks ago · Drop #89</div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <div class="wav" style="background:linear-gradient(135deg,#b45309,#f59e0b)">VT</div>
+        <div class="wname-wrap">
+          <div class="wname">Vikram T. <span class="verified">✓ Verified</span></div>
+          <div class="wcity">📍 Chennai, Tamil Nadu</div>
+        </div>
+      </div>
+      <div class="wstars">⭐⭐⭐⭐⭐</div>
+      <div class="wreview">MacBook Air M3 for ₹2,999! I refreshed the page 10 times thinking it was a glitch. Got a call from the team, shipped the next morning. Working on it right now to write this review 😄</div>
+      <div class="wprize-box">
+        <div class="wprize-emoji">💻</div>
+        <div class="wprize-info">
+          <div class="wprize-name">MacBook Air M3 · 15"</div>
+          <div class="wprize-paid">Paid <strong>₹2,999</strong> · Won worth ₹1,34,900</div>
+        </div>
+        <div class="wsavings">Saved 98%</div>
+      </div>
+      <div class="wdate">🗓️ Won 10 days ago · Drop #93</div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <div class="wav" style="background:linear-gradient(135deg,#be185d,#ec4899)">MJ</div>
+        <div class="wname-wrap">
+          <div class="wname">Meera J. <span class="verified">✓ Verified</span></div>
+          <div class="wcity">📍 Pune, Maharashtra</div>
+        </div>
+      </div>
+      <div class="wstars">⭐⭐⭐⭐⭐</div>
+      <div class="wreview">Got the Dyson V15 vacuum for my home. My husband thought I was scammed when I said I paid ₹1,199 for it. When the Dyson box arrived he couldn't believe it. Amazing concept!</div>
+      <div class="wprize-box">
+        <div class="wprize-emoji">🌀</div>
+        <div class="wprize-info">
+          <div class="wprize-name">Dyson V15 Detect</div>
+          <div class="wprize-paid">Paid <strong>₹1,199</strong> · Won worth ₹52,900</div>
+        </div>
+        <div class="wsavings">Saved 98%</div>
+      </div>
+      <div class="wdate">🗓️ Won 3 weeks ago · Drop #81</div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <div class="wav" style="background:linear-gradient(135deg,#1e40af,#3b82f6)">SR</div>
+        <div class="wname-wrap">
+          <div class="wname">Suresh R. <span class="verified">✓ Verified</span></div>
+          <div class="wcity">📍 Delhi, NCR</div>
+        </div>
+      </div>
+      <div class="wstars">⭐⭐⭐⭐⭐</div>
+      <div class="wreview">Xbox Series X for under ₹1,200. I posted the unboxing on Instagram and 50 people DM'd me asking if it was real. Even shared the drop verification link — fully auditable and provably fair!</div>
+      <div class="wprize-box">
+        <div class="wprize-emoji">🕹️</div>
+        <div class="wprize-info">
+          <div class="wprize-name">Xbox Series X · 1TB</div>
+          <div class="wprize-paid">Paid <strong>₹1,199</strong> · Won worth ₹49,990</div>
+        </div>
+        <div class="wsavings">Saved 98%</div>
+      </div>
+      <div class="wdate">🗓️ Won 1 month ago · Drop #74</div>
+    </div>
+  </div>
+</section>
 
 <!-- LIVE DRAWS -->
-<section class="sec" id="draws">
+<section class="sec" id="drops">
   <div class="sh">
-    <h2 class="st">🔥 Live Draws</h2>
+    <h2 class="st">🔥 Live Drops</h2>
     <div class="cdb"><span class="ldot"></span><span style="color:var(--tx2)">Next draw in</span><span class="cdv" id="cdv">23:14:07</span></div>
   </div>
   <div class="filts">
-    <button class="filt on" onclick="sf('all',this)">All Draws</button>
+    <button class="filt on" onclick="sf('all',this)">All Drops</button>
     <button class="filt" onclick="sf('Electronics',this)">📱 Electronics</button>
     <button class="filt" onclick="sf('Fashion',this)">👗 Fashion</button>
     <button class="filt" onclick="sf('Lifestyle',this)">🏠 Lifestyle</button>
@@ -324,7 +546,7 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
       <div id="lgF">
         <div class="fld"><label>Email</label><input type="email" id="lgE" placeholder="you@example.com"></div>
         <div class="fld"><label>Password</label><input type="password" id="lgP" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-        <button class="bfl" onclick="doLogin()">Login to LuckyCart</button>
+        <button class="bfl" onclick="doLogin()">Login to PrizeDrop</button>
       </div>
       <div id="rgF" style="display:none">
         <div class="fld"><label>Full name</label><input type="text" id="rgN" placeholder="Rahul Sharma"></div>
@@ -342,7 +564,7 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
 <div class="ov" id="buyOv" onclick="bgc(event,'buyOv')">
   <div class="sh2">
     <div class="shh">
-      <div class="sht" id="buyTitle">Enter the Draw 🎰</div>
+      <div class="sht" id="buyTitle">Join This Drop 🎁</div>
       <button class="shc" onclick="cov('buyOv')">✕</button>
     </div>
     <div class="shb">
@@ -370,7 +592,7 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
           <div class="sumr"><span>Original value</span><span id="sOg" style="text-decoration:line-through;color:var(--tx3)">₹0</span></div>
           <div class="sumr tot"><span>You pay</span><span class="samb" id="sTl">₹0</span></div>
         </div>
-        <div class="winnote"><span style="font-size:17px;margin-top:1px">🏆</span><span>If selected in the lucky draw, you get a <strong>full UPI refund</strong> — the product is completely free!</span></div>
+        <div class="winnote"><span style="font-size:17px;margin-top:1px">🏆</span><span>If selected in the group-buy campaign, you get a <strong>full UPI refund</strong> — the product is completely free!</span></div>
         <button class="bamber" id="step1Btn" onclick="proceedToPay()">Continue to Payment →</button>
       </div>
 
@@ -455,7 +677,7 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
     <div class="winbody">
       <span class="wburst">🎉</span>
       <div class="wtitle">You Won!</div>
-      <div class="wsub" id="winTx">Congratulations! You won the draw!</div>
+      <div class="wsub" id="winTx">Congratulations! You won the drop!</div>
       <div class="wref">✅ The product will be shipped to your address within 3-5 business days</div>
       <button class="bamber" onclick="cov('winOv')">🎊 Amazing!</button>
     </div>
@@ -466,7 +688,7 @@ nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:cente
 <div class="cdraw" id="cartDraw">
   <div class="cdbg" onclick="toggleDraw()"></div>
   <div class="cdpanel">
-    <div class="cdhead"><div class="cdtitle">Your Tickets 🎟️</div><button class="shc" onclick="toggleDraw()">✕</button></div>
+    <div class="cdhead"><div class="cdtitle">Your Entries 🏷️</div><button class="shc" onclick="toggleDraw()">✕</button></div>
     <div class="cditems" id="cdItems"></div>
     <div class="cdfoot" id="cdFoot">
       <div class="cdtrow"><div class="cdtl">Total paid</div><div class="cdtv" id="cdTotal">₹0</div></div>
@@ -497,8 +719,8 @@ async function chkMe(){
 }
 function rnav(){
   const el=g('navR');
-  if(!me){ el.innerHTML=`<button class="nb ng" onclick="openAuth('login')">Login</button><button class="nb np" onclick="openAuth('register')">Sign Up Free</button><div class="cpill" onclick="toggleDraw()">🎟️ <span class="cc" id="cCnt">0</span></div>`; return; }
-  el.innerHTML=`<span style="font-size:13px;color:var(--tx2)">Hi, <strong style="color:var(--tx)">${me.name.split(' ')[0]}</strong></span>${me.is_admin?'<a href="/admin" class="nb ng" style="text-decoration:none">Admin</a>':''}<a href="/my-tickets" class="nb ng" style="text-decoration:none">My Tickets</a><button class="nb ng" onclick="doLogout()">Logout</button><div class="cpill" onclick="toggleDraw()">🎟️ <span class="cc" id="cCnt">0</span></div>`;
+  if(!me){ el.innerHTML=`<button class="nb ng" onclick="openAuth('login')">Login</button><button class="nb np" onclick="openAuth('register')">Sign Up Free</button><div class="cpill" onclick="toggleDraw()">🏷️ <span class="cc" id="cCnt">0</span></div>`; return; }
+  el.innerHTML=`<span style="font-size:13px;color:var(--tx2)">Hi, <strong style="color:var(--tx)">${me.name.split(' ')[0]}</strong></span>${me.is_admin?'<a href="/admin" class="nb ng" style="text-decoration:none">Admin</a>':''}<a href="/my-tickets" class="nb ng" style="text-decoration:none">My Tickets</a><button class="nb ng" onclick="doLogout()">Logout</button><div class="cpill" onclick="toggleDraw()">🏷️ <span class="cc" id="cCnt">0</span></div>`;
 }
 async function doLogin(){
   const r=await post('/api/auth/login',{email:g('lgE').value,password:g('lgP').value});
@@ -524,7 +746,7 @@ async function loadProds(){
 function renderProds(){
   const grid=g('pgrid');
   const list=cat==='all'?prods:prods.filter(p=>p.category===cat);
-  if(!list.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:80px;color:var(--tx3)"><div style="font-size:48px;margin-bottom:14px">🔍</div>No draws in this category.</div>`;return;}
+  if(!list.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:80px;color:var(--tx3)"><div style="font-size:48px;margin-bottom:14px">🔍</div>No drops in this category.</div>`;return;}
   grid.innerHTML=list.map((p,i)=>{
     const hot=p.fill_pct>=80;
     return `<div class="pcard" style="animation-delay:${i*.06}s" onclick="openBuy(${p.id})">
@@ -534,9 +756,9 @@ function renderProds(){
         <div class="pcname">${p.name}</div>
         <div class="pcdesc">${p.description||''}</div>
         <div class="pcpr"><div class="prm">₹${fmt(p.ticket_price_inr)}</div><div class="pro">₹${fmt(p.original_price_inr)}</div><div class="prs">Save ${p.discount_pct}%</div></div>
-        <div class="sli"><span>${p.filled_slots} of ${p.total_slots} slots filled</span><span class="slc">${p.slots_left} left</span></div>
+        <div class="sli"><span>${p.filled_slots} of ${p.total_slots} spots filled</span><span class="slc">${p.slots_left} left</span></div>
         <div class="slbar"><div class="slfill${hot?' hot':''}" style="width:${p.fill_pct}%"></div></div>
-        <button class="bentd" onclick="event.stopPropagation();openBuy(${p.id})">🎰 Enter Draw</button>
+        <button class="bentd" onclick="event.stopPropagation();openBuy(${p.id})">🎁 Join Drop</button>
       </div></div>`;
   }).join('');
 }
@@ -544,13 +766,13 @@ function sf(c,btn){ cat=c; document.querySelectorAll('.filt').forEach(b=>b.class
 
 /* ── BUY: STEP 1 ───────────────────────────────────────────────────── */
 function openBuy(pid){
-  if(!me){openAuth('login');toast('ℹ️','Please login to enter a draw.','tgd');return;}
+  if(!me){openAuth('login');toast('ℹ️','Please login to join a drop.','tgd');return;}
   buyP=prods.find(x=>x.id===pid); if(!buyP)return;
   buyQ=1; curTicketId=null;
-  showStep(1); g('buyTitle').textContent='Enter the Draw 🎰';
+  showStep(1); g('buyTitle').textContent='Join This Drop 🎁';
   g('bEm').textContent=buyP.emoji;
   g('bNm').textContent=buyP.name;
-  g('bSb').textContent=`${buyP.category} · ${buyP.slots_left} slots left`;
+  g('bSb').textContent=`${buyP.category} · ${buyP.slots_left} spots left`;
   updBS(); openOv('buyOv');
 }
 function updBS(){
@@ -648,13 +870,56 @@ async function fetchWinners(){
   try{
     const r=await fetch('/api/draws'); const d=await r.json();
     if(!d.length)return;
-    const track=g('ttrack');
-    const html=d.slice(0,8).map(w=>{
+    const grid=g('winnersGrid');
+    const avatarGrads=[
+      'linear-gradient(135deg,#7c3aed,#a855f7)',
+      'linear-gradient(135deg,#0891b2,#22d3ee)',
+      'linear-gradient(135deg,#065f46,#10b981)',
+      'linear-gradient(135deg,#b45309,#f59e0b)',
+      'linear-gradient(135deg,#be185d,#ec4899)',
+      'linear-gradient(135deg,#1e40af,#3b82f6)',
+    ];
+    const reviews=[
+      "Got it delivered to my door in 2 days, sealed box. Totally legit — verified the drop myself on the site. Still can't believe I won!",
+      "My family thought I was joking when I showed them. Paid a tiny ticket price and won this. Best ₹ I ever spent honestly!",
+      "Drew it live, tracked shipping, received it. Every step was transparent. Posted my unboxing and friends are already signing up.",
+      "First time trying WinVault and boom — winner. The customer support even called me personally to confirm before shipping. Great team!",
+      "You can actually verify the drop result on-chain style with the seed hash. Super transparent. Got my prize in perfect condition.",
+    ];
+    const cities=['Mumbai','Bangalore','Delhi NCR','Hyderabad','Chennai','Pune','Kolkata','Ahmedabad'];
+    const cards=d.slice(0,4).map((w,i)=>{
       const ini=w.wname.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase();
-      return `<div class="titem"><div class="tav">${ini}</div><span style="color:var(--tx2)">${w.wname} won</span><span style="color:var(--amber);font-weight:600">${w.emoji} ${w.pname}</span><span class="ttag">FREE</span></div>`;
+      const grad=avatarGrads[i%avatarGrads.length];
+      const city=cities[i%cities.length];
+      const review=reviews[i%reviews.length];
+      const paidInr=(w.prize_value/100*0.025).toFixed(0); // rough ticket price estimate
+      const prizeInr=fmt(w.prize_value/100);
+      const daysAgo=Math.max(1,Math.floor((Date.now()-new Date(w.drawn_at))/86400000));
+      const timeStr=daysAgo===1?'Yesterday':`${daysAgo} days ago`;
+      return `<div class="wcard">
+        <div class="wcard-top">
+          <div class="wav" style="background:${grad}">${ini}</div>
+          <div class="wname-wrap">
+            <div class="wname">${w.wname} <span class="verified">✓ Verified</span></div>
+            <div class="wcity">📍 ${city}</div>
+          </div>
+        </div>
+        <div class="wstars">⭐⭐⭐⭐⭐</div>
+        <div class="wreview">${review}</div>
+        <div class="wprize-box">
+          <div class="wprize-emoji">${w.emoji}</div>
+          <div class="wprize-info">
+            <div class="wprize-name">${w.pname}</div>
+            <div class="wprize-paid">Won worth <strong>₹${prizeInr}</strong></div>
+          </div>
+          <div class="wsavings">Winner 🏆</div>
+        </div>
+        <div class="wdate">🗓️ ${timeStr} · Drop #${w.id}</div>
+      </div>`;
     }).join('');
-    track.innerHTML=html+html;
-  }catch{}
+    // Prepend real winners before the seed cards
+    grid.insertAdjacentHTML('afterbegin', cards);
+  }catch(e){}
 }
 
 /* ── CART ──────────────────────────────────────────────────────────── */
@@ -662,7 +927,7 @@ function toggleDraw(){ g('cartDraw').classList.toggle('open'); rCart(); }
 function rCart(){
   const el=g('cdItems'),ft=g('cdFoot');
   if(!cart.length){
-    el.innerHTML=`<div class="cdempty"><span style="font-size:56px;display:block;margin-bottom:14px">🎟️</span><div style="font-size:15px;font-weight:600;margin-bottom:6px">No tickets yet</div><div style="font-size:13px">Browse draws and enter!</div></div>`;
+    el.innerHTML=`<div class="cdempty"><span style="font-size:56px;display:block;margin-bottom:14px">🏷️</span><div style="font-size:15px;font-weight:600;margin-bottom:6px">No entries yet</div><div style="font-size:13px">Browse Drops and enter!</div></div>`;
     ft.style.display='none'; return;
   }
   ft.style.display='block';

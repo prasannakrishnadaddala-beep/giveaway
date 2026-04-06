@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Tickets — LuckyCart</title>
+<title>My Entries — PrizeDrop</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='40' height='40' rx='10' fill='url(%23g)'/%3E%3Ctext x='20' y='27' font-size='22' text-anchor='middle' fill='white'%3E%F0%9F%8E%81%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0a0a0f;--s:#12121a;--s2:#1a1a26;--bd:#2a2a3f;--gd:#f5c842;--ac:#7c6af7;--ac2:#5b4fcf;--gr:#2ecc71;--rd:#e74c3c;--tx:#f0f0fa;--mt:#7a7a9a;}
@@ -41,18 +42,18 @@ h2{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:6p
 </head>
 <body>
 <nav>
-  <div class="logo">🎰 LuckyCart</div>
+  <div class="logo">🎁 PrizeDrop</div>
   <div style="display:flex;gap:10px;align-items:center">
     <span style="font-size:13px;color:var(--mt)">{{ user.name }}</span>
-    <a href="/" class="bsm">← Back to Draws</a>
+    <a href="/" class="bsm">← Back to Drops</a>
   </div>
 </nav>
 <main>
-  <h2>My Tickets 🎟️</h2>
-  <p class="sub">All your draw entries and wins</p>
+  <h2>My Entries 🏷️</h2>
+  <p class="sub">All your drop entries and wins</p>
 
   <div class="tabs">
-    <button class="tab act" onclick="swTab('tickets',this)">All Tickets</button>
+    <button class="tab act" onclick="swTab('tickets',this)">All Entries</button>
     <button class="tab" onclick="swTab('wins',this)">🏆 My Wins</button>
   </div>
 
@@ -74,7 +75,7 @@ async function loadWins(){
 }
 function renderTickets(){
   const el=document.getElementById('ticketsView');
-  if(!tickets.length){el.innerHTML=`<div class="empty"><div class="empty-icon">🎟️</div><div>No tickets yet. <a href="/" style="color:var(--ac)">Browse draws</a></div></div>`;return;}
+  if(!tickets.length){el.innerHTML=`<div class="empty"><div class="empty-icon">🏷️</div><div>No entries yet. <a href="/" style="color:var(--ac)">Browse Drops</a></div></div>`;return;}
   el.innerHTML=tickets.map(t=>`
     <div class="tcard${t.is_winner?' winner-tcard':''}">
       <div class="tc-em">${t.emoji}</div>
@@ -94,14 +95,14 @@ function renderTickets(){
 }
 function renderWins(){
   const el=document.getElementById('winsView');
-  if(!wins.length){el.innerHTML=`<div class="empty"><div class="empty-icon">🏆</div><div>No wins yet — keep entering draws!</div></div>`;return;}
+  if(!wins.length){el.innerHTML=`<div class="empty"><div class="empty-icon">🏆</div><div>No wins yet — keep joining drops!</div></div>`;return;}
   el.innerHTML=wins.map(w=>`
     <div class="win-card">
       <div class="wc-em">${w.emoji}</div>
       <div class="wc-title">You won ${w.product_name}!</div>
       <div class="wc-sub">Draw held on ${new Date(w.drawn_at).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</div>
       <div class="wc-ref">✅ Refund of ₹${fmt(w.refund_amount/100)} — ${w.refund_status==='processed'?'Processed':'Processing in 24h'}</div>
-      <a class="verify-link" href="/api/draws/${w.id}/verify" target="_blank">🔍 Verify this draw →</a>
+      <a class="verify-link" href="/api/draws/${w.id}/verify" target="_blank">🔍 Verify this drop →</a>
     </div>`).join('');
 }
 function swTab(tab, btn){

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LuckyCart Admin v5</title>
+<title>PrizeDrop Admin</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='40' height='40' rx='10' fill='url(%23g)'/%3E%3Ctext x='20' y='27' font-size='22' text-anchor='middle' fill='white'%3E%F0%9F%8E%81%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -167,8 +168,8 @@ main,nav{position:relative;z-index:1;}
 
 <nav>
   <div class="logo">
-    <div class="lbadge">🎰</div>
-    <span>LuckyCart <span style="color:var(--tx3);font-weight:400">Admin</span></span>
+    <div class="lbadge">🎁</div>
+    <span>PrizeDrop <span style="color:var(--tx3);font-weight:400">Admin</span></span>
   </div>
   <div class="nav-user">
     <span>{{ user.name }}</span>
@@ -181,8 +182,8 @@ main,nav{position:relative;z-index:1;}
   <!-- STATS -->
   <div class="stats" id="statGrid">
     <div class="stat"><div class="statv" id="s0">—</div><div class="statl">Total Users</div></div>
-    <div class="stat"><div class="statv" id="s1">—</div><div class="statl">Active Draws</div></div>
-    <div class="stat"><div class="statv" id="s2">—</div><div class="statl">Draws Done</div></div>
+    <div class="stat"><div class="statv" id="s1">—</div><div class="statl">Active Drops</div></div>
+    <div class="stat"><div class="statv" id="s2">—</div><div class="statl">Drops Done</div></div>
     <div class="stat pulse"><div class="statv" id="s3">—</div><div class="statl">⏳ Payments Pending</div></div>
     <div class="stat"><div class="statv gold" id="s4">—</div><div class="statl">Total Revenue</div></div>
     <div class="stat pulse"><div class="statv" id="s5">—</div><div class="statl">🎁 Prizes to Ship</div></div>
@@ -193,9 +194,9 @@ main,nav{position:relative;z-index:1;}
   <div class="tabs">
     <button class="tab on" onclick="swTab('payments',this)">⏳ Payments <span class="badge" id="pendBadge">0</span></button>
     <button class="tab" onclick="swTab('shipments',this)">📦 Ship Prizes</button>
-    <button class="tab" onclick="swTab('draws',this)">🔥 Live Draws</button>
-    <button class="tab" onclick="swTab('create',this)">➕ New Draw</button>
-    <button class="tab" onclick="swTab('all',this)">📋 All Tickets</button>
+    <button class="tab" onclick="swTab('draws',this)">🔥 Live Drops</button>
+    <button class="tab" onclick="swTab('create',this)">➕ New Drop</button>
+    <button class="tab" onclick="swTab('all',this)">📋 All Entries</button>
     <button class="tab" onclick="swTab('referrals',this)">🔗 Referrals</button>
   </div>
 
@@ -215,10 +216,10 @@ main,nav{position:relative;z-index:1;}
   <div id="tabShipments" style="display:none">
     <div class="card">
       <div class="card-hdr">
-        <div class="card-title">📦 Prizes to Ship to Winners</div>
+        <div class="card-title">📦 Products to Ship to Recipients</div>
         <button class="btn-sm" onclick="loadShipments()">↻ Refresh</button>
       </div>
-      <p class="sub-text">Draw winners waiting for their product. Enter tracking info after dispatch.</p>
+      <p class="sub-text">Campaign winners waiting for their product. Enter tracking info after dispatch.</p>
       <div id="shipmentList"><div class="empty">Loading…</div></div>
     </div>
   </div>
@@ -226,7 +227,7 @@ main,nav{position:relative;z-index:1;}
   <div id="tabDraws" style="display:none">
     <div class="card">
       <div class="card-hdr">
-        <div class="card-title">🔥 Active Draws</div>
+        <div class="card-title">🔥 Active Drops</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn-sm" onclick="selectAllDraws()">☑ Select All</button>
           <button class="btn-sm" onclick="clearSelection()">☐ Clear</button>
@@ -234,7 +235,7 @@ main,nav{position:relative;z-index:1;}
         </div>
       </div>
       <div class="bulk-bar" id="bulkBar" style="display:none">
-        <span class="bulk-count"><strong id="selCount">0</strong> draws selected</span>
+        <span class="bulk-count"><strong id="selCount">0</strong> drops selected</span>
         <button class="btn-danger" onclick="bulkDelete()">🗑️ Delete Selected</button>
       </div>
       <div id="drawList" style="overflow-x:auto">Loading…</div>
@@ -244,7 +245,7 @@ main,nav{position:relative;z-index:1;}
   <!-- ── CREATE DRAW ── -->
   <div id="tabCreate" style="display:none">
     <div class="card">
-      <div class="card-hdr"><div class="card-title">➕ Create New Draw</div></div>
+      <div class="card-hdr"><div class="card-title">➕ Create New Drop</div></div>
       <div class="frow">
         <div class="fld"><label>Product Name</label><input type="text" id="pName" placeholder="iPhone 15 Pro"></div>
         <div class="fld"><label>Category</label>
@@ -273,7 +274,7 @@ main,nav{position:relative;z-index:1;}
         <input type="url" id="pImg" placeholder="https://i.imgur.com/xxxx.jpg" style="margin-top:6px;width:100%;padding:8px 12px;background:var(--bg4);border:1px solid var(--line);border-radius:8px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:12px;outline:none;">
       </div>
       <div class="fld" style="margin-bottom:16px"><label>Description</label><textarea id="pDesc" placeholder="Short product description…"></textarea></div>
-      <button class="btn-pr" onclick="createProduct()">Create Draw</button>
+      <button class="btn-pr" onclick="createProduct()">Create Drop</button>
       <div class="msg" id="cpMsg"></div>
     </div>
   </div>
@@ -282,7 +283,7 @@ main,nav{position:relative;z-index:1;}
   <div id="tabAll" style="display:none">
     <div class="card">
       <div class="card-hdr">
-        <div class="card-title">📋 All Tickets</div>
+        <div class="card-title">📋 All Entries</div>
         <button class="btn-sm" onclick="loadAll()">↻ Refresh</button>
       </div>
       <div id="allTable" style="overflow-x:auto">Loading…</div>
@@ -306,7 +307,7 @@ main,nav{position:relative;z-index:1;}
 <div class="modal-ov" id="editModal">
   <div class="modal">
     <div class="modal-hdr">
-      <div class="modal-title">✏️ Edit Draw</div>
+      <div class="modal-title">✏️ Edit Drop</div>
       <button class="modal-close" onclick="closeEdit()">✕</button>
     </div>
     <div class="modal-body">
@@ -408,7 +409,7 @@ async function loadPending() {
         <div class="pq-name">${t.pname}</div>
         <div class="pq-meta">
           👤 <strong>${t.uname}</strong> · ${t.email}${t.phone?' · 📱 '+t.phone:''}
-          <br>🎟️ ${t.quantity} ticket${t.quantity>1?'s':''} · Ref: <code>${t.order_ref||'—'}</code> · 📅 ${dt}
+          <br>🏷️ ${t.quantity} ticket${t.quantity>1?'s':''} · Ref: <code>${t.order_ref||'—'}</code> · 📅 ${dt}
           ${isSubmitted ? `<br><span class="pq-utr">UTR: ${t.utr}</span>` : '<br><span style="color:var(--tx3);font-size:11px">⚠️ Customer hasn\'t submitted UTR yet</span>'}
         </div>
       </div>
@@ -428,7 +429,7 @@ async function confirmPay(tid) {
   const r = await post(`/api/admin/confirm-payment/${tid}`, {});
   if (r.error) { alert('Error: ' + r.error); return; }
   if (r.draw_result) {
-    alert(`🎰 DRAW TRIGGERED!\n🏆 Winner: ${r.draw_result.winner_name}\n📞 ${r.draw_result.winner_phone||'—'}\n📍 ${r.draw_result.winner_address||'Contact winner'}\n🎁 Prize: ₹${fmt(r.draw_result.prize_value/100)} product to ship!`);
+    alert(`🎁 DROP COMPLETED!\n🏆 Winner: ${r.draw_result.winner_name}\n📞 ${r.draw_result.winner_phone||'—'}\n📍 ${r.draw_result.winner_address||'Contact winner'}\n🎁 Prize: ₹${fmt(r.draw_result.prize_value/100)} product to ship!`);
   } else {
     alert(`✅ Confirmed! Slots: ${r.filled_slots}/${r.total_slots}`);
   }
@@ -449,7 +450,7 @@ async function loadShipments() {
   el.innerHTML = d.map(s=>`
     <div class="ship-item">
       <div class="ship-hdr">
-        <div class="ship-name">${s.emoji} ${s.pname} — Draw #${s.id}</div>
+        <div class="ship-name">${s.emoji} ${s.pname} — Drop #${s.id}</div>
         <span class="pill ${s.delivery_status==='shipped'?'p-ind':'p-pend'}">${s.delivery_status==='shipped'?'📦 Shipped':'⏳ Pending'}</span>
       </div>
       <div class="ship-meta">
@@ -499,7 +500,7 @@ function clearSelection() {
 async function bulkDelete() {
   const ids = [...selectedDrawIds];
   if (!ids.length) return;
-  if (!confirm(`Delete ${ids.length} selected draw(s)?\n\nDraws with confirmed paid tickets will be skipped.`)) return;
+  if (!confirm(`Delete ${ids.length} selected drop(s)?\n\nDraws with confirmed paid tickets will be skipped.`)) return;
   const r = await post('/api/admin/products/bulk-delete', {ids});
   alert(r.message || r.error);
   selectedDrawIds.clear();
@@ -532,7 +533,7 @@ async function loadDraws() {
     </td>
     <td>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn-gold" onclick="forceDraw(${p.id},'${p.name.replace(/'/g,"\\'")}')">🎰 Draw</button>
+        <button class="btn-gold" onclick="forceDraw(${p.id},'${p.name.replace(/'/g,"\\'")}')">🎁 Draw</button>
         <button class="btn-edit" onclick="openEdit(${p.id})">✏️ Edit</button>
         <button class="btn-danger" onclick="deleteDraw(${p.id},'${p.name.replace(/'/g,"\\'")}')">🗑️</button>
       </div>
@@ -547,7 +548,7 @@ function toggleSelect(id, checked) {
 }
 
 async function forceDraw(pid, name) {
-  if (!confirm(`Force lucky draw for "${name}"?`)) return;
+  if (!confirm(`Force group-buy campaign for "${name}"?`)) return;
   const r = await post(`/api/admin/draw/${pid}`, {});
   if (r.error) { alert('Error: '+r.error); return; }
   alert(`🎉 Draw!\nWinner: ${r.winner_name}\n📞 ${r.winner_phone||'—'}\nSlot: ${r.winning_slot+1}/${r.total_slots}\n🎁 ₹${fmt(r.prize_value/100)} product to ship!`);
@@ -684,7 +685,7 @@ async function createProduct() {
 async function loadAll() {
   const d = await (await fetch('/api/admin/all-tickets')).json();
   const el = g('allTable');
-  if (!d.length) { el.innerHTML='<p class="empty">No tickets yet.</p>'; return; }
+  if (!d.length) { el.innerHTML='<p class="empty">No entries yet.</p>'; return; }
   const scls = {paid:'p-paid',utr_submitted:'p-utr',pending:'p-pend',rejected:'p-rej'};
   el.innerHTML = `<table><thead><tr><th>User</th><th>Product</th><th>Qty</th><th>Amount</th><th>UTR</th><th>Status</th><th>Date</th></tr></thead><tbody>
   ${d.slice(0,150).map(t=>`<tr>
